@@ -3,7 +3,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/custom_navbar"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
     android:background="@color/white"
     android:gravity="center"
     android:orientation="horizontal">
@@ -11,22 +12,24 @@
     <!-- 홈 -->
     <LinearLayout
         android:id="@+id/nav_home"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_home" />
+            android:id="@+id/nav_home_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_home_non"  />
 
         <TextView
+            android:id="@+id/nav_home_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="홈"
-            android:textColor="#4D4D4D"
+            android:textColor="#FFCCECE3"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -40,15 +43,17 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_notification" />
+            android:id="@+id/nav_notification_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_notification_non"  />
 
         <TextView
+            android:id="@+id/nav_notification_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="알림"
-            android:textColor="#4D4D4D"
+            android:textColor="#FFCCECE3"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -62,15 +67,10 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_add" />
-        <!--        <TextView-->
-        <!--            android:text="프로필"-->
-        <!--            android:textSize="12sp"-->
-        <!--            android:textColor="#4D4D4D"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content" />-->
+            android:id="@+id/nav_matching_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_matching_non" />
     </LinearLayout>
 
     <!-- 마이 -->
@@ -83,15 +83,17 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_profile" />
+            android:id="@+id/nav_myprofile_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_profile_non" />
 
         <TextView
+            android:id="@+id/nav_myprofile_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="마이"
-            android:textColor="#4D4D4D"
+            android:textColor="#FFCCECE3"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -105,15 +107,17 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_settings" />
+            android:id="@+id/nav_settings_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_settings_non"  />
 
         <TextView
+            android:id="@+id/nav_settings_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="설정"
-            android:textColor="#4D4D4D"
+            android:textColor="#FFCCECE3"
             android:textSize="12sp" />
     </LinearLayout>
 

@@ -2,7 +2,11 @@ package com.example.mobile2025s2_1_2.utils;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.example.mobile2025s2_1_2.*;
 import com.example.mobile2025s2_1_2.home.HomeActivity;
@@ -36,12 +40,44 @@ public class BottomNavBarHelper {
             }
         });
 
+//        navMatching.setOnClickListener(v -> {
+//            if (!(activity instanceof MatchingActivity)) {
+//                activity.startActivity(new Intent(activity, MatchingActivity.class));
+//                activity.overridePendingTransition(0, 0);
+//            }
+//        });
+        // BottomNavBarHelper.java (activity를 인자로 받는 유틸)
         navMatching.setOnClickListener(v -> {
-            if (!(activity instanceof MatchingActivity)) {
-                activity.startActivity(new Intent(activity, MatchingActivity.class));
-                activity.overridePendingTransition(0, 0);
+            if (activity instanceof FragmentActivity) {
+                FragmentActivity fa = (FragmentActivity) activity;
+
+                // container가 있는 액티비티인지 확인 (안전장치)
+                View container = fa.findViewById(R.id.fragment_container);
+                if (container == null) {
+                    // TODO: 로그/토스트로 알려주기 (해당 Activity 레이아웃에 FrameLayout 추가 필요)
+                    return;
+                }
+
+                final String TAG = "MatchingCategoryFragment";
+                if (fa.getSupportFragmentManager().findFragmentByTag(TAG) != null) return;
+
+                fa.getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(
+                                android.R.anim.fade_in,
+                                android.R.anim.fade_out,
+                                android.R.anim.fade_in,
+                                android.R.anim.fade_out)
+                        .add(R.id.fragment_container,
+                                new com.example.mobile2025s2_1_2.matching.MatchingCategoryFragment(),
+                                TAG)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
+
+
+
 
         navMyprofile.setOnClickListener(v -> {
             if (!(activity instanceof MyprofileActivity)) {
