@@ -1,18 +1,17 @@
 package com.example.mobile2025s2_1_2.matching;
 
 import android.os.Bundle;
+import android.text.Html;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import com.example.mobile2025s2_1_2.*;
-import com.example.mobile2025s2_1_2.utils.BottomNavBarHelper;
 
 
 public class MatchingCategoryFragment extends Fragment {
@@ -22,12 +21,15 @@ public class MatchingCategoryFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.matching_category,container,false);
-
-        LinearLayout bottomNavBar = requireActivity().findViewById(R.id.custom_navbar);
-        ImageView matching_nav_Icon_f = bottomNavBar.findViewById(R.id.nav_matching_icon);
-        matching_nav_Icon_f.setImageResource(R.drawable.ic_matching_non);
-        matching_nav_Icon_f.setImageResource(R.drawable.ic_matching);
+        TextView textView = view.findViewById(R.id.match_cate_title);
+        String text = "<font color='#2DD7A4'>카테고리</font> <font color='#FFFFFF'>선택</font>";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            textView.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY));
+        } else {
+            textView.setText(Html.fromHtml(text));
+        }
         return view;
     }
+
 
 }
