@@ -1,0 +1,91 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#BF212121"> <!--반투명 배경-->
+
+    <!--여기가 카테고리 선택 페이지 화면-->
+    <LinearLayout
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <!--카테고리 선택 제목-->
+        <TextView
+            android:id="@+id/match_cate_title"
+            android:text="카테고리 선택"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+
+        <!--카테고리 선택 설명-->
+        <TextView
+            android:text="매칭 서비스를 이용하실 카테고리를 선택해주세요"
+            android:textSize="15sp"
+            android:textStyle="normal"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+
+        <!--진로 버튼-->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/match_cate_career"
+            android:text="진로·전공 멘토 매칭"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            app:backgroundTint="#FFEBFFF9"
+            app:strokeColor="#00A68E"
+            app:strokeWidth="3dp"
+            app:cornerRadius="25dp"
+            android:layout_margin="11dp"
+            android:layout_width="236dp"
+            android:layout_height="65dp"/>
+
+        <!--교내외 활동 버튼-->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/match_cate_school"
+            android:text="교내·교외 활동 팀원 매칭"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            app:backgroundTint="#FFEBFFF9"
+            app:strokeColor="#00A68E"
+            app:strokeWidth="3dp"
+            app:cornerRadius="25dp"
+            android:layout_margin="11dp"
+            android:layout_width="236dp"
+            android:layout_height="65dp"/>
+
+        <!--룸메이트 버튼-->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/match_cate_roomate"
+            android:text="기숙사 룸메이트 매칭"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            app:backgroundTint="#FFEBFFF9"
+            app:strokeColor="#00A68E"
+            app:strokeWidth="3dp"
+            app:cornerRadius="25dp"
+            android:layout_margin="11dp"
+            android:layout_width="236dp"
+            android:layout_height="65dp"/>
+
+        <!--디자인을 위한 여백용-->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+        </FrameLayout>
+
+    </LinearLayout>
+</FrameLayout>

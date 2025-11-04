@@ -1,12 +1,14 @@
 package com.example.mobile2025s2_1_2.notification;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.mobile2025s2_1_2.*;
 import com.example.mobile2025s2_1_2.utils.BottomNavBarHelper;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class NotificationActivity extends AppCompatActivity {
     @Override
@@ -14,7 +16,9 @@ public class NotificationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notification_main);
 
+        //하단 navBar
         LinearLayout bottomNavBar = findViewById(R.id.custom_navbar);
         BottomNavBarHelper.setupCustomNav(this, bottomNavBar);
+        BottomNavBarHelper.setActiveTab(bottomNavBar, R.id.nav_notification);
     }
 }
