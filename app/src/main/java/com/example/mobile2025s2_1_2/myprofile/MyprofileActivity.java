@@ -16,6 +16,7 @@ public class MyprofileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.myprofile_main);
 
+        //하단 navBar
         LinearLayout bottomNavBar = findViewById(R.id.custom_navbar);
         BottomNavBarHelper.setupCustomNav(this, bottomNavBar);
         BottomNavBarHelper.setActiveTab(bottomNavBar, R.id.nav_myprofile);

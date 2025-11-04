@@ -16,6 +16,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_main);
 
+        //하단 navBar
         LinearLayout bottomNavBar = findViewById(R.id.custom_navbar);
         BottomNavBarHelper.setupCustomNav(this, bottomNavBar);
         BottomNavBarHelper.setActiveTab(bottomNavBar, R.id.nav_home);

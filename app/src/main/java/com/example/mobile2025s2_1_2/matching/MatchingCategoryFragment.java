@@ -21,6 +21,8 @@ public class MatchingCategoryFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.matching_category,container,false);
+
+        //카테고리 선택 텍스트 색상 다르게 하기
         TextView textView = view.findViewById(R.id.match_cate_title);
         String text = "<font color='#2DD7A4'>카테고리</font> <font color='#FFFFFF'>선택</font>";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -28,6 +30,7 @@ public class MatchingCategoryFragment extends Fragment {
         } else {
             textView.setText(Html.fromHtml(text));
         }
+
         return view;
     }
 

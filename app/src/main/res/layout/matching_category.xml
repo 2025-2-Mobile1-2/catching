@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#BF212121">
+    android:background="#BF212121"> <!--반투명 배경-->
 
+    <!--여기가 카테고리 선택 페이지 화면-->
     <LinearLayout
         android:layout_gravity="center"
         android:orientation="vertical"
@@ -12,6 +13,7 @@
         android:layout_height="wrap_content"
         android:gravity="center">
 
+        <!--카테고리 선택 제목-->
         <TextView
             android:id="@+id/match_cate_title"
             android:text="카테고리 선택"
@@ -23,6 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
 
+        <!--카테고리 선택 설명-->
         <TextView
             android:text="매칭 서비스를 이용하실 카테고리를 선택해주세요"
             android:textSize="15sp"
@@ -33,6 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
 
+        <!--진로 버튼-->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/match_cate_career"
             android:text="진로·전공 멘토 매칭"
@@ -47,6 +51,7 @@
             android:layout_width="236dp"
             android:layout_height="65dp"/>
 
+        <!--교내외 활동 버튼-->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/match_cate_school"
             android:text="교내·교외 활동 팀원 매칭"
@@ -61,6 +66,7 @@
             android:layout_width="236dp"
             android:layout_height="65dp"/>
 
+        <!--룸메이트 버튼-->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/match_cate_roomate"
             android:text="기숙사 룸메이트 매칭"
@@ -75,29 +81,11 @@
             android:layout_width="236dp"
             android:layout_height="65dp"/>
 
+        <!--디자인을 위한 여백용-->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="100dp">
-
         </FrameLayout>
-<!--        <Button-->
-<!--            android:id="@+id/match_cate_roomate"-->
-<!--            android:text="기숙사 룸메이트 매칭"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:textStyle="bold"-->
-<!--            android:backgroundTint="#FFEBFFF9"-->
-<!--            android:layout_margin="10dp"-->
-<!--            android:layout_width="200dp"-->
-<!--            android:layout_height="wrap_content"/>-->
 
     </LinearLayout>
-<!--    <include-->
-<!--        android:id="@+id/custom_navbar"-->
-<!--        layout="@layout/layout_bottom_nav"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="70dp"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        android:layout_gravity="bottom"/>-->
-
-
 </FrameLayout>

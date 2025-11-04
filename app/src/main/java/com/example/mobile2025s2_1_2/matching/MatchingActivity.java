@@ -13,11 +13,5 @@ public class MatchingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.matching_main);
-
-        LinearLayout bottomNavBar = findViewById(R.id.custom_navbar);
-        BottomNavBarHelper.setupCustomNav(this, bottomNavBar);
-        ImageView matching_nav_Icon = bottomNavBar.findViewById(R.id.nav_matching_icon);
-        matching_nav_Icon.setImageResource(R.drawable.ic_matching_non);
-        matching_nav_Icon.setImageResource(R.drawable.ic_matching);
     }
 }
