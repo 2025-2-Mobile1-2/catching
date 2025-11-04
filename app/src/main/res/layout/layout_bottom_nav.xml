@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:text="홈"
             android:textColor="#FFCCECE3"
+            android:fontFamily="@font/medium"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -54,6 +55,7 @@
             android:layout_height="wrap_content"
             android:text="알림"
             android:textColor="#FFCCECE3"
+            android:fontFamily="@font/medium"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -94,6 +96,7 @@
             android:layout_height="wrap_content"
             android:text="마이"
             android:textColor="#FFCCECE3"
+            android:fontFamily="@font/medium"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -118,6 +121,7 @@
             android:layout_height="wrap_content"
             android:text="설정"
             android:textColor="#FFCCECE3"
+            android:fontFamily="@font/medium"
             android:textSize="12sp" />
     </LinearLayout>
 
