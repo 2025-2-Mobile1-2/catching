@@ -1,27 +1,212 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <!--여기가 메인 홈 화면-->
-        <LinearLayout
-            android:orientation="vertical"
-            android:gravity="center"
+        android:layout_height="match_parent"
+        android:background="#FFF5F5F5">
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/custom_navbar">
+            android:layout_above="@+id/custom_navbar">
+            <!--여기가 메인 홈 화면-->
+            <LinearLayout
+                android:orientation="vertical"
+                android:gravity="top"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@id/custom_navbar">
+                <!--캐칭 앱 로고와 이름-->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="68dp"
+                    android:background="#FFF5F5F5">
+                    <ImageView
+                        android:layout_margin="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_catching"/>
+                    <ImageView
+                        android:layout_margin="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/name_catching_mint"/>
+                </LinearLayout>
 
-            <TextView
-                android:text="홈 화면"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+                <!--캐칭 앱 배너 광고-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:background="#F82DD7A0">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/banner_catching_background"/>
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        android:background="#17212121">
+                    </FrameLayout>
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="20dp">
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/banner_catching_title">
+                        </ImageView>
+                    </FrameLayout>
+                </RelativeLayout>
+
+                <!--공지사항-->
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="7dp">
+                    <!--공지사항문구-->
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="7dp"
+                        android:layout_marginTop="7dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="공지사항"
+                            android:fontFamily="@font/medium"
+                            android:textSize="18sp"
+                            android:textColor="#FF2DD7A4"/>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_arrow_right"/>
+                    </LinearLayout>
+                    <!--공지사항 내용-->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="7dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="0dp"
+                        app:strokeColor="@android:color/transparent"
+                        app:rippleColor="@android:color/transparent"
+                        android:backgroundTint="@android:color/white">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="7dp"
+                            android:padding="3dp"
+                            android:background="#FFFFFF">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="[공지사항] 어쩌고 저ㅓㅉ고"
+                                android:textColor="#FF808080" />
+                            <!-- 내용 -->
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+
+
+                <!--교내 활동-->
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="7dp">
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="7dp">
+                        <TextView
+                            android:id="@+id/home_username_school"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="국만두님을 위한 교내 활동"
+                            android:fontFamily="@font/medium"
+                            android:textSize="18sp"
+                            android:textColor="#FF2DD7A4"/>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_arrow_right"/>
+                    </LinearLayout>
+                    <!--교내활동 정보 카드-->
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none"
+                        android:overScrollMode="never"
+                        android:fillViewport="true">
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/card_school"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="4dp" />
+                    </HorizontalScrollView>
+
+
+                </LinearLayout>
+
+                <!--교외 활동-->
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="7dp">
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="7dp">
+                        <TextView
+                            android:id="@+id/home_username_out"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="국만두님을 위한 교외 활동"
+                            android:fontFamily="@font/medium"
+                            android:textSize="18sp"
+                            android:textColor="#FF2DD7A4"/>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_arrow_right"/>
+                    </LinearLayout>
+                    <!--교내활동 정보 카드-->
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none"
+                        android:overScrollMode="never"
+                        android:fillViewport="true">
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/card_out"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="4dp" />
+                    </HorizontalScrollView>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+
 
         <!--매칭 페이지 선택시 카테고리창 fragment영역-->
         <FrameLayout
