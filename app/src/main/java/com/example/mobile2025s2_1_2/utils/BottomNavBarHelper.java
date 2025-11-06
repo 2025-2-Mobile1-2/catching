@@ -79,6 +79,16 @@ public class BottomNavBarHelper {
         LinearLayout navSettings = bottomNavBar.findViewById(R.id.nav_settings);
 
         navHome.setOnClickListener(v -> {
+            //매칭 탭  fragment 켜 있으면 닫기
+            if (activity instanceof FragmentActivity) {
+                FragmentActivity fa = (FragmentActivity) activity;
+                final String TAG = "MatchingCategoryFragment";
+                if (fa.getSupportFragmentManager().findFragmentByTag(TAG) != null) {
+                    fa.getSupportFragmentManager().popBackStack();
+                    setActiveTab(bottomNavBar, R.id.nav_home);
+                }
+            }
+            //홈페이지 아니면 홈페이지로
             if (!(activity instanceof HomeActivity)) {
                 activity.startActivity(new Intent(activity, HomeActivity.class));
                 activity.overridePendingTransition(0, 0);
@@ -86,6 +96,16 @@ public class BottomNavBarHelper {
         });
 
         navNotification.setOnClickListener(v -> {
+            //매칭 탭  fragment 켜 있으면 닫기
+            if (activity instanceof FragmentActivity) {
+                FragmentActivity fa = (FragmentActivity) activity;
+                final String TAG = "MatchingCategoryFragment";
+                if (fa.getSupportFragmentManager().findFragmentByTag(TAG) != null) {
+                    fa.getSupportFragmentManager().popBackStack();
+                    setActiveTab(bottomNavBar, R.id.nav_notification);
+                }
+            }
+            //알림페이지 아니면 알림페이지로
             if (!(activity instanceof NotificationActivity)) {
                 activity.startActivity(new Intent(activity, NotificationActivity.class));
                 activity.overridePendingTransition(0, 0);
@@ -120,6 +140,16 @@ public class BottomNavBarHelper {
 
 
         navMyprofile.setOnClickListener(v -> {
+            //매칭 탭  fragment 켜 있으면 닫기
+            if (activity instanceof FragmentActivity) {
+                FragmentActivity fa = (FragmentActivity) activity;
+                final String TAG = "MatchingCategoryFragment";
+                if (fa.getSupportFragmentManager().findFragmentByTag(TAG) != null) {
+                    fa.getSupportFragmentManager().popBackStack();
+                    setActiveTab(bottomNavBar, R.id.nav_myprofile);
+                }
+            }
+            //프로필 페이지 아니면 프로필 페이지로
             if (!(activity instanceof MyprofileActivity)) {
                 activity.startActivity(new Intent(activity, MyprofileActivity.class));
                 activity.overridePendingTransition(0, 0);
@@ -127,6 +157,16 @@ public class BottomNavBarHelper {
         });
 
         navSettings.setOnClickListener(v -> {
+            //매칭 탭  fragment 켜 있으면 닫기
+            if (activity instanceof FragmentActivity) {
+                FragmentActivity fa = (FragmentActivity) activity;
+                final String TAG = "MatchingCategoryFragment";
+                if (fa.getSupportFragmentManager().findFragmentByTag(TAG) != null) {
+                    fa.getSupportFragmentManager().popBackStack();
+                    setActiveTab(bottomNavBar, R.id.nav_settings);
+                }
+            }
+            //설정페이지 아니면 설정페이지로
             if (!(activity instanceof SettingsActivity)) {
                 activity.startActivity(new Intent(activity, SettingsActivity.class));
                 activity.overridePendingTransition(0, 0);
