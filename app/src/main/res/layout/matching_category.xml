@@ -69,7 +69,7 @@
 
         <!--룸메이트 버튼-->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/match_cate_roomate"
+            android:id="@+id/match_cate_roommate"
             android:text="기숙사 룸메이트 매칭"
             android:textColor="@color/black"
             android:fontFamily="@font/semibold"

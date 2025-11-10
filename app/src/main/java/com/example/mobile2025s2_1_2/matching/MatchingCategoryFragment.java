@@ -1,5 +1,6 @@
 package com.example.mobile2025s2_1_2.matching;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.os.Build;
@@ -30,6 +31,17 @@ public class MatchingCategoryFragment extends Fragment {
         } else {
             textView.setText(Html.fromHtml(text));
         }
+
+        View roomateView = view.findViewById(R.id.match_cate_roommate);
+
+        roomateView.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), RoommateActivity.class);
+            startActivity(intent);
+        });
+
+
+
+
 
         return view;
     }
