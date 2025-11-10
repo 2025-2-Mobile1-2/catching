@@ -3,7 +3,6 @@ package com.example.mobile2025s2_1_2.utils;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,7 +11,6 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.mobile2025s2_1_2.*;
 import com.example.mobile2025s2_1_2.home.HomeActivity;
-import com.example.mobile2025s2_1_2.matching.MatchingActivity;
 import com.example.mobile2025s2_1_2.myprofile.MyprofileActivity;
 import com.example.mobile2025s2_1_2.notification.NotificationActivity;
 import com.example.mobile2025s2_1_2.settings.SettingsActivity;

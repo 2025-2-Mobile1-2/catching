@@ -42,11 +42,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:background="#F82DD7A0">
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/banner_catching_background"/>
+                    android:background="@drawable/banner_catching_background">
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="100dp"

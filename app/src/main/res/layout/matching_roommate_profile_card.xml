@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp">
+
+    <LinearLayout
+        android:layout_width="294dp"
+        android:layout_height="426dp"
+        android:orientation="vertical">
+
+        <!--하트-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_margin="15dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_heart_red"/>
+        </LinearLayout>
+
+        <!--이름 & 프로필 사진-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_profile_reverse"/>
+            <TextView
+                android:id="@+id/roommate_name"
+                android:text="김국민"
+                android:textSize="18sp"
+                android:fontFamily="@font/regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <!--특징-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!-- 특징 태그 묶음 -->
+            <com.google.android.flexbox.FlexboxLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:padding="8dp"
+                app:flexWrap="wrap"
+                app:justifyContent="center">
+
+                <TextView
+                    android:id="@+id/roommate_major"
+                    android:text="23학번"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/light"
+                    android:background="@drawable/background_card_tag"
+                    android:layout_margin="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:text="남"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/light"
+                    android:background="@drawable/background_card_tag"
+                    android:layout_margin="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:text="음주 O"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/light"
+                    android:background="@drawable/background_card_tag"
+                    android:layout_margin="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:text="흡연 X"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/light"
+                    android:background="@drawable/background_card_tag"
+                    android:layout_margin="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/roommate_mbti"
+                    android:text="ESFP"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/light"
+                    android:background="@drawable/background_card_tag"
+                    android:layout_margin="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:text="1:00 - 8:00 수면"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/light"
+                    android:background="@drawable/background_card_tag"
+                    android:layout_margin="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </com.google.android.flexbox.FlexboxLayout>
+        </LinearLayout>
+
+        <!-- 잠버릇 & 청결 수준 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
