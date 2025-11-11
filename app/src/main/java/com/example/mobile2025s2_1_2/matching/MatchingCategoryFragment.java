@@ -39,10 +39,6 @@ public class MatchingCategoryFragment extends Fragment {
             startActivity(intent);
         });
 
-
-
-
-
         return view;
     }
 

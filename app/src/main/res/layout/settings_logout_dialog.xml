@@ -1,0 +1,66 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#AAFFFFFF"> <!--반투명 배경-->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        app:cardCornerRadius="10dp"
+        app:strokeColor="@android:color/transparent"
+        app:strokeWidth="0dp"
+        android:layout_gravity="center"
+        android:backgroundTint="#FFFFFFFF"
+        app:cardElevation="10dp"
+        app:cardUseCompatPadding="true"
+        app:cardPreventCornerOverlap="true">>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp">
+            <TextView
+                android:layout_margin="20dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="로그아웃 하시겠습니까?"
+                android:textSize="20sp"
+                android:fontFamily="@font/regular"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/logout_ok"
+                    android:layout_margin="5dp"
+                    android:layout_width="102dp"
+                    android:layout_height="41dp"
+                    android:text="로그아웃"
+                    android:textSize="18sp"
+                    android:textColor="#EC5655"
+                    android:fontFamily="@font/regular"
+                    app:cornerRadius="50dp"
+                    app:strokeColor="#EC5655"
+                    app:strokeWidth="0.7dp"
+                    app:backgroundTint="#FFFFE5E5" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/logout_cancel"
+                    android:layout_margin="5dp"
+                    android:layout_width="102dp"
+                    android:layout_height="41dp"
+                    android:text="취소"
+                    android:textColor="#FF808080"
+                    android:textStyle="bold"
+                    app:cornerRadius="50dp"
+                    app:strokeColor="#FF808080"
+                    app:strokeWidth="0.7dp"
+                    app:backgroundTint="#FFFFFFFF" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</FrameLayout>
