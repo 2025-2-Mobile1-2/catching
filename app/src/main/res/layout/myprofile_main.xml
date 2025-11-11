@@ -21,16 +21,19 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/custom_navbar"> <ImageButton
-            android:id="@+id/back_button"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:contentDescription="뒤로 가기"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_arrow_left" />
+            android:layout_above="@id/custom_navbar">
+
+            <ImageButton
+                android:id="@+id/back_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@null"
+                android:contentDescription="뒤로 가기"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_arrow_left" />
 
             <TextView
                 android:id="@+id/edit_button"
@@ -38,43 +41,90 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
                 android:text="저장"
-                android:textColor="@color/black"
+                android:textColor="#2DD7A4"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/back_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/back_button" />
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayout"
+            <HorizontalScrollView
+                android:id="@+id/tab_scroll_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:scrollbars="none"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/back_button">
 
-                <com.google.android.material.tabs.TabItem
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chip_group_tabs"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tab 1" />
+                    app:chipSpacingHorizontal="8dp"
+                    app:singleSelection="true">
 
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tab 2" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_mentor"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="진로·전공 멘토 매칭"
+                        android:textColor="@color/tab_chip_text_color"
+                        app:chipBackgroundColor="@color/tab_chip_background_color"
+                        app:chipStrokeColor="@color/tab_chip_stroke_color"
+                        app:chipStrokeWidth="1dp"
+                        app:chipMinHeight="36dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:textAppearance="?attr/textAppearanceBody2" />
 
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tab 3" />
-            </com.google.android.material.tabs.TabLayout>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_activity"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="교내·교외 활동 팀원 매칭"
+                        android:textColor="@color/tab_chip_text_color"
+                        app:chipBackgroundColor="@color/tab_chip_background_color"
+                        app:chipStrokeColor="@color/tab_chip_stroke_color"
+                        app:chipStrokeWidth="1dp"
+                        app:chipMinHeight="36dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:textAppearance="?attr/textAppearanceBody2" />
 
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_roommate"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="기숙사 룸메이트 매칭"
+                        android:textColor="@color/tab_chip_text_color"
+                        app:chipBackgroundColor="@color/tab_chip_background_color"
+                        app:chipStrokeColor="@color/tab_chip_stroke_color"
+                        app:chipStrokeWidth="1dp"
+                        app:chipMinHeight="36dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:textAppearance="?attr/textAppearanceBody2" />
+
+                </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/view_pager"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintTop_toBottomOf="@id/tabLayout"
+                app:layout_constraintTop_toBottomOf="@id/tab_scroll_view"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
