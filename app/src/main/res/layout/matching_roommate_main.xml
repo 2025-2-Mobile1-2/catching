@@ -17,6 +17,7 @@
             android:layout_margin="40dp"
             android:orientation="horizontal">
             <ImageView
+                android:id="@+id/matching_roommate_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_arrow_left"/>
@@ -60,6 +61,7 @@
                 android:paddingEnd="50dp" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/match_roommate_button"
                 android:text="매칭 신청하기"
                 android:textColor="@color/black"
                 android:textSize="18sp"
