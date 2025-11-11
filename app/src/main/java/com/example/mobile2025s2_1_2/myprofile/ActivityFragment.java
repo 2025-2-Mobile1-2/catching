@@ -19,6 +19,6 @@ public class ActivityFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // fragment_activity.xml 파일을 화면에 띄웁니다.
-        return inflater.inflate(R.layout.fragment_activity, container, false);
+        return inflater.inflate(R.layout.myprofile_fragment_activity, container, false);
     }
 }
