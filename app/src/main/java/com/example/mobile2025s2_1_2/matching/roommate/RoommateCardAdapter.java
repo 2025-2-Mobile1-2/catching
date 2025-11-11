@@ -1,4 +1,4 @@
-package com.example.mobile2025s2_1_2.matching;
+package com.example.mobile2025s2_1_2.matching.roommate;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.mobile2025s2_1_2.R;
+
 import java.util.List;
 
 

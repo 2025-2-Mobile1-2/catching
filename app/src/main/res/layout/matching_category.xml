@@ -89,4 +89,11 @@
         </FrameLayout>
 
     </LinearLayout>
+    <!--디자인을 위한 여백용-->
+
+    <FrameLayout
+        android:id="@+id/roommate_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
 </FrameLayout>

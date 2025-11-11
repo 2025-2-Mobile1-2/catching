@@ -1,4 +1,4 @@
-package com.example.mobile2025s2_1_2.matching;
+package com.example.mobile2025s2_1_2.matching.roommate;
 
 import android.content.Context;
 import com.google.gson.Gson;
