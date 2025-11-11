@@ -1,6 +1,7 @@
 package com.example.mobile2025s2_1_2.matching;
 
 import android.os.Bundle;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
 import com.example.mobile2025s2_1_2.*;
+import com.example.mobile2025s2_1_2.utils.BottomNavBarHelper;
 
 import java.util.List;
 
