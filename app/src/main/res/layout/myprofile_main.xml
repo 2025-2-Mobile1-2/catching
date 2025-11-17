@@ -39,11 +39,7 @@
                 android:id="@+id/edit_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-<<<<<<< Updated upstream
-=======
                 android:layout_marginTop="16dp"
->>>>>>> Stashed changes
-                android:layout_marginEnd="24dp"
                 android:text="저장"
                 android:textColor="#2DD7A4"
                 android:textSize="20sp"
@@ -167,15 +163,13 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-<<<<<<< Updated upstream
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:background="#E0E0E0" />
-=======
->>>>>>> Stashed changes
+
             </LinearLayout>
 
             <LinearLayout
@@ -210,12 +204,14 @@
                     android:text="카카오톡 아이디"
                     android:textColor="#3C647C" />
             </LinearLayout>
+
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/view_pager"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintTop_toBottomOf="@id/fixed_profile_area"
-                app:layout_constraintBottom_toTopOf="@id/fixed_kakao_area"  app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/fixed_kakao_area"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
