@@ -1,90 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="0dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="16dp"
-                    android:text="학번"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:layout_weight="1"
-                    android:text="경영학전공"
-                    android:textAlignment="textEnd" />
-
-            </LinearLayout>
-
-            <View
-                android:id="@+id/view"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/cardview_dark_background" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_weight="1"
-                    android:text="성별"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_weight="1"
-                    android:text="소프트웨어광고융합전공"
-                    android:textAlignment="textEnd" />
-
-            </LinearLayout>
-
-            <View
-                android:id="@+id/view2"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/cardview_dark_background" />
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="[임시] 페이지 내용"/>
 
 </LinearLayout>
