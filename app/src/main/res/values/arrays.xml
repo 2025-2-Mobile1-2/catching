@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="department_array">
+        <item>선택하세요</item>
+        <item>소프트웨어학부</item>
+        <item>경영학부</item>
+        <item>경제학부</item>
+        <item>융합디자인학부</item>
+        <item>AI학부</item>
+    </string-array>
+
+    <string-array name="grade_array">
+        <item>선택하세요</item>
+        <item>1학년</item>
+        <item>2학년</item>
+        <item>3학년</item>
+        <item>4학년</item>
+    </string-array>
+
+    <string-array name="mbti_array">
+        <item>선택하세요</item>
+        <item>ISTJ</item>
+        <item>ISFJ</item>
+        <item>INFJ</item>
+        <item>INTJ</item>
+        <item>ISTP</item>
+        <item>ISFP</item>
+        <item>INFP</item>
+        <item>INTP</item>
+        <item>ESTP</item>
+        <item>ESFP</item>
+        <item>ENFP</item>
+        <item>ENTP</item>
+        <item>ESTJ</item>
+        <item>ESFJ</item>
+        <item>ENFJ</item>
+        <item>ENTJ</item>
+    </string-array>
+
+</resources>
