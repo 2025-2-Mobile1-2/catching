@@ -53,9 +53,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:scrollbars="none"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
+                android:scrollbars="none"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/back_button">
@@ -64,7 +64,7 @@
                     android:id="@+id/chip_group_tabs"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:chipSpacingHorizontal="8dp"
+                    app:chipSpacingHorizontal="3dp"
                     app:singleSelection="true">
 
                     <com.google.android.material.chip.Chip
@@ -72,51 +72,51 @@
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="8dp"
                         android:text="진로·전공 멘토 매칭"
+                        android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="@color/tab_chip_text_color"
                         app:chipBackgroundColor="@color/tab_chip_background_color"
-                        app:chipStrokeColor="@color/tab_chip_stroke_color"
-                        app:chipStrokeWidth="1dp"
                         app:chipMinHeight="36dp"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:textAppearance="?attr/textAppearanceBody2" />
+                        app:chipStrokeColor="@color/tab_chip_stroke_color"
+                        app:chipStrokeWidth="1dp" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chip_activity"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="8dp"
                         android:text="교내·교외 활동 팀원 매칭"
+                        android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="@color/tab_chip_text_color"
                         app:chipBackgroundColor="@color/tab_chip_background_color"
-                        app:chipStrokeColor="@color/tab_chip_stroke_color"
-                        app:chipStrokeWidth="1dp"
                         app:chipMinHeight="36dp"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:textAppearance="?attr/textAppearanceBody2" />
+                        app:chipStrokeColor="@color/tab_chip_stroke_color"
+                        app:chipStrokeWidth="1dp" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chip_roommate"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="8dp"
                         android:text="기숙사 룸메이트 매칭"
+                        android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="@color/tab_chip_text_color"
                         app:chipBackgroundColor="@color/tab_chip_background_color"
-                        app:chipStrokeColor="@color/tab_chip_stroke_color"
-                        app:chipStrokeWidth="1dp"
                         app:chipMinHeight="36dp"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:textAppearance="?attr/textAppearanceBody2" />
+                        app:chipStrokeColor="@color/tab_chip_stroke_color"
+                        app:chipStrokeWidth="1dp" />
 
                 </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
