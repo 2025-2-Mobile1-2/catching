@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.mobile2025s2_1_2">
 
     <application
         android:allowBackup="true"
@@ -21,12 +22,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".home.HomeActivity" />
+        <activity android:name=".home.HomeActivity"
+            android:exported="true"/>
         <activity android:name=".notification.NotificationActivity" />
         <activity android:name=".matching.RoommateActivity" />
         <activity android:name=".myprofile.MyprofileActivity" />
         <activity android:name=".settings.SettingsActivity" />
-        <activity android:name=".login.LoginActivity" />
+        <activity
+            android:name=".notification.ProfilePopActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".login.CreateProfileActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".login.LoginActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".login.StartActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>

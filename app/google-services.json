@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "456923291195",
+    "project_id": "catching2",
+    "storage_bucket": "catching2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:456923291195:android:95c4ce11add57b2053061e",
+        "android_client_info": {
+          "package_name": "com.example.mobile2025s2_1_2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "456923291195-0rd8if7ajoi03k0ovkkmusbd8h8hg76l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mobile2025s2_1_2",
+            "certificate_hash": "d1db3ae6a42d8f29018216ae49d3236b3be40739"
+          }
+        },
+        {
+          "client_id": "456923291195-cm5q2ekcfa1h7upthi1klqtsq7kf77hk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9AW_NjR1RML6wjYzEpj2T1nxqplJU3Pg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "456923291195-cm5q2ekcfa1h7upthi1klqtsq7kf77hk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

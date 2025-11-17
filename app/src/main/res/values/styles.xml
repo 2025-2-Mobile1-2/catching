@@ -4,4 +4,11 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">10%</item> <!-- 50%면 완전 원형 -->
     </style>
+
+    <style name="ProfileBarTitle">
+        <item name="android:textSize">15sp</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="android:textColor">#2DD7A4</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>
