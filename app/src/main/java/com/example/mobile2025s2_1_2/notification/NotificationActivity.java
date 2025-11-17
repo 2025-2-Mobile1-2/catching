@@ -118,4 +118,4 @@ public class NotificationActivity extends AppCompatActivity {
             tvSent.setTypeface(reg);
         }
     }
-}
+}//
