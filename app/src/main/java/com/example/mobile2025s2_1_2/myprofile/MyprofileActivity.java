@@ -35,15 +35,6 @@ public class MyprofileActivity extends AppCompatActivity {
         setContentView(R.layout.myprofile_main);
 
 
-        // --- 1. 뒤로가기 버튼 기능 ---
-        ImageButton backButton = findViewById(R.id.back_button);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish(); // 현재 액티비티 종료
-            }
-        });
-
 
         // --- 2. 상단 탭 (ChipGroup) 기능 ---
         // XML에서 ChipGroup ID와 ViewPager2 ID를 찾습니다.
