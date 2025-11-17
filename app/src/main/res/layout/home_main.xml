@@ -202,8 +202,6 @@
             </LinearLayout>
         </ScrollView>
 
-
-
         <!--매칭 페이지 선택시 카테고리창 fragment영역-->
         <FrameLayout
             android:id="@+id/fragment_container"
