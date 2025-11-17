@@ -9,7 +9,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.example.mobile2025s2_1_2.home.HomeActivity;
-import com.example.mobile2025s2_1_2.login.LoginActivity;;
+import com.example.mobile2025s2_1_2.login.LoginActivity;
+;
 
 public class MainActivity extends AppCompatActivity {
 
