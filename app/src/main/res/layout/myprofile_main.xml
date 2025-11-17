@@ -20,7 +20,7 @@
                 android:id="@+id/edit_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
                 android:text="저장"
                 android:textColor="#2DD7A4"
@@ -33,7 +33,7 @@
                 android:id="@+id/tab_scroll_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:scrollbars="none"
@@ -109,19 +109,11 @@
                 android:layout_marginTop="8dp"
                 android:orientation="vertical"
                 android:paddingStart="16dp"
-                android:paddingTop="20dp"
+                android:paddingTop="8dp"
                 android:paddingEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tab_scroll_view">
-
-                <View
-                    android:id="@+id/view2"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="16dp"
-                    android:background="#E0E0E0" />
 
                 <TextView
                     android:id="@+id/tv_user_email"
@@ -152,12 +144,6 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="16dp"
-                    android:background="#E0E0E0" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/fixed_kakao_area"
