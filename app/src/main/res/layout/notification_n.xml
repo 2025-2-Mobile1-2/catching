@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/alarm_basic_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginEnd="21dp"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <!-- 카드 -->
+    <RelativeLayout
+        android:id="@+id/alarm_basic"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@drawable/notification_b"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingStart="16dp"
+        android:paddingEnd="12dp">
+
+        <TextView
+            android:id="@+id/tv_alarm_title"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/ivArrow"
+            android:fontFamily="@font/light"
+            android:maxLines="2"
+            android:text="최북악 님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!"
+            android:textColor="#212121"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/ivArrow"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow_right" />
+    </RelativeLayout>
+
+    <!-- N 뱃지 -->
+    <TextView
+        android:id="@+id/badgeNew"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_gravity="top|end"
+        android:background="@drawable/background_badge_red"
+        android:clickable="true"
+        android:fontFamily="@font/medium"
+        android:gravity="center"
+        android:text="N"
+        android:textColor="@android:color/white"
+        android:textSize="13sp"
+        android:translationX="8dp"
+        android:translationY="-8dp" />
+</FrameLayout>
+

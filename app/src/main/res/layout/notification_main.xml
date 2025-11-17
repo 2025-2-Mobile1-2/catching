@@ -1,27 +1,81 @@
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!--여기가 메인 알림 화면-->
+        <!--여기가 메인 홈 화면-->
         <LinearLayout
             android:orientation="vertical"
-            android:gravity="center"
+            android:gravity="top"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/custom_navbar">
+            android:layout_above="@id/custom_navbar"
+            android:clipChildren="false">
 
-            <TextView
-                android:text="알림 화면"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <!--캐칭 앱 로고와 이름-->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="68dp"
+                android:background="#FFF5F5F5">
+                <ImageView
+                    android:layout_margin="4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_catching"/>
+                <ImageView
+                    android:layout_margin="4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/name_catching_mint"/>
+            </LinearLayout>
+
+            <!--캐칭 앱 배너 광고-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@drawable/banner_catching_background">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:background="#17212121">
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="20dp">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/banner_catching_title">
+                    </ImageView>
+                </FrameLayout>
+            </RelativeLayout>
+
+            <!-- 받은/보낸 매칭 토글 -->
+            <include layout="@layout/notification_toggle" />
+
+            <!-- 스크롤 영역 -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clipToPadding="false"
+                android:clipChildren="false"
+                android:paddingTop="8dp"
+                android:paddingBottom="80dp"
+                android:overScrollMode="never"/>
+
         </LinearLayout>
+
 
         <!--매칭 페이지 선택시 카테고리창 fragment영역-->
         <FrameLayout
