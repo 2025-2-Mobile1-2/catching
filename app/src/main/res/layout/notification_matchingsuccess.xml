@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_matching_success"
+    android:layout_width="318dp"
+    android:layout_height="187dp"
+    android:background="@drawable/notification_matchingsuccess"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="22dp"
+    android:paddingBottom="22dp"
+    android:elevation="6dp">
+
+    <!-- 내용 컨테이너 -->
+    <LinearLayout
+        android:id="@+id/content_box"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <!-- 안내 첫줄 -->
+        <TextView
+            android:id="@+id/tv_line1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="김국민님의 카카오톡 아이디는"
+            android:textColor="#212121"
+            android:textSize="16sp"
+            android:fontFamily="@font/regular"
+            android:letterSpacing="-0.01"
+            android:gravity="center"/>
+
+        <!-- 아이디 -->
+        <TextView
+            android:id="@+id/tv_kakao_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="6dp"
+            android:text="@@@@@"
+            android:textColor="#2DD7A4"
+            android:textSize="20sp"
+            android:fontFamily="@font/semibold"
+            android:letterSpacing="0.01"
+            android:gravity="center"/>
+
+        <!-- 안내 마지막 줄 -->
+        <TextView
+            android:id="@+id/tv_line2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="입니다. 연락해보세요!"
+            android:textColor="#212121"
+            android:textSize="16sp"
+            android:fontFamily="@font/regular"
+            android:letterSpacing="-0.01"
+            android:gravity="center"/>
+
+        <!-- 복사하기 버튼 (민트 아웃라인) -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_copy"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="16dp"
+            android:text="복사하기"
+            android:textSize="16sp"
+            android:fontFamily="@font/semibold"
+            android:textColor="#2DD7A4"
+            app:strokeColor="#2DD7A4"
+            app:strokeWidth="1.6dp"
+            app:cornerRadius="22dp"
+            app:rippleColor="@android:color/transparent"
+            android:backgroundTint="@android:color/transparent"/>
+    </LinearLayout>
+
+</RelativeLayout>
+
+
