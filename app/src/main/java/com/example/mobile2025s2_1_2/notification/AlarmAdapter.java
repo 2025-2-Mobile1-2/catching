@@ -18,12 +18,14 @@ import java.util.List;
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.VH> {
 
     private final List<AlarmItem> items;
+    private final boolean isReceivedList; // ★ 추가
 
-    public AlarmAdapter(List<AlarmItem> items) {
+    public AlarmAdapter(List<AlarmItem> items, boolean isReceivedList) {
         this.items = items;
+        this.isReceivedList = isReceivedList;
     }
 
-    static class VH extends RecyclerView.ViewHolder {
+    class VH extends RecyclerView.ViewHolder {
         TextView title, badge;
 
         VH(@NonNull View itemView) {
@@ -40,10 +42,20 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.VH> {
             badge.setVisibility(item.isNew ? View.VISIBLE : View.GONE);
 
             // 클릭 시 읽음 처리
+            // 🔥 여기만 수정됨
             itemView.setOnClickListener(v -> {
+
+                // N 읽음 처리
                 if (item.isNew) {
                     item.isNew = false;
                     badge.setVisibility(View.GONE);
+                }
+
+                // ★ 받은(received) 리스트일 때만 팝업 실행
+                if (isReceivedList) {
+                    if (v.getContext() instanceof NotificationActivity) {
+                        ((NotificationActivity) v.getContext()).showProfilePopup();
+                    }
                 }
             });
         }

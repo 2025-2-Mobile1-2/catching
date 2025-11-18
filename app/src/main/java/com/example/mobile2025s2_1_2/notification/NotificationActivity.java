@@ -1,8 +1,14 @@
 package com.example.mobile2025s2_1_2.notification;
 
+import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,6 +31,9 @@ public class NotificationActivity extends AppCompatActivity {
     // 토글
     private RelativeLayout toggleReceived, toggleSent;
     private TextView tvReceived, tvSent;
+
+    private Dialog profileDialog;
+    private Dialog confirmDialog;
 
     // 리스트
     private RecyclerView recycler;
@@ -80,13 +89,14 @@ public class NotificationActivity extends AppCompatActivity {
 
     /** 받은 탭 데이터 표시 */
     private void showReceived() {
-        adapter = new AlarmAdapter(new ArrayList<>(received));
+        adapter = new AlarmAdapter(new ArrayList<>(received), true);  // ★ true
         recycler.setAdapter(adapter);
     }
 
+
     /** 보낸 탭 데이터 표시 */
     private void showSent() {
-        adapter = new AlarmAdapter(new ArrayList<>(sent));
+        adapter = new AlarmAdapter(new ArrayList<>(sent), false); // ★ false
         recycler.setAdapter(adapter);
     }
 
@@ -117,5 +127,57 @@ public class NotificationActivity extends AppCompatActivity {
             tvSent.setTextColor(Color.parseColor("#2DD7A4"));
             tvSent.setTypeface(reg);
         }
+    }
+
+    public void showProfilePopup() {
+        profileDialog = new Dialog(NotificationActivity.this);
+        profileDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        profileDialog.setContentView(R.layout.profile_popup);
+
+        if (profileDialog.getWindow() != null) {
+            profileDialog.getWindow().setBackgroundDrawable(
+                    new ColorDrawable(Color.parseColor("#80000000"))
+            );
+            profileDialog.getWindow().setLayout(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+            );
+        }
+
+        ImageView btnClose = profileDialog.findViewById(R.id.btn_close);
+        btnClose.setOnClickListener(v -> profileDialog.dismiss());
+
+        ImageView btnAccept = profileDialog.findViewById(R.id.btn_accept);
+        ImageView btnReject = profileDialog.findViewById(R.id.btn_reject);
+
+        btnAccept.setOnClickListener(v -> {
+            profileDialog.dismiss();
+            showConfirmPopup();
+        });
+
+        btnReject.setOnClickListener(v -> profileDialog.dismiss());
+
+        profileDialog.show();
+    }
+
+    private void showConfirmPopup() {
+        confirmDialog = new Dialog(NotificationActivity.this);
+        confirmDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        confirmDialog.setContentView(R.layout.profile_popup2);
+
+        if (confirmDialog.getWindow() != null) {
+            confirmDialog.getWindow().setBackgroundDrawable(
+                    new ColorDrawable(Color.parseColor("#80000000"))
+            );
+            confirmDialog.getWindow().setLayout(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+            );
+        }
+
+        View btnConfirm = confirmDialog.findViewById(R.id.btn_confirm_layout);
+        btnConfirm.setOnClickListener(v -> confirmDialog.dismiss());
+
+        confirmDialog.show();
     }
 }//
