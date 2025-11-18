@@ -11,7 +11,9 @@
     android:paddingEnd="20dp"
     android:paddingTop="22dp"
     android:paddingBottom="22dp"
-    android:elevation="6dp">
+    android:elevation="6dp"
+    android:layout_gravity="center">
+
 
     <!-- 내용 컨테이너 -->
     <LinearLayout

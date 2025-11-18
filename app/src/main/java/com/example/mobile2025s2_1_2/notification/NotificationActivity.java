@@ -39,7 +39,7 @@ public class NotificationActivity extends AppCompatActivity {
     private RecyclerView recycler;
     private AlarmAdapter adapter;
 
-    // 테스트 데이터 (원하면 자유롭게 수정)
+    // 테스트 데이터
     private final List<AlarmItem> received = Arrays.asList(
             new AlarmItem("최북악 님으로부터 진로·전공 멘토 매칭 신청이 왔습니다!", true),   // 새 알림 (N)
             new AlarmItem("최북악 님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!", false)   // 읽은 알림
