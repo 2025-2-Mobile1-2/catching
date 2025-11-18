@@ -22,7 +22,14 @@ import com.example.mobile2025s2_1_2.utils.BottomNavBarHelper;
 // ChipGroup 관련 import (TabLayout 대체)
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-// ------------------------------------
+
+// ▼▼▼▼▼ 카카오 ID 수정을 위해 4줄 추가 ▼▼▼▼▼
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.content.Context;
+import android.view.inputmethod.InputMethodManager;
+// ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
 
 public class MyprofileActivity extends AppCompatActivity {
 
@@ -90,5 +97,32 @@ public class MyprofileActivity extends AppCompatActivity {
 
         // 현재 '마이' 탭이 활성화된 상태임을 Helper에 알림 (아이콘 및 텍스트 색상 변경)
         BottomNavBarHelper.setActiveTab(bottomNavBar, R.id.nav_myprofile);
+
+
+        // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+        // --- 4. 카카오톡 ID 입력란 기능 추가 ---
+        // (XML의 ID가 'edittext_kakao_id', 'icon_edit_kakao_id'라고 가정)
+
+        final EditText etKakaoId = findViewById(R.id.edittext_kakao_id);
+        ImageView iconEditKakaoId = findViewById(R.id.icon_edit_kakao_id);
+
+        // 연필 아이콘을 클릭했을 때의 동작
+        iconEditKakaoId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 1. EditText에 강제로 포커스를 줍니다.
+                etKakaoId.requestFocus();
+
+                // 2. 키보드를 수동으로 올립니다.
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.showSoftInput(etKakaoId, InputMethodManager.SHOW_IMPLICIT);
+                }
+
+                // 3. 커서를 텍스트 맨 뒤로 이동시킵니다.
+                etKakaoId.setSelection(etKakaoId.getText().length());
+            }
+        });
+        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
     }
 }
