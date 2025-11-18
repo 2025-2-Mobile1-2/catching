@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string-array name="gender_array">
+        <item>선택</item>
+        <item>남자</item>
+        <item>여자</item>
+    </string-array>
+
+    <!-- 1. 기숙사 종류 -->
+    <string-array name="dormitory_array">
+        <item>선택</item>
+        <item>교내생활관</item>
+        <item>길음생활관</item>
+        <item>정릉생활관</item>
+        <item>제2정릉생활관</item>
+    </string-array>
+
     <string-array name="department_array">
-        <item>선택하세요</item>
+        <item>선택</item>
         <item>소프트웨어학부</item>
         <item>경영학부</item>
         <item>경제학부</item>
@@ -11,7 +26,7 @@
     </string-array>
 
     <string-array name="grade_array">
-        <item>선택하세요</item>
+        <item>선택</item>
         <item>1학년</item>
         <item>2학년</item>
         <item>3학년</item>
@@ -19,7 +34,7 @@
     </string-array>
 
     <string-array name="mbti_array">
-        <item>선택하세요</item>
+        <item>선택</item>
         <item>ISTJ</item>
         <item>ISFJ</item>
         <item>INFJ</item>
@@ -36,6 +51,14 @@
         <item>ESFJ</item>
         <item>ENFJ</item>
         <item>ENTJ</item>
+    </string-array>
+
+    <!-- 3. 음주/흡연 여부 (O, X) -->
+    <!-- (이 배열 하나로 음주, 흡연 스피너 2곳에서 같이 사용할 수 있습니다) -->
+    <string-array name="ox_array">
+        <item>선택</item>
+        <item>O</item>
+        <item>X</item>
     </string-array>
 
 </resources>
