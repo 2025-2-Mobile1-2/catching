@@ -35,19 +35,22 @@ public class NotificationActivity extends AppCompatActivity {
     private Dialog profileDialog;
     private Dialog confirmDialog;
 
+    // ★ 추가됨
+    private Dialog kakaoDialog;    // 보낸 매칭 팝업용 다이얼로그
+
     // 리스트
     private RecyclerView recycler;
     private AlarmAdapter adapter;
 
     // 테스트 데이터
     private final List<AlarmItem> received = Arrays.asList(
-            new AlarmItem("최북악 님으로부터 진로·전공 멘토 매칭 신청이 왔습니다!", true),   // 새 알림 (N)
-            new AlarmItem("최북악 님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!", false)   // 읽은 알림
+            new AlarmItem("최북악 님으로부터 진로·전공 멘토 매칭 신청이 왔습니다!", true),
+            new AlarmItem("최북악 님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!", false)
     );
 
     private final List<AlarmItem> sent = Arrays.asList(
             new AlarmItem("김국민 님께 진로·전공 멘토 매칭 신청을 보냈습니다!", false),
-            new AlarmItem("홍지우 님께 교내·교외 활동 팀원 매칭 신청을 보냈습니다!", true)  // 새 알림 (N)
+            new AlarmItem("홍지우 님께 교내·교외 활동 팀원 매칭 신청을 보냈습니다!", true)
     );
 
     @Override
@@ -61,8 +64,8 @@ public class NotificationActivity extends AppCompatActivity {
         BottomNavBarHelper.setActiveTab(bottomNavBar, R.id.nav_notification);
 
         // 토글 뷰
-        toggleReceived = findViewById(R.id.alarm_toggle_r); // 받은 매칭 루트
-        toggleSent     = findViewById(R.id.alarm_toggle_s); // 보낸 매칭 루트
+        toggleReceived = findViewById(R.id.alarm_toggle_r);
+        toggleSent     = findViewById(R.id.alarm_toggle_s);
         tvReceived     = findViewById(R.id.tv_received);
         tvSent         = findViewById(R.id.tv_sent);
 
@@ -72,9 +75,9 @@ public class NotificationActivity extends AppCompatActivity {
         recycler.setClipChildren(false);
         recycler.setClipToPadding(false);
 
-        // 초기: 받은 매칭 활성 + 받은 데이터 표시
-        setToggleState(false); // UI만 전환
-        showReceived();        // 데이터 바인딩
+        // 초기: 받은 매칭 활성
+        setToggleState(false);
+        showReceived();
 
         // 토글 클릭
         toggleReceived.setOnClickListener(v -> {
@@ -87,42 +90,37 @@ public class NotificationActivity extends AppCompatActivity {
         });
     }
 
-    /** 받은 탭 데이터 표시 */
+    /** 받은 탭 */
     private void showReceived() {
-        adapter = new AlarmAdapter(new ArrayList<>(received), true);  // ★ true
+        adapter = new AlarmAdapter(new ArrayList<>(received), true);
         recycler.setAdapter(adapter);
     }
 
-
-    /** 보낸 탭 데이터 표시 */
+    /** 보낸 탭 */
     private void showSent() {
-        adapter = new AlarmAdapter(new ArrayList<>(sent), false); // ★ false
+        adapter = new AlarmAdapter(new ArrayList<>(sent), false);
         recycler.setAdapter(adapter);
     }
 
-    /** 토글의 활성/비활성 색상 및 폰트 전환(UI) */
+    /** 토글 UI 전환 */
     private void setToggleState(boolean isSentActive) {
         Typeface semi = ResourcesCompat.getFont(this, R.font.semibold);
         Typeface reg  = ResourcesCompat.getFont(this, R.font.regular);
 
         if (isSentActive) {
-            // 보낸 활성
             toggleSent.setBackgroundResource(R.drawable.notification_toggle_r);
             tvSent.setTextColor(Color.WHITE);
             tvSent.setTypeface(semi);
 
-            // 받은 비활성
             toggleReceived.setBackgroundResource(R.drawable.notification_toggle_s);
             tvReceived.setTextColor(Color.parseColor("#2DD7A4"));
             tvReceived.setTypeface(reg);
 
         } else {
-            // 받은 활성
             toggleReceived.setBackgroundResource(R.drawable.notification_toggle_r);
             tvReceived.setTextColor(Color.WHITE);
             tvReceived.setTypeface(semi);
 
-            // 보낸 비활성
             toggleSent.setBackgroundResource(R.drawable.notification_toggle_s);
             tvSent.setTextColor(Color.parseColor("#2DD7A4"));
             tvSent.setTypeface(reg);
@@ -180,4 +178,30 @@ public class NotificationActivity extends AppCompatActivity {
 
         confirmDialog.show();
     }
-}//
+
+    // ★ 추가된 카카오톡 아이디 팝업 함수
+    public void showKakaoPopup() {
+        kakaoDialog = new Dialog(NotificationActivity.this);
+        kakaoDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        kakaoDialog.setContentView(R.layout.notification_matchingsuccess);
+
+        if (kakaoDialog.getWindow() != null) {
+            kakaoDialog.getWindow().setBackgroundDrawable(
+                    new ColorDrawable(Color.parseColor("#80000000"))
+            );
+            kakaoDialog.getWindow().setLayout(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+            );
+        }
+
+        // 닫기/복사 버튼
+        View btnCopy = kakaoDialog.findViewById(R.id.btn_copy);
+        if (btnCopy != null) {
+            btnCopy.setOnClickListener(v -> kakaoDialog.dismiss());
+        }
+
+        kakaoDialog.show();
+    }
+}
