@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="최북악 님과 24기간 이야기나 정말수준의 대화를 기대하세요!"
+                android:text="최북악 님과 24기간 이야기나 정말 수준의\n 대화를 기대하세요!"
                 android:textSize="12sp"
                 android:textColor="#666666"
                 android:gravity="center" />

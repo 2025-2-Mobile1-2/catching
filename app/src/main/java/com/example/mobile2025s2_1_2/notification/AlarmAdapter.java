@@ -23,9 +23,17 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.VH> {
     private final List<AlarmItem> items;
     private final boolean isReceivedList; // 받은/보낸 구분
 
-    public AlarmAdapter(List<AlarmItem> items, boolean isReceivedList) {
+    private final OnAlarmClickListener listener;   // ★ 추가된 부분
+
+    // ★ 클릭 리스너 인터페이스 추가
+    public interface OnAlarmClickListener {
+        void onClick(AlarmItem item, boolean isReceivedList);
+    }
+
+    public AlarmAdapter(List<AlarmItem> items, boolean isReceivedList, OnAlarmClickListener listener) {
         this.items = items;
         this.isReceivedList = isReceivedList;
+        this.listener = listener;
     }
 
     class VH extends RecyclerView.ViewHolder {
@@ -47,25 +55,14 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.VH> {
             // 🔽 여기 클릭 로직만 수정
             itemView.setOnClickListener(v -> {
 
-                // 1) 먼저 N 읽음 처리
                 if (item.isNew) {
                     item.isNew = false;
                     badge.setVisibility(View.GONE);
                 }
 
-                // 2) 어떤 탭인지에 따라 다른 팝업 호출
-                if (v.getContext() instanceof NotificationActivity) {
-                    NotificationActivity act = (NotificationActivity) v.getContext();
-
-                    if (isReceivedList) {
-                        // 받은 매칭 탭 → 기존 프로필 팝업
-                        act.showProfilePopup();
-                    } else {
-                        // 보낸 매칭 탭 → 카카오 아이디 팝업
-                        act.showKakaoPopup();
-                    }
-                }
+                listener.onClick(item, isReceivedList);
             });
+
         }
 
         private CharSequence highlightCategory(String text) {
