@@ -8,17 +8,17 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.mobile2025s2_1_2.*;
-import com.example.mobile2025s2_1_2.utils.BottomNavBarHelper;
 
 public class ProfilePopActivity extends AppCompatActivity {
 
     private Button btnShowProfile;
     private Dialog profileDialog;
+    private Dialog confirmDialog;
+
+    private boolean shouldReopenProfilePopup = false; // 🔥 추가됨
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,17 +38,13 @@ public class ProfilePopActivity extends AppCompatActivity {
     private void showProfilePopup() {
         profileDialog = new Dialog(ProfilePopActivity.this);
 
-        // ✅ 타이틀바 제거
         profileDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         profileDialog.setContentView(R.layout.profile_popup);
 
-        // ✅ 배경을 반투명 검정색으로 설정
         if (profileDialog.getWindow() != null) {
             profileDialog.getWindow().setBackgroundDrawable(
                     new ColorDrawable(Color.parseColor("#80000000"))
             );
-            // ✅ 다이얼로그 크기를 화면에 맞게 설정
             profileDialog.getWindow().setLayout(
                     android.view.ViewGroup.LayoutParams.MATCH_PARENT,
                     android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -57,35 +53,57 @@ public class ProfilePopActivity extends AppCompatActivity {
 
         profileDialog.setCancelable(true);
 
-        // X 버튼
         ImageView btnClose = profileDialog.findViewById(R.id.btn_close);
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                profileDialog.dismiss();
-            }
-        });
+        btnClose.setOnClickListener(v -> profileDialog.dismiss());
 
-        // 확인 버튼
         ImageView btnAccept = profileDialog.findViewById(R.id.btn_accept);
         ImageView btnReject = profileDialog.findViewById(R.id.btn_reject);
 
-        btnAccept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 수락 동작
-                profileDialog.dismiss();
-            }
+        btnAccept.setOnClickListener(v -> {
+            profileDialog.dismiss();
+            showConfirmPopup();
         });
 
-        btnReject.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 거절 동작
-                profileDialog.dismiss();
-            }
-        });
+        btnReject.setOnClickListener(v -> profileDialog.dismiss());
 
         profileDialog.show();
+    }
+
+    private void showConfirmPopup() {
+        confirmDialog = new Dialog(ProfilePopActivity.this);
+        confirmDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        confirmDialog.setContentView(R.layout.profile_popup2);
+
+        if (confirmDialog.getWindow() != null) {
+            confirmDialog.getWindow().setBackgroundDrawable(
+                    new ColorDrawable(Color.parseColor("#80000000"))
+            );
+            confirmDialog.getWindow().setLayout(
+                    android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+                    android.view.ViewGroup.LayoutParams.MATCH_PARENT
+            );
+        }
+
+        confirmDialog.setCancelable(true);
+
+        View btnConfirm = confirmDialog.findViewById(R.id.btn_confirm_layout);
+        btnConfirm.setOnClickListener(v -> {
+            confirmDialog.dismiss();
+            shouldReopenProfilePopup = true;
+            recreate();
+        });
+
+        confirmDialog.show();
+    }
+
+    // 🔥 finish() 후 액티비티로 돌아오면 ProfilePopup1 다시 뜨도록
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (shouldReopenProfilePopup) {
+            shouldReopenProfilePopup = false;
+            showProfilePopup();
+        }
     }
 }
