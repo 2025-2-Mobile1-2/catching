@@ -1,8 +1,8 @@
 package com.example.mobile2025s2_1_2;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -10,7 +10,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.example.mobile2025s2_1_2.home.HomeActivity;
 import com.example.mobile2025s2_1_2.login.LoginActivity;
-;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 2. (로그인 X, 회원가입 O) -> 로그인 화면으로
         else if (signin && !login) {
-            Intent intent = new Intent(this, LoginActivity.class);
+            Intent intent = new Intent(this, Activity.class);
             startActivity(intent);
             finish(); // (중요) 현재 액티비티 종료
             return;   // (중요) 아래의 setContentView를 실행하지 않고 즉시 종료

@@ -1,22 +1,50 @@
 [
   {
     "name": "김국민",
-    "major": "24학번",
-    "mbti": "ENTP"
+    "sex": "남",
+    "domitory":"교내생활관",
+    "age": "2005년생",
+    "mbti": "ENTP",
+    "drink": "음주 O",
+    "smoke": "흡연 X",
+    "clean": 90,
+    "sleep": 50,
+    "subtlety": 10
   },
   {
     "name": "홍길동",
-    "major": "25학번",
-    "mbti": "ISFP"
+    "sex": "여",
+    "domitory":"정릉생활관",
+    "age": "2004년생",
+    "mbti": "ISFP",
+    "drink": "음주 X",
+    "smoke": "흡연 O",
+    "clean": 0,
+    "sleep": 80,
+    "subtlety": 60
   },
   {
     "name": "국만두",
-    "major": "21학번",
-    "mbti": "INTJ"
+    "sex": "남",
+    "domitory":"길음생활관",
+    "age": "2001년생",
+    "mbti": "INTJ",
+    "drink": "음주 X",
+    "smoke": "흡연 X",
+    "clean": 100,
+    "sleep": 20,
+    "subtlety": 30
   },
   {
     "name": "쿠민이",
-    "major": "23학번",
-    "mbti": "ENFP"
+    "sex": "여",
+    "domitory":"정릉2생활관",
+    "age": "2000년생",
+    "mbti": "ENFP",
+    "drink": "음주 O",
+    "smoke": "흡연 O",
+    "clean": 50,
+    "sleep": 45,
+    "subtlety": 100
   }
 ]
