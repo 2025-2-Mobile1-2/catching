@@ -28,9 +28,6 @@
         <activity android:name=".myprofile.MyprofileActivity" />
         <activity android:name=".settings.SettingsActivity" />
         <activity
-            android:name=".notification.ProfilePopActivity"
-            android:exported="true"/>
-        <activity
             android:name=".notification.NotificationActivity"
             android:exported="true"/>
         <activity

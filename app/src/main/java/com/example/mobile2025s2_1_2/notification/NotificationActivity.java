@@ -155,7 +155,12 @@ public class NotificationActivity extends AppCompatActivity {
             showConfirmPopup();
         });
 
-        btnReject.setOnClickListener(v -> profileDialog.dismiss());
+        btnReject.setOnClickListener(v -> {
+            profileDialog.dismiss();
+            showRejectPopup();
+        });
+
+
 
         profileDialog.show();
     }
@@ -180,4 +185,33 @@ public class NotificationActivity extends AppCompatActivity {
 
         confirmDialog.show();
     }
+
+    private void showRejectPopup() {
+        Dialog rejectDialog = new Dialog(NotificationActivity.this);
+        rejectDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        rejectDialog.setContentView(R.layout.profile_popup3);
+
+        if (rejectDialog.getWindow() != null) {
+            rejectDialog.getWindow().setBackgroundDrawable(
+                    new ColorDrawable(Color.parseColor("#80000000"))
+            );
+            rejectDialog.getWindow().setLayout(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+            );
+        }
+
+        // ✔ popup3의 "취소하기" 버튼 ID에 맞춰서 변경해야 함
+        View btnClose = rejectDialog.findViewById(R.id.btn_reject_layout);
+
+        btnClose.setOnClickListener(v -> rejectDialog.dismiss());
+        // ✔ popup3의 "취소하기" 버튼 ID에 맞춰서 변경해야 함
+        View btnDelete = rejectDialog.findViewById(R.id.btn_delete_layout);
+
+        btnDelete.setOnClickListener(v -> rejectDialog.dismiss());
+
+        rejectDialog.show();
+    }
+
+
 }//

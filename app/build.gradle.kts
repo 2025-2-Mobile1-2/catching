@@ -52,7 +52,8 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.cardview)
     implementation(libs.viewpager2)
-    implementation(libs.play.services.tasks)
+    implementation("com.google.android.gms:play-services-tasks:18.0.2")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
