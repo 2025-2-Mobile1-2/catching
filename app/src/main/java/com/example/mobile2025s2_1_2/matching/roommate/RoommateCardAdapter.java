@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.mobile2025s2_1_2.R;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
 
@@ -26,15 +27,45 @@ public class RoommateCardAdapter extends RecyclerView.Adapter<RoommateCardAdapte
     // 🔹 카드 아이템 하나를 표현하는 내부 클래스
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameText;
-        TextView majorText;
+        TextView sexText;
+        TextView domitoryText;
+        TextView ageText;
         TextView mbtiText;
+        TextView drinkText;
+        TextView smokeText;
+        MaterialCardView cleanPercent;
+        MaterialCardView sleepPercent;
+        MaterialCardView subtletyPercent;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             nameText = itemView.findViewById(R.id.roommate_name);
-            majorText = itemView.findViewById(R.id.roommate_major);
+            sexText = itemView.findViewById(R.id.roommate_sex);
+            domitoryText = itemView.findViewById(R.id.roommate_domitory);
+            ageText = itemView.findViewById(R.id.roommate_age);
             mbtiText = itemView.findViewById(R.id.roommate_mbti);
+            drinkText = itemView.findViewById(R.id.roommate_drink);
+            smokeText = itemView.findViewById(R.id.roommate_smoke);
+            cleanPercent = itemView.findViewById(R.id.roommate_clean);
+            sleepPercent = itemView.findViewById(R.id.roommate_sleep);
+            subtletyPercent = itemView.findViewById(R.id.roommate_subtlety);
         }
+    }
+
+    private void setPercent(MaterialCardView bar, int percent) {
+        percent = Math.max(0, Math.min(percent, 100));
+        int finalPercent = percent;
+        bar.post(() -> {
+            int parentWidth = dpToPx(220);  // 최대 길이를 220dp로 고정
+            ViewGroup.LayoutParams params = bar.getLayoutParams();
+            params.width = (int)(parentWidth * (finalPercent / 100f));
+            bar.setLayoutParams(params);
+        });
+    }
+    private int dpToPx(int dp) {
+        float density = context.getResources().getDisplayMetrics().density;
+        return Math.round(dp * density);
     }
 
     @NonNull
@@ -50,8 +81,15 @@ public class RoommateCardAdapter extends RecyclerView.Adapter<RoommateCardAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         RoommateCardData.RoommateData data = roommateList.get(position);
         holder.nameText.setText(data.getName());
-        holder.majorText.setText(data.getMajor());
+        holder.sexText.setText(data.getSex());
+        holder.domitoryText.setText(data.getDomitory());
+        holder.ageText.setText(data.getAge());
         holder.mbtiText.setText(data.getMbti());
+        holder.drinkText.setText(data.getDrink());
+        holder.smokeText.setText(data.getSmoke());
+        setPercent(holder.cleanPercent, data.getClean());
+        setPercent(holder.sleepPercent, data.getSleep());
+        setPercent(holder.subtletyPercent, data.getSubtlety());
     }
 
     // 🔹 전체 카드 개수

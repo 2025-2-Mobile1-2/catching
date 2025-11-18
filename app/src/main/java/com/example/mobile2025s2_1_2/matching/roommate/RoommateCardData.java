@@ -15,13 +15,27 @@ public class RoommateCardData {
 
     public static class RoommateData {
         private String name;
-        private String major;
+        private String sex;
+        private String domitory;
+        private String age;
         private String mbti;
+        private String drink;
+        private String smoke;
+        private int clean;
+        private int sleep;
+        private int subtlety;
 
         // Getter 메서드 (Gson이 자동으로 매핑함)
         public String getName() { return name; }
-        public String getMajor() { return major; }
+        public String getSex() { return sex; }
+        public String getDomitory() { return domitory; }
+        public String getAge() { return age; }
         public String getMbti() { return mbti; }
+        public String getDrink() { return drink; }
+        public String getSmoke() { return smoke; }
+        public int getClean() { return clean; }
+        public int getSleep() { return sleep; }
+        public int getSubtlety() { return subtlety; }
     }
     // JSON 파일을 읽어서 룸메이트 데이터 리스트로 반환
     public static List<RoommateData> loadRoommates(Context context) {

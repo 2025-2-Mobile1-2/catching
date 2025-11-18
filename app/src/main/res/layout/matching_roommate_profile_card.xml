@@ -16,12 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:layout_margin="15dp">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_heart_red"/>
-        </LinearLayout>
+            android:layout_margin="15dp"/>
 
         <!--이름 & 프로필 사진-->
         <LinearLayout
@@ -45,7 +40,8 @@
         <!--특징-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <!-- 특징 태그 묶음 -->
             <com.google.android.flexbox.FlexboxLayout
                 android:layout_width="match_parent"
@@ -56,8 +52,8 @@
                 app:justifyContent="center">
 
                 <TextView
-                    android:id="@+id/roommate_major"
-                    android:text="23학번"
+                    android:id="@+id/roommate_sex"
+                    android:text="남"
                     android:textSize="16sp"
                     android:fontFamily="@font/light"
                     android:background="@drawable/background_card_tag"
@@ -66,7 +62,8 @@
                     android:layout_height="wrap_content" />
 
                 <TextView
-                    android:text="남"
+                    android:id="@+id/roommate_domitory"
+                    android:text="교내생활관"
                     android:textSize="16sp"
                     android:fontFamily="@font/light"
                     android:background="@drawable/background_card_tag"
@@ -75,16 +72,8 @@
                     android:layout_height="wrap_content"/>
 
                 <TextView
-                    android:text="음주 O"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/light"
-                    android:background="@drawable/background_card_tag"
-                    android:layout_margin="5dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
-                    android:text="흡연 X"
+                    android:id="@+id/roommate_age"
+                    android:text="2005년생"
                     android:textSize="16sp"
                     android:fontFamily="@font/light"
                     android:background="@drawable/background_card_tag"
@@ -103,7 +92,18 @@
                     android:layout_height="wrap_content"/>
 
                 <TextView
-                    android:text="1:00 - 8:00 수면"
+                    android:id="@+id/roommate_drink"
+                    android:text="음주 O"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/light"
+                    android:background="@drawable/background_card_tag"
+                    android:layout_margin="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/roommate_smoke"
+                    android:text="흡연 X"
                     android:textSize="16sp"
                     android:fontFamily="@font/light"
                     android:background="@drawable/background_card_tag"
@@ -111,6 +111,130 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </com.google.android.flexbox.FlexboxLayout>
+
+            <!--특징 percent Bar-->
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_margin="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <!--청결도-->
+                <LinearLayout
+                    android:layout_margin="5dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="청결도"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/semibold"
+                        android:textColor="#FF2DD7A4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="220dp"
+                            android:layout_height="15dp"
+                            android:backgroundTint="#FFE0FFF6"
+                            app:cardCornerRadius="12dp"
+                            android:layout_marginHorizontal="25dp"
+                            android:layout_marginTop="6dp"
+                            app:strokeWidth="0dp"
+                            app:strokeColor="@android:color/transparent"/>
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/roommate_clean"
+                            android:layout_width="80dp"
+                            android:layout_height="15dp"
+                            android:backgroundTint="#FF2DD7A4"
+                            app:cardCornerRadius="12dp"
+                            android:layout_marginHorizontal="25dp"
+                            android:layout_marginTop="6dp"
+                            app:strokeWidth="0dp"
+                            app:strokeColor="@android:color/transparent"/>
+                    </FrameLayout>
+                </LinearLayout>
+                <!--잠꼬대 정도-->
+                <LinearLayout
+                    android:layout_margin="5dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="잠꼬대 정도"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/semibold"
+                        android:textColor="#FF2DD7A4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="220dp"
+                            android:layout_height="15dp"
+                            android:backgroundTint="#FFE0FFF6"
+                            app:cardCornerRadius="12dp"
+                            android:layout_marginHorizontal="25dp"
+                            android:layout_marginTop="6dp"
+                            app:strokeWidth="0dp"
+                            app:strokeColor="@android:color/transparent"/>
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/roommate_sleep"
+                            android:layout_width="150dp"
+                            android:layout_height="15dp"
+                            android:backgroundTint="#FF2DD7A4"
+                            app:cardCornerRadius="12dp"
+                            android:layout_marginHorizontal="25dp"
+                            android:layout_marginTop="6dp"
+                            app:strokeWidth="0dp"
+                            app:strokeColor="@android:color/transparent"/>
+                    </FrameLayout>
+                </LinearLayout>
+                <!--예민 정도-->
+                <LinearLayout
+                    android:layout_margin="5dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="예민 정도"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/semibold"
+                        android:textColor="#FF2DD7A4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="220dp"
+                            android:layout_height="15dp"
+                            android:backgroundTint="#FFE0FFF6"
+                            app:cardCornerRadius="12dp"
+                            android:layout_marginHorizontal="25dp"
+                            android:layout_marginTop="6dp"
+                            app:strokeWidth="0dp"
+                            app:strokeColor="@android:color/transparent"/>
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/roommate_subtlety"
+                            android:layout_width="20dp"
+                            android:layout_height="15dp"
+                            android:backgroundTint="#FF2DD7A4"
+                            app:cardCornerRadius="12dp"
+                            android:layout_marginHorizontal="25dp"
+                            android:layout_marginTop="6dp"
+                            app:strokeWidth="0dp"
+                            app:strokeColor="@android:color/transparent"/>
+                    </FrameLayout>
+                </LinearLayout>
+
+
+            </LinearLayout>
         </LinearLayout>
 
         <!-- 잠버릇 & 청결 수준 -->
