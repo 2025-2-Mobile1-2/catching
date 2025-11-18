@@ -10,15 +10,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.mobile2025s2_1_2.R;
+
 import java.util.List;
 
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.VH> {
 
     private final List<AlarmItem> items;
-    private final boolean isReceivedList; // ★ 추가
+    private final boolean isReceivedList; // 받은/보낸 구분
 
     public AlarmAdapter(List<AlarmItem> items, boolean isReceivedList) {
         this.items = items;
@@ -41,20 +44,25 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.VH> {
             // N 뱃지 보이기/숨기기
             badge.setVisibility(item.isNew ? View.VISIBLE : View.GONE);
 
-            // 클릭 시 읽음 처리
-            // 🔥 여기만 수정됨
+            // 🔽 여기 클릭 로직만 수정
             itemView.setOnClickListener(v -> {
 
-                // N 읽음 처리
+                // 1) 먼저 N 읽음 처리
                 if (item.isNew) {
                     item.isNew = false;
                     badge.setVisibility(View.GONE);
                 }
 
-                // ★ 받은(received) 리스트일 때만 팝업 실행
-                if (isReceivedList) {
-                    if (v.getContext() instanceof NotificationActivity) {
-                        ((NotificationActivity) v.getContext()).showProfilePopup();
+                // 2) 어떤 탭인지에 따라 다른 팝업 호출
+                if (v.getContext() instanceof NotificationActivity) {
+                    NotificationActivity act = (NotificationActivity) v.getContext();
+
+                    if (isReceivedList) {
+                        // 받은 매칭 탭 → 기존 프로필 팝업
+                        act.showProfilePopup();
+                    } else {
+                        // 보낸 매칭 탭 → 카카오 아이디 팝업
+                        act.showKakaoPopup();
                     }
                 }
             });
