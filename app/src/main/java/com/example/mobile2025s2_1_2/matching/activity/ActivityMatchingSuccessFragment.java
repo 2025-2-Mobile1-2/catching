@@ -1,4 +1,4 @@
-package com.example.mobile2025s2_1_2.matching.roommate;
+package com.example.mobile2025s2_1_2.matching.activity;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,27 +12,27 @@ import androidx.fragment.app.Fragment;
 
 import com.example.mobile2025s2_1_2.R;
 
-public class RoommateMatchingSuccessFragment extends Fragment {
+public class ActivityMatchingSuccessFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.matching_roommate_match_success, container, false);
+        View view = inflater.inflate(R.layout.matching_activity_match_success, container, false);
         String name = getArguments().getString("name");
 
-        TextView nameText = view.findViewById(R.id.matching_roommate_name);
+        TextView nameText = view.findViewById(R.id.matching_activity_name);
         nameText.setText(name);
-        TextView toNameText = view.findViewById(R.id.matching_roommate_to_name);
+        TextView toNameText = view.findViewById(R.id.matching_activity_to_name);
         toNameText.setText(name + " 님께");
-        TextView textName = view.findViewById(R.id.matching_roommate_text_name);
+        TextView textName = view.findViewById(R.id.matching_activity_text_name);
         textName.setText(name + "님께서 매칭을 수락하시면");
 
 
 
 
         //확인했어요
-        TextView roommateMatchingOk = view.findViewById(R.id.matching_roommate_success);
+        TextView roommateMatchingOk = view.findViewById(R.id.matching_activity_success);
         roommateMatchingOk.setOnClickListener(v -> {
             requireActivity().getSupportFragmentManager().popBackStack();
 

@@ -54,7 +54,7 @@
 
         <!--교내외 활동 버튼-->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/match_cate_school"
+            android:id="@+id/match_cate_activity"
             android:text="교내·교외 활동 팀원 매칭"
             android:textColor="@color/black"
             android:fontFamily="@font/semibold"
@@ -93,6 +93,11 @@
 
     <FrameLayout
         android:id="@+id/roommate_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
+    <FrameLayout
+        android:id="@+id/activity_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </FrameLayout>

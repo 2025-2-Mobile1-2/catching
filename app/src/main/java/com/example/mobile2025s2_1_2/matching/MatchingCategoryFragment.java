@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.example.mobile2025s2_1_2.*;
 import com.example.mobile2025s2_1_2.matching.roommate.RoommateFragment;
+import com.example.mobile2025s2_1_2.matching.activity.ActivityFragment;
 
 
 public class MatchingCategoryFragment extends Fragment {
@@ -31,6 +32,17 @@ public class MatchingCategoryFragment extends Fragment {
         } else {
             textView.setText(Html.fromHtml(text));
         }
+        //기숫사 룸메이트 매칭 버튼
+        View activityView = view.findViewById(R.id.match_cate_activity);
+
+        activityView.setOnClickListener(v -> {
+            ActivityFragment activityFragment = new ActivityFragment();
+            getParentFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.activity_container, activityFragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
 
         //기숫사 룸메이트 매칭 버튼
         View roomateView = view.findViewById(R.id.match_cate_roommate);
