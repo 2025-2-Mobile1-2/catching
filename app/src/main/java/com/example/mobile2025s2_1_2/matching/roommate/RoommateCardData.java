@@ -41,7 +41,7 @@ public class RoommateCardData {
     public static List<RoommateData> loadRoommates(Context context) {
         try {
             // 1️⃣ JSON 파일 가져오기 (res/raw/roommate_data.json)
-            InputStream inputStream = context.getResources().openRawResource(R.raw.roommate_data);
+            InputStream inputStream = context.getResources().openRawResource(R.raw.user_data);
 
             // 2️⃣ 파일을 문자 단위로 읽기 위한 Reader
             InputStreamReader reader = new InputStreamReader(inputStream);
