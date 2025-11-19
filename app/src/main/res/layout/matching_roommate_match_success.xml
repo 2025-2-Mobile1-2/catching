@@ -37,7 +37,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_profile_reverse"/>
                 <TextView
-                    android:id="@+id/roommate_name"
+                    android:id="@+id/matching_roommate_name"
                     android:text="김국민"
                     android:textSize="18sp"
                     android:fontFamily="@font/regular"
@@ -54,13 +54,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="20dp"/>
                 <TextView
-                    android:id="@+id/roommate_to_name"
+                    android:id="@+id/matching_roommate_to_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="김국민 님께"
                     android:textSize="15sp"
                     android:fontFamily="@font/light"/>
                 <TextView
+                    android:id="@+id/matching_roommate_title"
                     android:layout_marginBottom="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -69,7 +70,7 @@
                     android:textColor="#FF2DD7A4"
                     android:fontFamily="@font/regular"/>
                 <TextView
-                    android:id="@+id/roommate_text_name"
+                    android:id="@+id/matching_roommate_text_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="김국민 님께서 매칭을 수락하시면"
@@ -86,7 +87,7 @@
                     android:layout_height="20dp"/>
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/roommate_matching_success"
+                    android:id="@+id/matching_roommate_success"
                     android:layout_margin="5dp"
                     android:layout_width="126dp"
                     android:layout_height="41dp"

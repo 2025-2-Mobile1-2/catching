@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:padding="4dp">
+            android:padding="10dp">
             <!--이름 & 프로필 사진-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -37,7 +37,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_profile_reverse"/>
                 <TextView
-                    android:id="@+id/matching_roommate_name"
+                    android:id="@+id/matching_activity_name"
                     android:text="김국민"
                     android:textSize="18sp"
                     android:fontFamily="@font/regular"
@@ -49,66 +49,59 @@
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp">
+                android:layout_margin="10dp">
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="20dp"/>
                 <TextView
-                    android:id="@+id/matching_roommate_to_name"
+                    android:id="@+id/matching_activity_to_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="김국민 님께"
                     android:textSize="15sp"
                     android:fontFamily="@font/light"/>
                 <TextView
-                    android:id="@+id/matching_roommate_title"
+                    android:id="@+id/match_title"
+                    android:layout_marginBottom="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="기숙사 룸메이트 매칭을 신청하시겠습니까?"
+                    android:text="교내·교외 활동 팀원 매칭 신청 성공!!"
+                    android:textSize="17sp"
+                    android:textColor="#FF2DD7A4"
+                    android:fontFamily="@font/regular"/>
+                <TextView
+                    android:id="@+id/matching_activity_text_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="김국민 님께서 매칭을 수락하시면"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/light"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="알림으로 알려드릴게요"
                     android:textSize="15sp"
                     android:fontFamily="@font/light"/>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="20dp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center">
+
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/matching_roommate_ok"
+                    android:id="@+id/matching_activity_success"
                     android:layout_margin="5dp"
-                    android:layout_width="102dp"
+                    android:layout_width="126dp"
                     android:layout_height="41dp"
-                    android:text="신청하기"
+                    android:text="확인했어요"
                     android:textColor="#FFFFFFFF"
-                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/semibold"
                     app:cornerRadius="50dp"
                     app:strokeColor="#00808080"
                     app:strokeWidth="0.7dp"
                     app:backgroundTint="#FF2DD7A4" />
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/matching_roommate_cancel"
-                    android:layout_margin="5dp"
-                    android:layout_width="102dp"
-                    android:layout_height="41dp"
-                    android:text="취소하기"
-                    android:textSize="18sp"
-                    android:textColor="#EC5655"
-                    android:fontFamily="@font/regular"
-                    app:cornerRadius="50dp"
-                    app:strokeColor="#EC5655"
-                    app:strokeWidth="0.7dp"
-                    app:backgroundTint="#FFFFE5E5" />
             </LinearLayout>
-            <TextView
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="신청하시면 취소가 불가능해요"
-                android:textSize="13sp"
-                android:fontFamily="@font/light"/>
+
+
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </FrameLayout>

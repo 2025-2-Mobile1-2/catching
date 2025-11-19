@@ -1,4 +1,4 @@
-package com.example.mobile2025s2_1_2.matching.roommate;
+package com.example.mobile2025s2_1_2.matching.activity;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,9 +17,12 @@ import androidx.recyclerview.widget.SnapHelper;
 import java.util.List;
 
 import com.example.mobile2025s2_1_2.R;
+import com.example.mobile2025s2_1_2.matching.roommate.RoommateCardAdapter;
+import com.example.mobile2025s2_1_2.matching.roommate.RoommateCardData;
+import com.example.mobile2025s2_1_2.matching.roommate.RoommateMatchingFragment;
 import com.google.android.material.button.MaterialButton;
 
-public class RoommateFragment extends Fragment {
+public class ActivityFragment extends Fragment {
 
     @Nullable
     @Override
@@ -27,16 +30,16 @@ public class RoommateFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.matching_roommate_main, container, false);
+        View view = inflater.inflate(R.layout.matching_activity_main, container, false);
 
         //뒤로가기
-        ImageView roommateBack = view.findViewById(R.id.matching_roommate_back);
+        ImageView roommateBack = view.findViewById(R.id.matching_activity_back);
         roommateBack.setOnClickListener(v->{
             requireActivity().getSupportFragmentManager().popBackStack();
         });
 
         // 프로필 카드 리스트
-        RecyclerView recyclerView = view.findViewById(R.id.profile_roommate);
+        RecyclerView recyclerView = view.findViewById(R.id.profile_activity);
         // 가로 스크롤
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -75,7 +78,7 @@ public class RoommateFragment extends Fragment {
 
 
         //메칭 신청하기 버튼
-        MaterialButton matchRoomButton = view.findViewById(R.id.match_roommate_button);
+        MaterialButton matchRoomButton = view.findViewById(R.id.match_activity_button);
         matchRoomButton.setOnClickListener(v -> {
             View centerRoomCard = snapHelper.findSnapView(layoutManager);
             if (centerRoomCard != null) {
@@ -83,15 +86,15 @@ public class RoommateFragment extends Fragment {
                 RoommateCardData.RoommateData selectedRoommate = roommateList.get(position);
                 String name = selectedRoommate.getName();
 
-                //프로필 이름과 함께 신처응로 값 넘기기
-                RoommateMatchingFragment fragment = new RoommateMatchingFragment();
+                //프로필 이름과 함께 신청으로 값 넘기기
+                ActivityMatchingFragment fragment = new ActivityMatchingFragment();
                 Bundle args = new Bundle();
                 args.putString("name", name);
                 fragment.setArguments(args);
                 requireActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                        .add(R.id.fragment_container, fragment, "RoommateMatchingDialogFragment")
+                        .add(R.id.fragment_container, fragment, "ActivityMatchingFragment")
                         .addToBackStack(null)
                         .commit();
             }

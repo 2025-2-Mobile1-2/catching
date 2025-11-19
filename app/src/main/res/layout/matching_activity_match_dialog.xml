@@ -21,7 +21,7 @@
         <LinearLayout
             android:layout_gravity="center"
             android:orientation="vertical"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:padding="4dp">
@@ -37,7 +37,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_profile_reverse"/>
                 <TextView
-                    android:id="@+id/matching_roommate_name"
+                    android:id="@+id/matching_activity_name"
                     android:text="김국민"
                     android:textSize="18sp"
                     android:fontFamily="@font/regular"
@@ -54,17 +54,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="20dp"/>
                 <TextView
-                    android:id="@+id/matching_roommate_to_name"
+                    android:id="@+id/matching_activity_to_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="김국민 님께"
                     android:textSize="15sp"
                     android:fontFamily="@font/light"/>
                 <TextView
-                    android:id="@+id/matching_roommate_title"
+                    android:id="@+id/matching_activity_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="기숙사 룸메이트 매칭을 신청하시겠습니까?"
+                    android:text="교내·교외 활동 팀원 매칭을 신청하시겠습니까?"
                     android:textSize="15sp"
                     android:fontFamily="@font/light"/>
                 <View
@@ -77,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center">
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/matching_roommate_ok"
+                    android:id="@+id/matching_activity_ok"
                     android:layout_margin="5dp"
                     android:layout_width="102dp"
                     android:layout_height="41dp"
@@ -89,7 +89,7 @@
                     app:strokeWidth="0.7dp"
                     app:backgroundTint="#FF2DD7A4" />
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/matching_roommate_cancel"
+                    android:id="@+id/matching_activity_cancel"
                     android:layout_margin="5dp"
                     android:layout_width="102dp"
                     android:layout_height="41dp"
