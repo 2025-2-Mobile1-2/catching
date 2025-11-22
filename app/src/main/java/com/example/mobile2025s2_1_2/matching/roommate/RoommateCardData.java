@@ -14,9 +14,10 @@ import com.example.mobile2025s2_1_2.R;
 public class RoommateCardData {
 
     public static class RoommateData {
+        private String email;
         private String name;
         private String sex;
-        private String domitory;
+        private String dormitory;
         private String age;
         private String mbti;
         private String drink;
@@ -26,9 +27,11 @@ public class RoommateCardData {
         private int subtlety;
 
         // Getter 메서드 (Gson이 자동으로 매핑함)
+        public String getEmail(){ return email; }
+
         public String getName() { return name; }
         public String getSex() { return sex; }
-        public String getDomitory() { return domitory; }
+        public String getDormitory() { return dormitory; }
         public String getAge() { return age; }
         public String getMbti() { return mbti; }
         public String getDrink() { return drink; }

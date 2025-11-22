@@ -1,0 +1,83 @@
+<!-- Auto layout, grids, variables, and unit scale are not yet supported -->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/matching_mentorship"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToOutline="true"
+    android:background="@drawable/background_matching">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="40dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/matching_mentorship_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_left"/>
+            <LinearLayout
+                android:layout_width="290dp"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+            <com.google.android.material.button.MaterialButton
+                android:text="진로·전공 멘토 매칭"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:fontFamily="@font/medium"
+                app:backgroundTint="#A8FFFFFF"
+                app:cornerRadius="25dp"
+                android:layout_margin="11dp"
+                android:layout_width="wrap_content"
+                android:layout_height="49dp"/>
+
+            <!--룸메이트 상대 프로필-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/profile_mentorship"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:paddingStart="50dp"
+                android:paddingEnd="50dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/match_mentorship_button"
+                android:text="매칭 신청하기"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:fontFamily="@font/medium"
+                app:backgroundTint="#FFFFFFFF"
+                app:strokeColor="#FF4DEFBF"
+                app:strokeWidth="2dp"
+                app:cornerRadius="20dp"
+                android:layout_margin="11dp"
+                android:layout_width="190dp"
+                android:layout_height="55dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!--하단 navBar-->
+    <include
+        android:id="@+id/custom_navbar"
+        layout="@layout/layout_bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"/>
+</RelativeLayout>

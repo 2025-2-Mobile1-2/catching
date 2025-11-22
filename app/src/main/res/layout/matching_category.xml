@@ -39,7 +39,7 @@
 
         <!--진로 버튼-->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/match_cate_career"
+            android:id="@+id/match_cate_mentorship"
             android:text="진로·전공 멘토 매칭"
             android:textColor="@color/black"
             android:fontFamily="@font/semibold"
@@ -91,6 +91,11 @@
     </LinearLayout>
     <!--디자인을 위한 여백용-->
 
+    <FrameLayout
+        android:id="@+id/mentorship_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
     <FrameLayout
         android:id="@+id/roommate_container"
         android:layout_width="match_parent"
