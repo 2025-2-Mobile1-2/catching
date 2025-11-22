@@ -11,9 +11,10 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.mobile2025s2_1_2.*;
 import com.example.mobile2025s2_1_2.home.HomeActivity;
-import com.example.mobile2025s2_1_2.myprofile.MyprofileActivity;
-import com.example.mobile2025s2_1_2.notification.NotificationActivity;
-import com.example.mobile2025s2_1_2.settings.SettingsActivity;
+import com.example.mobile2025s2_1_2.notification.NotificationFragment;
+import com.example.mobile2025s2_1_2.matching.MatchingCategoryFragment;
+import com.example.mobile2025s2_1_2.myprofile.MyprofileFragment;
+import com.example.mobile2025s2_1_2.settings.SettingsFragment;
 
 
 public class BottomNavBarHelper {
@@ -77,36 +78,62 @@ public class BottomNavBarHelper {
         LinearLayout navSettings = bottomNavBar.findViewById(R.id.nav_settings);
 
         navHome.setOnClickListener(v -> {
-            //매칭 탭  fragment 켜 있으면 닫기
             if (activity instanceof FragmentActivity) {
                 FragmentActivity fa = (FragmentActivity) activity;
-                final String TAG = "MatchingCategoryFragment";
-                if (fa.getSupportFragmentManager().findFragmentByTag(TAG) != null) {
+
+                // 🔥 매칭 탭 fragment 켜 있으면 닫기
+                final String MATCHING_TAG = "MatchingCategoryFragment";
+                if (fa.getSupportFragmentManager().findFragmentByTag(MATCHING_TAG) != null) {
                     fa.getSupportFragmentManager().popBackStack();
-                    setActiveTab(bottomNavBar, R.id.nav_home);
                 }
+
+                // 🔥 모든 Fragment 닫기 (백스택 전체 초기화)
+                fa.getSupportFragmentManager().popBackStack(
+                        null,
+                        androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
+                );
             }
-            //홈페이지 아니면 홈페이지로
-            if (!(activity instanceof HomeActivity)) {
-                activity.startActivity(new Intent(activity, HomeActivity.class));
-                activity.overridePendingTransition(0, 0);
-            }
+
+            // 홈 탭 UI 활성화
+            setActiveTab(bottomNavBar, R.id.nav_home);
+
+            // 🔥 무조건 HomeActivity 로 이동
+            Intent intent = new Intent(activity, HomeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            activity.startActivity(intent);
+            activity.overridePendingTransition(0, 0);
         });
 
         navNotification.setOnClickListener(v -> {
-            //매칭 탭  fragment 켜 있으면 닫기
             if (activity instanceof FragmentActivity) {
                 FragmentActivity fa = (FragmentActivity) activity;
-                final String TAG = "MatchingCategoryFragment";
-                if (fa.getSupportFragmentManager().findFragmentByTag(TAG) != null) {
-                    fa.getSupportFragmentManager().popBackStack();
+
+                // 이미 NotificationFragment면 중복 실행 방지
+                final String NOTIFICATION_TAG = "NotificationFragment";
+                if (fa.getSupportFragmentManager().findFragmentByTag(NOTIFICATION_TAG) != null) {
                     setActiveTab(bottomNavBar, R.id.nav_notification);
+                    return;
                 }
-            }
-            //알림페이지 아니면 알림페이지로
-            if (!(activity instanceof NotificationActivity)) {
-                activity.startActivity(new Intent(activity, NotificationActivity.class));
-                activity.overridePendingTransition(0, 0);
+
+                // 🔥 모든 Fragment 닫기 (백스택 전체 초기화)
+                fa.getSupportFragmentManager().popBackStack(
+                        null,
+                        androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
+                );
+
+                // 활성 탭 업데이트
+                setActiveTab(bottomNavBar, R.id.nav_notification);
+
+                // NotificationFragment 열기
+                fa.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(
+                                R.id.fragment_container,
+                                new NotificationFragment(),
+                                NOTIFICATION_TAG
+                        )
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 
@@ -120,13 +147,8 @@ public class BottomNavBarHelper {
 
                 fa.getSupportFragmentManager()
                         .beginTransaction()
-                        .setCustomAnimations(
-                                android.R.anim.fade_in,
-                                android.R.anim.fade_out,
-                                android.R.anim.fade_in,
-                                android.R.anim.fade_out)
                         .replace(R.id.fragment_container,
-                                new com.example.mobile2025s2_1_2.matching.MatchingCategoryFragment(),
+                                new MatchingCategoryFragment(),
                                 TAG)
                         .addToBackStack(null)
                         .commit();
@@ -134,40 +156,66 @@ public class BottomNavBarHelper {
         });
 
 
-
-
-
         navMyprofile.setOnClickListener(v -> {
-            //매칭 탭  fragment 켜 있으면 닫기
             if (activity instanceof FragmentActivity) {
                 FragmentActivity fa = (FragmentActivity) activity;
-                final String TAG = "MatchingCategoryFragment";
-                if (fa.getSupportFragmentManager().findFragmentByTag(TAG) != null) {
-                    fa.getSupportFragmentManager().popBackStack();
+
+                // 이미 MyprofileFragment면 중복 실행 방지
+                final String MYPROFILE_TAG = "MyprofileFragment";
+                if (fa.getSupportFragmentManager().findFragmentByTag(MYPROFILE_TAG) != null) {
                     setActiveTab(bottomNavBar, R.id.nav_myprofile);
+                    return;
                 }
-            }
-            //프로필 페이지 아니면 프로필 페이지로
-            if (!(activity instanceof MyprofileActivity)) {
-                activity.startActivity(new Intent(activity, MyprofileActivity.class));
-                activity.overridePendingTransition(0, 0);
+
+                // 🔥 다른 Fragment 모두 닫기 (백스택 초기화)
+                fa.getSupportFragmentManager().popBackStack(
+                        null,
+                        androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
+                );
+                // 활성 탭 업데이트
+                setActiveTab(bottomNavBar, R.id.nav_myprofile);
+
+                // MyprofileFragment 열기
+                fa.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(
+                                R.id.fragment_container,
+                                new MyprofileFragment(),
+                                MYPROFILE_TAG
+                        )
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 
         navSettings.setOnClickListener(v -> {
-            //매칭 탭  fragment 켜 있으면 닫기
             if (activity instanceof FragmentActivity) {
                 FragmentActivity fa = (FragmentActivity) activity;
-                final String TAG = "MatchingCategoryFragment";
-                if (fa.getSupportFragmentManager().findFragmentByTag(TAG) != null) {
-                    fa.getSupportFragmentManager().popBackStack();
+
+                // 이미 SettingsFragment면 중복 실행 방지
+                final String SETTINGS_TAG = "SettingsFragment";
+                if (fa.getSupportFragmentManager().findFragmentByTag(SETTINGS_TAG) != null) {
                     setActiveTab(bottomNavBar, R.id.nav_settings);
+                    return;
                 }
-            }
-            //설정페이지 아니면 설정페이지로
-            if (!(activity instanceof SettingsActivity)) {
-                activity.startActivity(new Intent(activity, SettingsActivity.class));
-                activity.overridePendingTransition(0, 0);
+                // 🔥 다른 Fragment 모두 닫기 (백스택 초기화)
+                fa.getSupportFragmentManager().popBackStack(
+                        null,
+                        androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
+                );
+
+                // SettingsFragment 열기
+                setActiveTab(bottomNavBar, R.id.nav_settings);
+
+                fa.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(
+                                R.id.fragment_container,
+                                new SettingsFragment(),
+                                SETTINGS_TAG
+                        )
+                        .addToBackStack(null)
+                        .commit();
             }
         });
     }

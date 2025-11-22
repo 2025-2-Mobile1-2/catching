@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -13,8 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,10 +26,9 @@ import com.example.mobile2025s2_1_2.utils.BottomNavBarHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-public class NotificationActivity extends AppCompatActivity {
+public class NotificationFragment extends Fragment {
 
     // 토글
     private RelativeLayout toggleReceived, toggleSent;
@@ -53,41 +55,43 @@ public class NotificationActivity extends AppCompatActivity {
             new AlarmItem("홍지우 님께 교내·교외 활동 팀원 매칭 신청을 보냈습니다!", true)  // 새 알림 (N)
     );
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.notification_main);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.notification_main, container, false);
 
         // 하단 navBar
-        LinearLayout bottomNavBar = findViewById(R.id.custom_navbar);
-        BottomNavBarHelper.setupCustomNav(this, bottomNavBar);
+        LinearLayout bottomNavBar = view.findViewById(R.id.custom_navbar);
+        BottomNavBarHelper.setupCustomNav(requireActivity(), bottomNavBar);
         BottomNavBarHelper.setActiveTab(bottomNavBar, R.id.nav_notification);
 
-        // 토글 뷰
-        toggleReceived = findViewById(R.id.alarm_toggle_r); // 받은 매칭 루트
-        toggleSent     = findViewById(R.id.alarm_toggle_s); // 보낸 매칭 루트
-        tvReceived     = findViewById(R.id.tv_received);
-        tvSent         = findViewById(R.id.tv_sent);
+        // 토글
+        toggleReceived = view.findViewById(R.id.alarm_toggle_r);
+        toggleSent     = view.findViewById(R.id.alarm_toggle_s);
+        tvReceived     = view.findViewById(R.id.tv_received);
+        tvSent         = view.findViewById(R.id.tv_sent);
 
         // RecyclerView
-        recycler = findViewById(R.id.recycler);
-        recycler.setLayoutManager(new LinearLayoutManager(this));
+        recycler = view.findViewById(R.id.recycler);
+        recycler.setLayoutManager(new LinearLayoutManager(requireContext()));
         recycler.setClipChildren(false);
         recycler.setClipToPadding(false);
 
-        // 초기: 받은 매칭 활성 + 받은 데이터 표시
-        setToggleState(false); // UI만 전환
-        showReceived();        // 데이터 바인딩
+        // 초기: 받은 탭
+        setToggleState(false);
+        showReceived();
 
-        // 토글 클릭
         toggleReceived.setOnClickListener(v -> {
             setToggleState(false);
             showReceived();
         });
+
         toggleSent.setOnClickListener(v -> {
             setToggleState(true);
             showSent();
         });
+
+        return view;
     }
 
     /** 받은 탭 데이터 표시 */
@@ -144,8 +148,8 @@ public class NotificationActivity extends AppCompatActivity {
 
     /** 토글의 활성/비활성 색상 및 폰트 전환(UI) */
     private void setToggleState(boolean isSentActive) {
-        Typeface semi = ResourcesCompat.getFont(this, R.font.semibold);
-        Typeface reg  = ResourcesCompat.getFont(this, R.font.regular);
+        Typeface semi = ResourcesCompat.getFont(requireContext(), R.font.semibold);
+        Typeface reg  = ResourcesCompat.getFont(requireContext(), R.font.regular);
 
         if (isSentActive) {
             // 보낸 활성
@@ -172,7 +176,7 @@ public class NotificationActivity extends AppCompatActivity {
     }
 
     public void showProfilePopup() {
-        profileDialog = new Dialog(NotificationActivity.this);
+        profileDialog = new Dialog(requireContext());
         profileDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         profileDialog.setContentView(R.layout.profile_popup);
 
@@ -221,7 +225,7 @@ public class NotificationActivity extends AppCompatActivity {
         // 🔥 마지막으로 뜬 팝업 = 2 저장
         if (currentItem != null) currentItem.lastPopupType = 2;
 
-        confirmDialog = new Dialog(NotificationActivity.this);
+        confirmDialog = new Dialog(requireContext());
         confirmDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         confirmDialog.setContentView(R.layout.profile_popup2);
 
@@ -243,7 +247,7 @@ public class NotificationActivity extends AppCompatActivity {
     }
 
     private void showRejectPopup() {
-        Dialog rejectDialog = new Dialog(NotificationActivity.this);
+        Dialog rejectDialog = new Dialog(requireContext());
         rejectDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         rejectDialog.setContentView(R.layout.profile_popup3);
 
@@ -285,7 +289,7 @@ public class NotificationActivity extends AppCompatActivity {
         if (currentItem != null) currentItem.lastPopupType = 4;
 
 
-        Dialog deleteDialog = new Dialog(NotificationActivity.this);
+        Dialog deleteDialog = new Dialog(requireContext());
         deleteDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         deleteDialog.setContentView(R.layout.profile_popup4);
 
@@ -312,7 +316,7 @@ public class NotificationActivity extends AppCompatActivity {
 
     // ★ 추가된 카카오톡 아이디 팝업 함수
     public void showKakaoPopup() {
-        Dialog kakaoDialog = new Dialog(NotificationActivity.this);
+        Dialog kakaoDialog = new Dialog(requireContext());
         kakaoDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         kakaoDialog.setContentView(R.layout.notification_matchingsuccess);
@@ -336,5 +340,3 @@ public class NotificationActivity extends AppCompatActivity {
         kakaoDialog.show();
     }
 }//
-
-

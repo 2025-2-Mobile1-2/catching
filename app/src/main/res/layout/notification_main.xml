@@ -5,7 +5,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#FFF5F5F5">
 
         <!--여기가 메인 홈 화면-->
         <LinearLayout
@@ -22,7 +23,7 @@
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
-                android:background="#FFF5F5F5">
+                android:background="#FFFFFFFF">
                 <ImageView
                     android:layout_margin="4dp"
                     android:layout_width="wrap_content"
