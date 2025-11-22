@@ -32,7 +32,19 @@ public class MatchingCategoryFragment extends Fragment {
         } else {
             textView.setText(Html.fromHtml(text));
         }
-        //기숫사 룸메이트 매칭 버튼
+
+        //진로, 전공 멘토 매칭 버튼
+        View mentorshipView = view.findViewById(R.id.match_cate_mentorship);
+        mentorshipView.setOnClickListener(v -> {
+            ActivityFragment activityFragment = new ActivityFragment();
+            getParentFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.mentorship_container, activityFragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+        //교내, 교외 활동 매칭 버튼
         View activityView = view.findViewById(R.id.match_cate_activity);
 
         activityView.setOnClickListener(v -> {
@@ -44,7 +56,7 @@ public class MatchingCategoryFragment extends Fragment {
                     .commit();
         });
 
-        //기숫사 룸메이트 매칭 버튼
+        //기숙사 룸메이트 매칭 버튼
         View roomateView = view.findViewById(R.id.match_cate_roommate);
 
         roomateView.setOnClickListener(v -> {
