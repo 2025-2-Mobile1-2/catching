@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/inapp_banner_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginEnd="21dp"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:visibility="gone">
+
+    <!-- 카드 -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@drawable/notification_b"
+        android:paddingStart="16dp"
+        android:paddingEnd="12dp">
+
+        <TextView
+            android:id="@+id/tv_inapp_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/ivInappArrow"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/light"
+            android:maxLines="2"
+            android:text="새로운 매칭 알림이 도착했습니다."
+            android:textColor="#212121"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/ivInappArrow"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow_right" />
+    </RelativeLayout>
+
+</FrameLayout>

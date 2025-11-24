@@ -62,6 +62,9 @@
                     </FrameLayout>
                 </RelativeLayout>
 
+                <include
+                    layout="@layout/inapp_notification_banner" />
+
                 <!--공지사항-->
                 <LinearLayout
                     android:orientation="vertical"
