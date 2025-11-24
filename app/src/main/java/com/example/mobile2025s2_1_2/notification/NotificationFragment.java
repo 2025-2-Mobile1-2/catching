@@ -1,6 +1,7 @@
 package com.example.mobile2025s2_1_2.notification;
 
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -23,9 +24,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mobile2025s2_1_2.R;
 import com.example.mobile2025s2_1_2.utils.BottomNavBarHelper;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class NotificationFragment extends Fragment {
@@ -34,6 +37,7 @@ public class NotificationFragment extends Fragment {
     private RelativeLayout toggleReceived, toggleSent;
     private TextView tvReceived, tvSent;
 
+    // 팝업
     private Dialog profileDialog;
     private Dialog confirmDialog;
 
@@ -41,29 +45,35 @@ public class NotificationFragment extends Fragment {
     private RecyclerView recycler;
     private AlarmAdapter adapter;
 
-    // 🔥 추가해야 하는 전역 변수
-    private AlarmItem currentItem;   // 🔥 현재 클릭된 아이템 저장 변수
+    // 현재 클릭된 알람
+    private AlarmItem currentItem;
 
-    // 테스트 데이터
-    private final List<AlarmItem> received = Arrays.asList(
-            new AlarmItem("최북악 님으로부터 진로·전공 멘토 매칭 신청이 왔습니다!", true),   // 새 알림 (N)
-            new AlarmItem("최북악 님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!", true)   // 읽은 알림
-    );
+    // Firestore
+    private FirebaseFirestore db;
+    private String currentUserEmail;
 
-    private final List<AlarmItem> sent = Arrays.asList(
-            new AlarmItem("김국민 님께 진로·전공 멘토 매칭 신청을 보냈습니다!", false),
-            new AlarmItem("홍지우 님께 교내·교외 활동 팀원 매칭 신청을 보냈습니다!", true)  // 새 알림 (N)
-    );
+    // 메모리 캐시용 리스트
+    private final List<AlarmItem> receivedList = new ArrayList<>();
+    private final List<AlarmItem> sentList     = new ArrayList<>();
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.notification_main, container, false);
 
         // 하단 navBar
         LinearLayout bottomNavBar = view.findViewById(R.id.custom_navbar);
         BottomNavBarHelper.setupCustomNav(requireActivity(), bottomNavBar);
         BottomNavBarHelper.setActiveTab(bottomNavBar, R.id.nav_notification);
+
+        // Firestore & 현재 유저 이메일
+        db = FirebaseFirestore.getInstance();
+        SharedPreferences prefs = requireActivity()
+                .getSharedPreferences("user_prefs", requireActivity().MODE_PRIVATE);
+        currentUserEmail = prefs.getString("user_email", null);
 
         // 토글
         toggleReceived = view.findViewById(R.id.alarm_toggle_r);
@@ -77,74 +87,177 @@ public class NotificationFragment extends Fragment {
         recycler.setClipChildren(false);
         recycler.setClipToPadding(false);
 
-        // 초기: 받은 탭
+        // 초기: 받은 탭 활성화 + Firestore에서 받은 매칭 불러오기
         setToggleState(false);
-        showReceived();
+        loadReceivedFromFirestore();
 
         toggleReceived.setOnClickListener(v -> {
             setToggleState(false);
-            showReceived();
+            loadReceivedFromFirestore();
         });
 
         toggleSent.setOnClickListener(v -> {
             setToggleState(true);
-            showSent();
+            loadSentFromFirestore();
         });
 
         return view;
     }
 
-    /** 받은 탭 데이터 표시 */
-    private void showReceived() {
-        adapter = new AlarmAdapter(
-                new ArrayList<>(received),
-                true,
-                (item, isReceivedList) -> handleAlarmClick(item, isReceivedList)   // 🔥 추가
-        );
-        recycler.setAdapter(adapter);
+    /** Firestore에서 받은 매칭 불러오기 (toID == 나) */
+    private void loadReceivedFromFirestore() {
+        if (currentUserEmail == null) return;
+
+        db.collection("matching_status")
+                .whereEqualTo("toID", currentUserEmail)
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener(snap -> {
+                    receivedList.clear();
+
+                    for (DocumentSnapshot doc : snap.getDocuments()) {
+                        String docId    = doc.getId();
+                        String fromId   = doc.getString("fromID");
+                        String state    = doc.getString("state");
+                        String category = doc.getString("category");
+                        Boolean isNewForB = doc.getBoolean("isNewForB");
+
+                        // TODO: 나중에 fromId → fromName (users 컬렉션에서 가져오기)
+                        String fromName = fromId; // 임시로 이메일 그대로 사용
+
+                        String text;
+                        if ("accepted".equals(state)) {
+                            text = fromName + " 님이 매칭을 수락했습니다.";
+                        } else if ("rejected".equals(state)) {
+                            text = fromName + " 님이 매칭을 거절했습니다.";
+                        } else { // "request" 또는 null
+                            text = fromName + " 님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!";
+                        }
+
+                        AlarmItem item = new AlarmItem(
+                                docId,
+                                text,
+                                Boolean.TRUE.equals(isNewForB),
+                                state != null ? state : "request",
+                                category != null ? category : "roommate",
+                                true   // 받은 탭
+                        );
+
+                        receivedList.add(item);
+                    }
+
+                    adapter = new AlarmAdapter(
+                            new ArrayList<>(receivedList),
+                            true,
+                            (item, isReceivedList) -> handleAlarmClick(item, isReceivedList)
+                    );
+                    recycler.setAdapter(adapter);
+                });
     }
 
+    /** Firestore에서 보낸 매칭 불러오기 (fromID == 나) */
+    private void loadSentFromFirestore() {
+        if (currentUserEmail == null) return;
 
+        db.collection("matching_status")
+                .whereEqualTo("fromID", currentUserEmail)
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener(snap -> {
+                    sentList.clear();
 
-    /** 보낸 탭 데이터 표시 */
-    private void showSent() {
-        adapter = new AlarmAdapter(
-                new ArrayList<>(sent),
-                false,
-                (item, isReceivedList) -> handleAlarmClick(item, isReceivedList)   // 🔥 listener 추가
-        );
-        recycler.setAdapter(adapter);
+                    for (DocumentSnapshot doc : snap.getDocuments()) {
+                        String docId    = doc.getId();
+                        String toId     = doc.getString("toID");
+                        String state    = doc.getString("state");
+                        String category = doc.getString("category");
+                        Boolean isNewForA = doc.getBoolean("isNewForA");
+
+                        // TODO: 나중에 toId → toName (users 컬렉션에서 가져오기)
+                        String toName = toId;
+
+                        String text;
+                        if ("accepted".equals(state)) {
+                            text = toName + " 님이 매칭을 수락했습니다. 카카오톡 아이디를 확인해 보세요.";
+                        } else if ("rejected".equals(state)) {
+                            text = toName + " 님이 매칭을 거절했습니다.";
+                        } else { // "request" 또는 null
+                            text = toName + " 님께 기숙사 룸메이트 매칭 신청을 보냈습니다!";
+                        }
+
+                        AlarmItem item = new AlarmItem(
+                                docId,
+                                text,
+                                Boolean.TRUE.equals(isNewForA),
+                                state != null ? state : "request",
+                                category != null ? category : "roommate",
+                                false  // 보낸 탭
+                        );
+
+                        sentList.add(item);
+                    }
+
+                    adapter = new AlarmAdapter(
+                            new ArrayList<>(sentList),
+                            false,
+                            (item, isReceivedList) -> handleAlarmClick(item, isReceivedList)
+                    );
+                    recycler.setAdapter(adapter);
+                });
     }
 
+    /** 알람 아이템 클릭 처리 공통 로직 */
     private void handleAlarmClick(AlarmItem item, boolean isReceivedList) {
-
-        // 🔥 현재 클릭된 아이템 기억
         currentItem = item;
 
-        // 보낸 매칭 → 카카오 팝업만
-        if (!isReceivedList) {
-            showKakaoPopup();
-            return;
+        // 1) N → 읽음 처리 (isNewForA / isNewForB false로)
+        if (item.isNew) {
+            item.isNew = false;
+            markAlarmRead(item, isReceivedList);
         }
 
-        // 🔥 이미 눌린 적 있음 → 마지막 팝업을 다시 띄우기
-        if (item.clickedBefore) {
-            if (item.lastPopupType == 2) {
-                showConfirmPopup(); // profile_popup2
-            } else if (item.lastPopupType == 4) {
-                showRejectConfirmPopup(); // profile_popup4
+        // 2) 보낸 매칭 탭 클릭
+        if (!isReceivedList) {
+            if ("accepted".equals(item.state)) {
+                // 수락된 매칭 → 카카오톡 아이디 팝업
+                showKakaoPopup();
+            } else if ("rejected".equals(item.state)) {
+                // 거절된 매칭 → 거절 확인 팝업
+                showRejectConfirmPopup();
+            } else {
+                // "request" 상태일 때는 아직 대기 중 (원하면 Toast 추가 가능)
             }
             return;
         }
 
-        // 🔥 처음 클릭 → 기본 popup 띄우기
+        // 3) 받은 매칭 탭 클릭
+
+        // 이미 눌린 적 있음 → 마지막 팝업 다시 띄우기
+        if (item.clickedBefore) {
+            if (item.lastPopupType == 2) {
+                showConfirmPopup();
+            } else if (item.lastPopupType == 4) {
+                showRejectConfirmPopup();
+            }
+            return;
+        }
+
+        // 처음 클릭 → 프로필 팝업
         item.clickedBefore = true;
-        item.lastPopupType = 1; // profile_popup
+        item.lastPopupType = 1;
         showProfilePopup();
     }
 
+    /** N 뱃지 읽음 처리 (isNewForA / isNewForB false로) */
+    private void markAlarmRead(AlarmItem item, boolean isReceivedList) {
+        if (db == null || item.docId == null) return;
 
+        String field = isReceivedList ? "isNewForB" : "isNewForA";
 
+        db.collection("matching_status")
+                .document(item.docId)
+                .update(field, false);
+    }
 
     /** 토글의 활성/비활성 색상 및 폰트 전환(UI) */
     private void setToggleState(boolean isSentActive) {
@@ -175,6 +288,8 @@ public class NotificationFragment extends Fragment {
         }
     }
 
+    // ================== 팝업 로직들 ==================
+
     public void showProfilePopup() {
         profileDialog = new Dialog(requireContext());
         profileDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -194,7 +309,6 @@ public class NotificationFragment extends Fragment {
         btnClose.setOnClickListener(v -> {
             profileDialog.dismiss();
 
-            // 🔥 상태 초기화!
             if (currentItem != null) {
                 currentItem.clickedBefore = false;
                 currentItem.lastPopupType = 0;
@@ -204,25 +318,49 @@ public class NotificationFragment extends Fragment {
         ImageView btnAccept = profileDialog.findViewById(R.id.btn_accept);
         ImageView btnReject = profileDialog.findViewById(R.id.btn_reject);
 
+        // ✅ 수락 버튼
         btnAccept.setOnClickListener(v -> {
             profileDialog.dismiss();
-            if (currentItem != null) currentItem.lastPopupType = 2;
+
+            if (currentItem != null && currentItem.docId != null) {
+                db.collection("matching_status")
+                        .document(currentItem.docId)
+                        .update(
+                                "state", "accepted",
+                                "isNewForA", true,   // A에게 새 알림
+                                "isNewForB", false   // B는 읽음
+                        );
+
+                currentItem.state = "accepted";
+                currentItem.lastPopupType = 2;
+            }
+
             showConfirmPopup();
         });
 
+        // ✅ 거절 버튼
         btnReject.setOnClickListener(v -> {
             profileDialog.dismiss();
+
+            if (currentItem != null && currentItem.docId != null) {
+                db.collection("matching_status")
+                        .document(currentItem.docId)
+                        .update(
+                                "state", "rejected",
+                                "isNewForA", true,
+                                "isNewForB", false
+                        );
+
+                currentItem.state = "rejected";
+            }
+
             showRejectPopup();
         });
-
-
 
         profileDialog.show();
     }
 
     private void showConfirmPopup() {
-
-        // 🔥 마지막으로 뜬 팝업 = 2 저장
         if (currentItem != null) currentItem.lastPopupType = 2;
 
         confirmDialog = new Dialog(requireContext());
@@ -242,7 +380,6 @@ public class NotificationFragment extends Fragment {
         View btnConfirm = confirmDialog.findViewById(R.id.btn_confirm_layout);
         btnConfirm.setOnClickListener(v -> confirmDialog.dismiss());
 
-
         confirmDialog.show();
     }
 
@@ -261,19 +398,16 @@ public class NotificationFragment extends Fragment {
             );
         }
 
-        // ✔ popup3의 "취소하기" 버튼 ID에 맞춰서 변경해야 함
         View btnReject = rejectDialog.findViewById(R.id.btn_reject_layout);
         btnReject.setOnClickListener(v -> {
             rejectDialog.dismiss();
-            showRejectConfirmPopup();   // ★ 새 팝업 띄우기
+            showRejectConfirmPopup();
         });
-        // ✔ popup3의 "취소하기" 버튼 ID에 맞춰서 변경해야 함
-        View btnClose = rejectDialog.findViewById(R.id.btn_delete_layout);
 
+        View btnClose = rejectDialog.findViewById(R.id.btn_delete_layout);
         btnClose.setOnClickListener(v -> {
             rejectDialog.dismiss();
 
-            // 🔥 상태 초기화!
             if (currentItem != null) {
                 currentItem.clickedBefore = false;
                 currentItem.lastPopupType = 0;
@@ -284,10 +418,7 @@ public class NotificationFragment extends Fragment {
     }
 
     private void showRejectConfirmPopup() {
-
-        // 🔥 마지막으로 뜬 팝업 = 4 저장
         if (currentItem != null) currentItem.lastPopupType = 4;
-
 
         Dialog deleteDialog = new Dialog(requireContext());
         deleteDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -303,22 +434,15 @@ public class NotificationFragment extends Fragment {
             );
         }
 
-        // XML의 확인 버튼 ID → btn_confirm_layout
         View btnConfirm = deleteDialog.findViewById(R.id.btn_confirm_layout);
-
         btnConfirm.setOnClickListener(v -> deleteDialog.dismiss());
 
         deleteDialog.show();
     }
 
-
-
-
-    // ★ 추가된 카카오톡 아이디 팝업 함수
     public void showKakaoPopup() {
         Dialog kakaoDialog = new Dialog(requireContext());
         kakaoDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         kakaoDialog.setContentView(R.layout.notification_matchingsuccess);
 
         if (kakaoDialog.getWindow() != null) {
@@ -331,7 +455,6 @@ public class NotificationFragment extends Fragment {
             );
         }
 
-        // 닫기/복사 버튼
         View btnCopy = kakaoDialog.findViewById(R.id.btn_copy);
         if (btnCopy != null) {
             btnCopy.setOnClickListener(v -> kakaoDialog.dismiss());
@@ -339,4 +462,4 @@ public class NotificationFragment extends Fragment {
 
         kakaoDialog.show();
     }
-}//
+}
