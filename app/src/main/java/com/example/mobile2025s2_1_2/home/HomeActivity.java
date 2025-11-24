@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mobile2025s2_1_2.*;
 import com.example.mobile2025s2_1_2.home.notice.NoticeFragment;
 import com.example.mobile2025s2_1_2.R;
 import com.example.mobile2025s2_1_2.utils.BottomNavBarHelper;
@@ -22,7 +21,6 @@ import com.google.firebase.firestore.Query;
 
 import java.util.Arrays;
 import java.util.List;
-import android.view.View;
 
 public class HomeActivity extends AppCompatActivity {
     public static View touchBlocker;
@@ -60,8 +58,6 @@ public class HomeActivity extends AppCompatActivity {
 
         touchBlocker = findViewById(R.id.touch_blocker);
 
-        //하단 navBar
-        LinearLayout bottomNavBar = findViewById(R.id.custom_navbar);
         // 하단 navBar
         bottomNavBar = findViewById(R.id.custom_navbar);
         BottomNavBarHelper.setupCustomNav(this, bottomNavBar);
