@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.mobile2025s2_1_2.MainActivity; // 메인 액티비티 import
 import com.example.mobile2025s2_1_2.R;
 import com.google.firebase.FirebaseApp;
 
@@ -23,11 +24,9 @@ public class StartActivity extends AppCompatActivity {
     private ConstraintLayout mainLayout;
 
     // ==========================================================
-    // 🎯 1. 사용자가 직접 조정할 DP 상수 (가장 중요한 부분)
+    // 🎯 1. 사용자가 직접 조정할 DP 상수
     // ==========================================================
-
     // 로고 그룹이 최종적으로 중앙에서 왼쪽으로 이동할 거리 (음수: 왼쪽, 양수: 오른쪽)
-    // 현재 -20dp로 설정 (균형점)
     private final float FINAL_SHIFT_X_DP = -55f;
 
 
@@ -58,14 +57,11 @@ public class StartActivity extends AppCompatActivity {
         titleText.setAlpha(0f);
         titleText.setTranslationX(getResources().getDisplayMetrics().density * 50);
 
-
-
-
         float slideDistance = getResources().getDisplayMetrics().density * 50;
         subtitleText.setAlpha(0f);
         subtitleText.setTranslationY(slideDistance);
 
-        // 뷰 측정 후 애니메이션 시작 로직 (계산 로직 제거)
+        // 애니메이션 시작
         startFullAnimationSequence(subtractLogo, symbolLogo, titleText, subtitleText);
 
         // EdgeToEdge 및 WindowInsets 설정 유지
@@ -94,7 +90,7 @@ public class StartActivity extends AppCompatActivity {
         // 2. subtractLogo -> symbolLogo 순식간에 교체되는 전환
         AnimatorSet instantaneousTransition = createInstantaneousTransitionAnim(subtractLogo, symbolLogo);
 
-        // 3. 로고 이동 및 한글 제목 등장 (🌟 상수 사용)
+        // 3. 로고 이동 및 한글 제목 등장
         AnimatorSet shiftAndTextSet = createLogoShiftAndTextAnim(symbolLogo, titleText);
 
         // 4. 서브타이틀 등장
@@ -114,6 +110,7 @@ public class StartActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animator animator) {
+                // 애니메이션 종료 후 클릭 이벤트 활성화
                 mainLayout.setClickable(true);
                 mainLayout.setOnClickListener(v -> {
                     navigateToNextScreen();
@@ -160,13 +157,11 @@ public class StartActivity extends AppCompatActivity {
         return transitionSet;
     }
 
-    // 2단계: 로고 이동 및 한글 제목 등장 (🌟 상수 사용)
     private AnimatorSet createLogoShiftAndTextAnim(View symbolLogo, View titleText) {
 
-        // 🌟 FINAL_SHIFT_X_DP 상수를 Pixel로 변환하여 사용
         float finalTranslationX = getResources().getDisplayMetrics().density * FINAL_SHIFT_X_DP;
 
-        // 1. symbolMove: 0f에서 finalTranslationX까지 이동
+        // 1. symbolMove
         ObjectAnimator symbolMove = ObjectAnimator.ofFloat(symbolLogo, View.TRANSLATION_X, 0f, finalTranslationX);
         symbolMove.setDuration(700);
         symbolMove.setInterpolator(new DecelerateInterpolator());
@@ -175,7 +170,7 @@ public class StartActivity extends AppCompatActivity {
         textFadeIn.setDuration(500);
         textFadeIn.setInterpolator(new AccelerateDecelerateInterpolator());
 
-        // 2. textMove: 초기 위치(+50dp)에서 최종 위치(finalTranslationX)까지 이동
+        // 2. textMove
         ObjectAnimator textMove = ObjectAnimator.ofFloat(titleText, View.TRANSLATION_X, titleText.getTranslationX(), finalTranslationX);
         textMove.setDuration(700);
         textMove.setInterpolator(new DecelerateInterpolator());
@@ -188,7 +183,6 @@ public class StartActivity extends AppCompatActivity {
         return shiftAndTextSet;
     }
 
-    // 3단계: 서브타이틀 슬라이드 업 등장
     private AnimatorSet createSubtitleAnim(View subtitleText) {
 
         ObjectAnimator slideUp = ObjectAnimator.ofFloat(subtitleText, View.TRANSLATION_Y,
@@ -206,7 +200,20 @@ public class StartActivity extends AppCompatActivity {
     }
 
     private void navigateToNextScreen() {
-        Intent intent = new Intent(this, NEXT_ACTIVITY_CLASS);
+        // ========================================================
+        // [테스트 및 설정]
+        // true  : 재실행 (로그인 기록 있다고 가정) -> MainActivity 이동
+        // false : 첫 실행 (로그인 기록 없다고 가정) -> LoginActivity 이동
+        // ========================================================
+        boolean isLogined = false;
+
+        Intent intent;
+        if (isLogined) {
+            intent = new Intent(this, MainActivity.class);
+        } else {
+            intent = new Intent(this, LoginActivity.class);
+        }
+
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();
