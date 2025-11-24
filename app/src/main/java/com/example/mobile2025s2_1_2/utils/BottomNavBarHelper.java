@@ -3,6 +3,7 @@ package com.example.mobile2025s2_1_2.utils;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -93,6 +94,7 @@ public class BottomNavBarHelper {
                         androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
                 );
             }
+            HomeActivity.touchBlocker.setVisibility(View.GONE);
 
             // 홈 탭 UI 활성화
             setActiveTab(bottomNavBar, R.id.nav_home);
@@ -114,6 +116,7 @@ public class BottomNavBarHelper {
                     setActiveTab(bottomNavBar, R.id.nav_notification);
                     return;
                 }
+                HomeActivity.touchBlocker.setVisibility(View.VISIBLE);
 
                 // 🔥 모든 Fragment 닫기 (백스택 전체 초기화)
                 fa.getSupportFragmentManager().popBackStack(
@@ -137,19 +140,34 @@ public class BottomNavBarHelper {
             }
         });
 
-         //BottomNavBarHelper.java (activity를 인자로 받는 유틸)
         navMatching.setOnClickListener(v -> {
-            updateSelectedTab(bottomNavBar, R.id.nav_matching);
             if (activity instanceof FragmentActivity) {
                 FragmentActivity fa = (FragmentActivity) activity;
-                final String TAG = "MatchingCategoryFragment";
-                if (fa.getSupportFragmentManager().findFragmentByTag(TAG) != null) return;
+
+                // 이미 MatchingFragment면 중복 실행 방지
+                final String MATCHINGS_TAG = "MatchingFragment";
+                if (fa.getSupportFragmentManager().findFragmentByTag(MATCHINGS_TAG) != null) {
+                    setActiveTab(bottomNavBar, R.id.nav_matching);
+                    return;
+                }
+                HomeActivity.touchBlocker.setVisibility(View.VISIBLE);
+
+                // 🔥 다른 Fragment 모두 닫기 (백스택 초기화)
+                fa.getSupportFragmentManager().popBackStack(
+                        null,
+                        androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
+                );
+
+                // MatchingFragment 열기
+                setActiveTab(bottomNavBar, R.id.nav_matching);
 
                 fa.getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_container,
+                        .replace(
+                                R.id.fragment_container,
                                 new MatchingCategoryFragment(),
-                                TAG)
+                                MATCHINGS_TAG
+                        )
                         .addToBackStack(null)
                         .commit();
             }
@@ -166,6 +184,7 @@ public class BottomNavBarHelper {
                     setActiveTab(bottomNavBar, R.id.nav_myprofile);
                     return;
                 }
+                HomeActivity.touchBlocker.setVisibility(View.VISIBLE);
 
                 // 🔥 다른 Fragment 모두 닫기 (백스택 초기화)
                 fa.getSupportFragmentManager().popBackStack(
@@ -198,6 +217,7 @@ public class BottomNavBarHelper {
                     setActiveTab(bottomNavBar, R.id.nav_settings);
                     return;
                 }
+                HomeActivity.touchBlocker.setVisibility(View.VISIBLE);
                 // 🔥 다른 Fragment 모두 닫기 (백스택 초기화)
                 fa.getSupportFragmentManager().popBackStack(
                         null,
