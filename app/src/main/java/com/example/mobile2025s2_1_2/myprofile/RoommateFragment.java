@@ -6,7 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -107,6 +109,95 @@ public class RoommateFragment extends Fragment {
         );
         smokingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSmoking.setAdapter(smokingAdapter);
+        // RoommateFragment.java - onViewCreated 메서드 끝 부분에 추가
 
+// 1. 위젯 참조
+        SeekBar seekBarCleanliness = view.findViewById(R.id.seekbar_cleanliness);
+        TextView valueLabel1 = view.findViewById(R.id.seekbar_value_label1);
+
+// 2. Null 체크를 통해 충돌 방지 (가장 중요)
+        if (seekBarCleanliness != null && valueLabel1 != null) {
+
+            // 3. 리스너 설정: 값 업데이트 기능만 구현
+            seekBarCleanliness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                    // ⭐ 이 부분이 progress 값을 TextView에 표시하는 유일한 방법입니다.
+                    valueLabel1.setText(String.valueOf(progress));
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) { }
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) { }
+            });
+
+            // 4. 초기값 설정 (화면 로딩 시 초기 Progress 값(5)을 TextView에 표시)
+            valueLabel1.setText(String.valueOf(seekBarCleanliness.getProgress()));
+        }
+        // RoommateFragment.java - onViewCreated 메서드 끝 부분에 추가
+
+// ... (기존 청결도(seekbar_cleanliness) 로직 다음에 이어서) ...
+
+// ----------------------------------------------------------------------
+// ⭐ 8. 잠꼬대 정도 (SeekBar) 및 동적 라벨 기능 추가
+// ----------------------------------------------------------------------
+
+// 1. 위젯 참조
+        SeekBar seekBarSnoring = view.findViewById(R.id.seekbar_Sleeptalk);
+        TextView valueLabel2 = view.findViewById(R.id.seekbar_value_label2);
+
+// 2. Null 체크를 통해 충돌 방지
+        if (seekBarSnoring != null && valueLabel2 != null) {
+
+            // 3. 리스너 설정: 값 업데이트 기능만 구현
+            seekBarSnoring.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                    // 값을 TextView에 표시
+                    valueLabel2.setText(String.valueOf(progress));
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) { }
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) { }
+            });
+
+            // 4. 초기값 설정
+            valueLabel2.setText(String.valueOf(seekBarSnoring.getProgress()));
+        }
+
+// ----------------------------------------------------------------------
+// ⭐ 9. 예민 정도 (SeekBar) 및 동적 라벨 기능 추가
+// ----------------------------------------------------------------------
+
+// 1. 위젯 참조
+        SeekBar seekBarSensitivity = view.findViewById(R.id.seekbar_sensitive);
+        TextView valueLabel3 = view.findViewById(R.id.seekbar_value_label3);
+
+// 2. Null 체크를 통해 충돌 방지
+        if (seekBarSensitivity != null && valueLabel3 != null) {
+
+            // 3. 리스너 설정: 값 업데이트 기능만 구현
+            seekBarSensitivity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                    // 값을 TextView에 표시
+                    valueLabel3.setText(String.valueOf(progress));
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) { }
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) { }
+            });
+
+            // 4. 초기값 설정
+            valueLabel3.setText(String.valueOf(seekBarSensitivity.getProgress()));
+        }
     }
 }
