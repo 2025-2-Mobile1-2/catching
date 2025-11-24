@@ -78,16 +78,12 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="공지사항"
+                            android:text="학사공지"
                             android:fontFamily="@font/medium"
                             android:textSize="18sp"
                             android:textColor="#FF2DD7A4"/>
-                        <ImageView
-                            android:id="@+id/home_notice_go"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_arrow_right"/>
                     </LinearLayout>
+
                     <!--공지사항 내용-->
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
@@ -116,102 +112,8 @@
                     </com.google.android.material.card.MaterialCardView>
 
                 </LinearLayout>
-
-
-                <!--교내 활동-->
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="7dp">
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="7dp">
-                        <TextView
-                            android:id="@+id/home_username_school"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="국만두님을 위한 교내 활동"
-                            android:fontFamily="@font/medium"
-                            android:textSize="18sp"
-                            android:textColor="#FF2DD7A4"/>
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_arrow_right"/>
-                    </LinearLayout>
-                    <!--교내활동 정보 카드-->
-                    <HorizontalScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:scrollbars="none"
-                        android:overScrollMode="never"
-                        android:fillViewport="true">
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/card_school"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:padding="4dp" />
-                    </HorizontalScrollView>
-
-
-                </LinearLayout>
-
-                <!--교외 활동-->
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="7dp">
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="7dp">
-                        <TextView
-                            android:id="@+id/home_username_out"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="국만두님을 위한 교외 활동"
-                            android:fontFamily="@font/medium"
-                            android:textSize="18sp"
-                            android:textColor="#FF2DD7A4"/>
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_arrow_right"/>
-                    </LinearLayout>
-                    <!--교내활동 정보 카드-->
-                    <HorizontalScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:scrollbars="none"
-                        android:overScrollMode="never"
-                        android:fillViewport="true">
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/card_out"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:padding="4dp" />
-                    </HorizontalScrollView>
-
-
-                </LinearLayout>
-
             </LinearLayout>
         </ScrollView>
-
-        <!--fragment 뜨면 터치 차단용-->
-        <View
-            android:id="@+id/touch_blocker"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:clickable="true"
-            android:focusable="true"
-            android:visibility="gone" />
 
         <!--매칭 페이지 선택시 카테고리창 fragment영역-->
         <FrameLayout

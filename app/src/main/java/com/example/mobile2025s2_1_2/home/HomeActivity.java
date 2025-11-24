@@ -2,23 +2,38 @@ package com.example.mobile2025s2_1_2.home;
 
 import android.os.Bundle;
 import android.widget.LinearLayout;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mobile2025s2_1_2.*;
-import com.example.mobile2025s2_1_2.home.*;
+import com.example.mobile2025s2_1_2.home.notice.NoticeFragment;
 import com.example.mobile2025s2_1_2.utils.BottomNavBarHelper;
 
 import java.util.Arrays;
 import java.util.List;
+import android.view.View;
 
 public class HomeActivity extends AppCompatActivity {
+    public static View touchBlocker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_main);
+
+        ImageView noticeGo = findViewById(R.id.home_notice_go);
+        noticeGo.setOnClickListener(v -> {
+            getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new NoticeFragment())
+                .addToBackStack(null)
+                .commit();
+        });
+
+        touchBlocker = findViewById(R.id.touch_blocker);
 
         //하단 navBar
         LinearLayout bottomNavBar = findViewById(R.id.custom_navbar);
