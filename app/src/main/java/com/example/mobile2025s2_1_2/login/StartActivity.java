@@ -14,7 +14,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.mobile2025s2_1_2.MainActivity; // 충돌 해결: 메인 액티비티 추가
+// 🌟 충돌 해결: 메인 액티비티 Import 추가
+import com.example.mobile2025s2_1_2.MainActivity;
 import com.example.mobile2025s2_1_2.R;
 import com.google.firebase.FirebaseApp;
 
@@ -22,7 +23,8 @@ public class StartActivity extends AppCompatActivity {
 
     private ConstraintLayout mainLayout;
 
-    // 충돌 해결: 상수 정의 유지 (-55f)
+    // 🌟 충돌 해결: 상수(-55f) 정의 유지
+    // 로고 그룹이 최종적으로 중앙에서 왼쪽으로 이동할 거리
     private final float FINAL_SHIFT_X_DP = -55f;
 
     @Override
@@ -56,10 +58,10 @@ public class StartActivity extends AppCompatActivity {
         subtitleText.setAlpha(0f);
         subtitleText.setTranslationY(slideDistance);
 
-        // 충돌 해결: 애니메이션 시작 메서드 호출
+        // 🌟 충돌 해결: 애니메이션 시작 메서드 호출
         startFullAnimationSequence(subtractLogo, symbolLogo, titleText, subtitleText);
 
-        // WindowInsets 설정
+        // EdgeToEdge 및 WindowInsets 설정 유지
         ViewCompat.setOnApplyWindowInsetsListener(mainLayout, (v, insets) -> {
             v.setPadding(
                     insets.getInsets(WindowInsetsCompat.Type.systemBars()).left,
@@ -71,18 +73,23 @@ public class StartActivity extends AppCompatActivity {
         });
     }
 
+    // ======================================================================
+    //                             애니메이션 시퀀스 관리
+    // ======================================================================
+
     private void startFullAnimationSequence(View subtractLogo, View symbolLogo, View titleText, View subtitleText) {
-        // 1. Fade In
+
+        // 1. subtractLogo의 첫 등장 (Fade In)
         ObjectAnimator subtractFadeIn = ObjectAnimator.ofFloat(subtractLogo, View.ALPHA, 0f, 1f);
         subtractFadeIn.setDuration(800);
 
-        // 2. 교체 전환
+        // 2. subtractLogo -> symbolLogo 순식간에 교체되는 전환
         AnimatorSet instantaneousTransition = createInstantaneousTransitionAnim(subtractLogo, symbolLogo);
 
-        // 3. 이동 및 텍스트 (상수 사용)
+        // 3. 로고 이동 및 한글 제목 등장 (상수 사용)
         AnimatorSet shiftAndTextSet = createLogoShiftAndTextAnim(symbolLogo, titleText);
 
-        // 4. 서브타이틀
+        // 4. 서브타이틀 등장
         AnimatorSet subtitleSet = createSubtitleAnim(subtitleText);
 
         AnimatorSet fullAnimation = new AnimatorSet();
@@ -119,6 +126,7 @@ public class StartActivity extends AppCompatActivity {
         AnimatorSet transitionSet = new AnimatorSet();
         long duration = 300;
 
+        // subtractLogo Fade Out & Scale Out
         ObjectAnimator subtractFadeOut = ObjectAnimator.ofFloat(subtractLogo, View.ALPHA, 1f, 0f);
         subtractFadeOut.setDuration(duration);
         ObjectAnimator subtractScaleOutX = ObjectAnimator.ofFloat(subtractLogo, View.SCALE_X, 1f, 0.5f);
@@ -129,6 +137,7 @@ public class StartActivity extends AppCompatActivity {
         AnimatorSet subtractOut = new AnimatorSet();
         subtractOut.play(subtractFadeOut).with(subtractScaleOutX).with(subtractScaleOutY);
 
+        // symbolLogo Fade In & Scale In
         ObjectAnimator symbolFadeIn = ObjectAnimator.ofFloat(symbolLogo, View.ALPHA, 0f, 1f);
         symbolFadeIn.setDuration(duration);
         ObjectAnimator symbolScaleInX = ObjectAnimator.ofFloat(symbolLogo, View.SCALE_X, 0.5f, 1f);
@@ -140,12 +149,17 @@ public class StartActivity extends AppCompatActivity {
         symbolIn.play(symbolFadeIn).with(symbolScaleInX).with(symbolScaleInY);
 
         transitionSet.play(subtractOut).with(symbolIn);
+
         return transitionSet;
     }
 
+    // 2단계: 로고 이동 및 한글 제목 등장
     private AnimatorSet createLogoShiftAndTextAnim(View symbolLogo, View titleText) {
+
+        // 🌟 상수를 Pixel로 변환하여 사용 (-55f 적용됨)
         float finalTranslationX = getResources().getDisplayMetrics().density * FINAL_SHIFT_X_DP;
 
+        // 1. symbolMove
         ObjectAnimator symbolMove = ObjectAnimator.ofFloat(symbolLogo, View.TRANSLATION_X, 0f, finalTranslationX);
         symbolMove.setDuration(700);
         symbolMove.setInterpolator(new DecelerateInterpolator());
@@ -154,18 +168,22 @@ public class StartActivity extends AppCompatActivity {
         textFadeIn.setDuration(500);
         textFadeIn.setInterpolator(new AccelerateDecelerateInterpolator());
 
+        // 2. textMove
         ObjectAnimator textMove = ObjectAnimator.ofFloat(titleText, View.TRANSLATION_X, titleText.getTranslationX(), finalTranslationX);
         textMove.setDuration(700);
         textMove.setInterpolator(new DecelerateInterpolator());
 
         AnimatorSet shiftAndTextSet = new AnimatorSet();
+
         shiftAndTextSet.play(symbolMove);
         shiftAndTextSet.play(textFadeIn).with(textMove).after(200);
 
         return shiftAndTextSet;
     }
 
+    // 3단계: 서브타이틀 슬라이드 업 등장
     private AnimatorSet createSubtitleAnim(View subtitleText) {
+
         ObjectAnimator slideUp = ObjectAnimator.ofFloat(subtitleText, View.TRANSLATION_Y,
                 subtitleText.getTranslationY(), 0f);
         slideUp.setDuration(600);
@@ -176,11 +194,15 @@ public class StartActivity extends AppCompatActivity {
 
         AnimatorSet subtitleSet = new AnimatorSet();
         subtitleSet.play(slideUp).with(fadeIn);
+
         return subtitleSet;
     }
 
+    // 🌟 화면 전환 로직 (충돌 해결됨)
     private void navigateToNextScreen() {
-        // [테스트용] 나중에 실제 로그인 값 체크 로직으로 변경
+        // [테스트용 설정]
+        // true  : 재실행 (메인 화면)
+        // false : 첫 실행 (로그인 화면)
         boolean isLogined = false;
 
         Intent intent;
@@ -191,6 +213,7 @@ public class StartActivity extends AppCompatActivity {
         }
 
         startActivity(intent);
+        // 부드러운 화면 전환 효과 (페이드)
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();
     }
