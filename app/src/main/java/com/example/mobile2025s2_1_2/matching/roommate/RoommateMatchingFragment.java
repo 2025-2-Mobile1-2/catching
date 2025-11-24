@@ -64,6 +64,8 @@ public class RoommateMatchingFragment extends Fragment {
             matchData.put("toID", toID);
             matchData.put("category", "roommate");
             matchData.put("state", "request");
+            matchData.put("isNewForA", true); // 보낸 사람(A)에게 새 알림
+            matchData.put("isNewForB", true); // 받은 사람(B)에게 새 알림
             matchData.put("timestamp", FieldValue.serverTimestamp());
 
             db.collection("matching_status")
