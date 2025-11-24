@@ -16,16 +16,23 @@
             android:layout_height="match_parent"
             android:layout_above="@id/custom_navbar"
             android:orientation="vertical">
+            <!--캐칭 앱 로고와 이름-->
             <LinearLayout
                 android:orientation="horizontal"
+                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
                 android:background="#FFFFFFFF">
                 <ImageView
-                    android:layout_margin="23dp"
+                    android:layout_margin="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_arrow_left"/>
+                    android:src="@drawable/ic_catching"/>
+                <ImageView
+                    android:layout_margin="4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/name_catching_mint"/>
             </LinearLayout>
 
             <!--알림설정-->

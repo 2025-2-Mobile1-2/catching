@@ -40,7 +40,6 @@ dependencies {
     // 🔥 Firebase modules (너가 필요한 것만 선택)
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
-
     implementation("com.google.android.gms:play-services-auth:21.2.0")
 
 
@@ -49,9 +48,12 @@ dependencies {
     implementation("androidx.activity:activity:1.8.2")
     implementation("com.google.android.flexbox:flexbox:3.0.0")
     implementation ("com.google.code.gson:gson:2.10.1")
+    implementation ("com.google.android.material:material:1.11.0")
     implementation(libs.constraintlayout)
     implementation(libs.cardview)
     implementation(libs.viewpager2)
+    implementation("com.google.android.gms:play-services-tasks:18.0.2")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

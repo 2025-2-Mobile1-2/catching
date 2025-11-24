@@ -14,20 +14,37 @@ import com.example.mobile2025s2_1_2.R;
 public class RoommateCardData {
 
     public static class RoommateData {
+        private String email;
         private String name;
-        private String major;
+        private String sex;
+        private String dormitory;
+        private String age;
         private String mbti;
+        private String drink;
+        private String smoke;
+        private int clean;
+        private int sleep;
+        private int subtlety;
 
         // Getter 메서드 (Gson이 자동으로 매핑함)
+        public String getEmail(){ return email; }
+
         public String getName() { return name; }
-        public String getMajor() { return major; }
+        public String getSex() { return sex; }
+        public String getDormitory() { return dormitory; }
+        public String getAge() { return age; }
         public String getMbti() { return mbti; }
+        public String getDrink() { return drink; }
+        public String getSmoke() { return smoke; }
+        public int getClean() { return clean; }
+        public int getSleep() { return sleep; }
+        public int getSubtlety() { return subtlety; }
     }
     // JSON 파일을 읽어서 룸메이트 데이터 리스트로 반환
     public static List<RoommateData> loadRoommates(Context context) {
         try {
             // 1️⃣ JSON 파일 가져오기 (res/raw/roommate_data.json)
-            InputStream inputStream = context.getResources().openRawResource(R.raw.roommate_data);
+            InputStream inputStream = context.getResources().openRawResource(R.raw.user_data);
 
             // 2️⃣ 파일을 문자 단위로 읽기 위한 Reader
             InputStreamReader reader = new InputStreamReader(inputStream);

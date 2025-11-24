@@ -2,7 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/matching_roommate"
+    android:id="@+id/matching_mentorship"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToOutline="true"
@@ -17,7 +17,7 @@
             android:layout_margin="40dp"
             android:orientation="horizontal">
             <ImageView
-                android:id="@+id/matching_roommate_back"
+                android:id="@+id/matching_mentorship_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_arrow_left"/>
@@ -31,7 +31,7 @@
             android:gravity="center"
             android:orientation="vertical">
             <com.google.android.material.button.MaterialButton
-                android:text="기숙사 룸메이트 매칭"
+                android:text="진로·전공 멘토 매칭"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:fontFamily="@font/medium"
@@ -43,7 +43,7 @@
 
             <!--룸메이트 상대 프로필-->
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/profile_roommate"
+                android:id="@+id/profile_mentorship"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -57,7 +57,7 @@
                 android:paddingEnd="50dp" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/match_roommate_button"
+                android:id="@+id/match_mentorship_button"
                 android:text="매칭 신청하기"
                 android:textColor="@color/black"
                 android:textSize="18sp"
