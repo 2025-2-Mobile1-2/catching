@@ -16,7 +16,7 @@ public class RoommateCardData {
     public static class RoommateData {
         private String name;
         private String sex;
-        private String domitory;
+        private String dormitory;
         private String age;
         private String mbti;
         private String drink;
@@ -32,7 +32,7 @@ public class RoommateCardData {
 
             this.name = name;
             this.sex = sex;
-            this.domitory = domitory;
+            this.dormitory = domitory;
             this.age = age;
             this.mbti = mbti;
             this.drink = drink;
@@ -48,7 +48,7 @@ public class RoommateCardData {
         // Getter 메서드
         public String getName() { return name; }
         public String getSex() { return sex; }
-        public String getDomitory() { return domitory; }
+        public String getDormitory() { return dormitory; }
         public String getAge() { return age; }
         public String getMbti() { return mbti; }
         public String getDrink() { return drink; }

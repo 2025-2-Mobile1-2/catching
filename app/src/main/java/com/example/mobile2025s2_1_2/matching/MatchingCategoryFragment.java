@@ -50,7 +50,7 @@ public class MatchingCategoryFragment extends Fragment {
             ActivityFragment activityFragment = new ActivityFragment();
             getParentFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.mentorship_container, activityFragment)
+                    .replace(R.id.match_category_container, activityFragment)
                     .addToBackStack(null)
                     .commit();
         });

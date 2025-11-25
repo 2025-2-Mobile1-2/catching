@@ -41,7 +41,7 @@
 
         <!--진로 버튼-->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/match_cate_career"
+            android:id="@+id/match_cate_mentorship"
             android:text="진로·전공 멘토 매칭"
             android:textColor="@color/black"
             android:fontFamily="@font/semibold"
@@ -90,9 +90,6 @@
             android:layout_height="100dp">
         </FrameLayout>
 
-
-
     </LinearLayout>
-    <!--디자인을 위한 여백용-->
 
 </FrameLayout>
