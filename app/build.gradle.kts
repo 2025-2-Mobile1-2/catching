@@ -43,6 +43,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:21.2.0")
 
 
+    implementation ("org.jsoup:jsoup:1.17.2")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation("androidx.activity:activity:1.8.2")

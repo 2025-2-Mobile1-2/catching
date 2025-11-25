@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,11 +29,18 @@ public class NoticeFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.home_notice_card);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        //공지사항 연결
         List<NoticeCardData.HomeNoticeData> list =
                 NoticeCardData.loadHomeNotices(requireContext());
 
         NoticeCardAdapter adapter = new NoticeCardAdapter(requireContext(), list);
         recyclerView.setAdapter(adapter);
+
+        //뒤로가기
+        ImageView roommateBack = view.findViewById(R.id.home_notice_back);
+        roommateBack.setOnClickListener(v->{
+            requireActivity().getSupportFragmentManager().popBackStack();
+        });
 
         return view;
     }

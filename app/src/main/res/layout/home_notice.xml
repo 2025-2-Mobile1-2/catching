@@ -22,21 +22,17 @@
                 <!--캐칭 앱 로고와 이름-->
                 <LinearLayout
                     android:orientation="horizontal"
-                    android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="68dp"
+                    android:padding="20dp"
                     android:background="#FFF5F5F5">
                     <ImageView
-                        android:layout_margin="4dp"
+                        android:id="@+id/home_notice_back"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_catching"/>
-                    <ImageView
-                        android:layout_margin="4dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/name_catching_mint"/>
+                        android:src="@drawable/ic_arrow_left"/>
                 </LinearLayout>
+
 
                 <!--캐칭 앱 배너 광고-->
                 <RelativeLayout
@@ -72,7 +68,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="14dp"
+                        android:layout_marginLeft="16dp"
                         android:layout_marginTop="7dp"
                         android:text="공지사항"
                         android:fontFamily="@font/medium"

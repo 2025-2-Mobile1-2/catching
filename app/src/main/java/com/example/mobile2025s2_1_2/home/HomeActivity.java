@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mobile2025s2_1_2.home.notice.NoticeFragment;
 import com.example.mobile2025s2_1_2.R;
+import com.example.mobile2025s2_1_2.home.schoolnotice.SchoolCardData;
+import com.example.mobile2025s2_1_2.home.schoolnotice.SchoolCrawler;
 import com.example.mobile2025s2_1_2.utils.BottomNavBarHelper;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
