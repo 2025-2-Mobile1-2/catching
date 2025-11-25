@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp">
+
+    <LinearLayout
+        android:layout_width="294dp"
+        android:layout_height="426dp"
+        android:orientation="vertical">
+
+        <!--하트-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_margin="15dp"/>
+
+        <!--이름 & 프로필 사진-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_marginBottom="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_profile_reverse"/>
+            <TextView
+                android:id="@+id/roommate_name"
+                android:text="김국민"
+                android:textSize="18sp"
+                android:fontFamily="@font/regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <!--특징-->
+
+        <!-- 팀플 경험 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!-- 특징 태그 묶음 -->
+
+            <!--특징 percent Bar-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="0dp"
+                android:orientation="vertical">
+                <!--청결도-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop='3dp'>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="220dp"
+                            android:layout_height="20dp"
+                            android:layout_marginHorizontal="25dp"
+                            android:layout_marginTop="6dp"
+                            android:backgroundTint="#FFE0FFF6"
+                            app:cardCornerRadius="12dp"
+                            app:strokeColor="@android:color/transparent"
+                            app:strokeWidth="0dp">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="2dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="8dp"
+                                    android:text="3학년"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/TV_gradename"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="학년"
+                                    android:textColor="#2DD7A4"
+                                    android:textColorHint="@null"
+                                    android:textColorLink="@null"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </com.google.android.material.card.MaterialCardView>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop='6dp'>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="220dp"
+                            android:layout_height="20dp"
+                            android:layout_marginHorizontal="25dp"
+                            android:layout_marginTop="6dp"
+                            android:backgroundTint="#FFE0FFF6"
+                            app:cardCornerRadius="12dp"
+                            app:strokeColor="@android:color/transparent"
+                            app:strokeWidth="0dp">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="2dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="8dp"
+                                    android:text="경영학전공"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="전공"
+                                    android:textColor="#2DD7A4"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop='6dp'>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="220dp"
+                            android:layout_height="20dp"
+                            android:layout_marginHorizontal="25dp"
+                            android:layout_marginTop="6dp"
+                            android:backgroundTint="#FFE0FFF6"
+                            app:cardCornerRadius="12dp"
+                            app:strokeColor="@android:color/transparent"
+                            app:strokeWidth="0dp">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="2dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="8dp"
+                                    android:text="소프트웨어광고융합전공"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="다·부전공"
+                                    android:textColor="#2DD7A4"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                    </FrameLayout>
+                </LinearLayout>
+                <!--잠꼬대 정도-->
+                <!--예민 정도-->
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:orientation="vertical">
+                <!--청결도-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/semibold"
+                        android:text="팀플경험"
+                        android:textColor="#FF2DD7A4"
+                        android:textSize="16sp" />
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="220dp"
+                            android:layout_height="15dp"
+                            android:layout_marginHorizontal="25dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginBottom="6dp"
+                            android:backgroundTint="#FFE0FFF6"
+                            app:cardCornerRadius="12dp"
+                            app:strokeColor="@android:color/transparent"
+                            app:strokeWidth="0dp" />
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/teamP_Exp"
+                            android:layout_width="120dp"
+                            android:layout_height="15dp"
+                            android:layout_marginHorizontal="25dp"
+                            android:layout_marginTop="6dp"
+                            android:backgroundTint="#FF2DD7A4"
+                            app:cardCornerRadius="12dp"
+                            app:strokeColor="@android:color/transparent"
+                            app:strokeWidth="0dp">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <TextView
+                                    android:id="@+id/textView"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="8dp"
+                                    android:text="20회"
+                                    android:textColor="@color/white"
+                                    android:textSize="10sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </com.google.android.material.card.MaterialCardView>
+
+                    </FrameLayout>
+
+                </LinearLayout>
+                <!--잠꼬대 정도-->
+                <!--예민 정도-->
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <!-- 특징 태그 묶음 -->
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/semibold"
+                    android:text="강점"
+                    android:textAlignment="center"
+                    android:textColor="@color/active_green"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.flexbox.FlexboxLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="1dp"
+                    android:padding="5dp"
+                    app:flexWrap="wrap"
+                    app:justifyContent="center">
+
+                    <TextView
+                        android:id="@+id/roommate_sex"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/background_card_tag"
+                        android:fontFamily="@font/light"
+                        android:text="남"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/roommate_dormitory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/background_card_tag"
+                        android:fontFamily="@font/light"
+                        android:text="교내생활관"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/roommate_age"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/background_card_tag"
+                        android:fontFamily="@font/light"
+                        android:text="2005년생"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/roommate_mbti"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/background_card_tag"
+                        android:fontFamily="@font/light"
+                        android:text="ESFP"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/roommate_drink"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/background_card_tag"
+                        android:fontFamily="@font/light"
+                        android:text="음주 O"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/roommate_smoke"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/background_card_tag"
+                        android:fontFamily="@font/light"
+                        android:text="흡연 X"
+                        android:textSize="16sp" />
+                </com.google.android.flexbox.FlexboxLayout>
+
+                <!--특징 percent Bar-->
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

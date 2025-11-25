@@ -47,7 +47,7 @@ public class RoommateCardAdapter extends RecyclerView.Adapter<RoommateCardAdapte
             mbtiText = itemView.findViewById(R.id.roommate_mbti);
             drinkText = itemView.findViewById(R.id.roommate_drink);
             smokeText = itemView.findViewById(R.id.roommate_smoke);
-            cleanPercent = itemView.findViewById(R.id.roommate_clean);
+            cleanPercent = itemView.findViewById(R.id.teamP_Exp);
             sleepPercent = itemView.findViewById(R.id.roommate_sleep);
             subtletyPercent = itemView.findViewById(R.id.roommate_subtlety);
         }

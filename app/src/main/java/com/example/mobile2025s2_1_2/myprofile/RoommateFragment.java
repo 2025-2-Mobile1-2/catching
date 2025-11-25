@@ -185,9 +185,6 @@ public class RoommateFragment extends Fragment {
                     if (etKakao != null && kakaoId != null) {
                         etKakao.setText(kakaoId);
                     }
-
-                    Toast.makeText(requireContext(), "데이터 불러오기 완료", Toast.LENGTH_SHORT).show();
-
                 } catch (Exception e) {
                     Log.e("CrashCheck", "데이터 적용 중 오류", e);
                 }
