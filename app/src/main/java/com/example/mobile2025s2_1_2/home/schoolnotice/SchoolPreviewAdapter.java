@@ -17,12 +17,23 @@ import com.example.mobile2025s2_1_2.R;
 
 import java.util.List;
 
-public class SchoolCardAdapter extends RecyclerView.Adapter<SchoolCardAdapter.ViewHolder> {
+public class SchoolPreviewAdapter extends RecyclerView.Adapter<SchoolPreviewAdapter.ViewHolder> {
 
     private List<SchoolCardData> list;
     private Context context;
 
-    public SchoolCardAdapter(Context context, List<SchoolCardData> list) {
+    // 클릭 이벤트 전달용
+    public interface OnItemClickListener {
+        void onClick(SchoolCardData item);
+    }
+
+    private OnItemClickListener listener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public SchoolPreviewAdapter(Context context, List<SchoolCardData> list) {
         this.context = context;
         this.list = list;
     }
@@ -34,27 +45,27 @@ public class SchoolCardAdapter extends RecyclerView.Adapter<SchoolCardAdapter.Vi
 
     @NonNull
     @Override
-    public SchoolCardAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SchoolPreviewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.home_school_notice_card, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SchoolCardAdapter.ViewHolder holder, int position) {
-        SchoolCardData item = list.get(position + 1);
+    public void onBindViewHolder(@NonNull SchoolPreviewAdapter.ViewHolder holder, int position) {
+        SchoolCardData item = list.get(position);
 
         holder.title.setText(item.getTitle());
+        holder.title.setSelected(false); // 자동 스크롤(마키) 방지
 
         holder.layout.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getUrl()));
-            context.startActivity(intent);
+            if (listener != null) listener.onClick(item);
         });
     }
 
     @Override
     public int getItemCount() {
-        return (list != null && list.size() > 1) ? list.size() - 1 : 0;
+        return list != null ? list.size() : 0;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
