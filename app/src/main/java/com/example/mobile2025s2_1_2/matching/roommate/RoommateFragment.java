@@ -61,6 +61,7 @@ public class RoommateFragment extends Fragment {
         // ⭐ 1) 내 정보 먼저 추가
         if (myInfo != null) {
             cardList.add(new RoommateCardData.RoommateData(
+                    safeToString(myInfo.get("email"), "N/A"),
                     safeToString(myInfo.get("name"), "미상"),
                     safeToString(myInfo.get("sex"), "미상"),
                     safeToString(myInfo.get("department"), "미상"),
@@ -76,6 +77,7 @@ public class RoommateFragment extends Fragment {
         if (otherUsers != null) {
             for (Map<String, Object> user : otherUsers) {
 
+                String email = safeToString(user.get("email"), "N/A");
                 String name = safeToString(user.get("name"), "미상");
                 String sex = safeToString(user.get("sex"), "미상");
                 String domitory = safeToString(user.get("department"), "미상");
@@ -89,7 +91,7 @@ public class RoommateFragment extends Fragment {
                 int subtle = 50;
 
                 cardList.add(new RoommateCardData.RoommateData(
-                        name, sex, domitory, age, mbti, drink, smoke,
+                        email, name, sex, domitory, age, mbti, drink, smoke,
                         clean, sleep, subtle
                 ));
             }
@@ -139,10 +141,12 @@ public class RoommateFragment extends Fragment {
                 RoommateCardData.RoommateData selectedCard = cardList.get(position);
 
                 String name = selectedCard.getName();
+                String email = selectedCard.getEmail();
 
                 RoommateMatchingFragment fragment = new RoommateMatchingFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("name", name);
+                bundle.putString("email", email);
                 fragment.setArguments(bundle);
 
                 requireActivity().getSupportFragmentManager()

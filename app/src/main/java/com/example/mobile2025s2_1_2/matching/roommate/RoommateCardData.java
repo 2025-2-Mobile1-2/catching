@@ -14,6 +14,7 @@ import com.example.mobile2025s2_1_2.R;
 public class RoommateCardData {
 
     public static class RoommateData {
+        private String email;
         private String name;
         private String sex;
         private String dormitory;
@@ -26,10 +27,11 @@ public class RoommateCardData {
         private int subtlety;
 
         // 🔥 [추가됨] Firestore 데이터 → 카드 객체로 생성할 수 있게 하는 생성자
-        public RoommateData(String name, String sex, String dormitory, String age,
+        public RoommateData(String email, String name, String sex, String dormitory, String age,
                             String mbti, String drink, String smoke,
                             int clean, int sleep, int subtlety) {
 
+            this.email = email;
             this.name = name;
             this.sex = sex;
             this.dormitory = dormitory;
@@ -45,6 +47,10 @@ public class RoommateCardData {
 
         // 🔥 Gson/Firestore가 필요로 하는 기본 생성자
         public RoommateData() {}
+
+        public String getEmail() {
+            return email;
+        }
 
         // Getter 메서드
         public String getName() { return name; }
