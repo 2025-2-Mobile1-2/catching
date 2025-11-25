@@ -29,7 +29,6 @@ public class RoommateCardData {
         public RoommateData(String name, String sex, String domitory, String age,
                             String mbti, String drink, String smoke,
                             int clean, int sleep, int subtlety) {
-
             this.name = name;
             this.sex = sex;
             this.dormitory = domitory;
