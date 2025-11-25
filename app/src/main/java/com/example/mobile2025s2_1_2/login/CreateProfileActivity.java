@@ -240,7 +240,7 @@ public class CreateProfileActivity extends AppCompatActivity {
 
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        db.collection("Users").document(uid).set(userProfile)
+        db.collection("Users").document(userEmail).set(userProfile)
                 .addOnSuccessListener(aVoid -> {
                     // 🔥 1) SharedPreferences 에 userEmail 저장
                     getSharedPreferences("user_prefs", MODE_PRIVATE)
