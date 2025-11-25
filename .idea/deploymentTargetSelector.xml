@@ -21,7 +21,7 @@
         <DropdownSelection timestamp="2025-11-25T12:49:52.200534100Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\joony\.android\avd\Pixel_2.avd" />
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=R3CX90KW3AN" />
             </handle>
           </Target>
         </DropdownSelection>
