@@ -94,7 +94,7 @@
                             app:thumbTint="#FFFFFFFF"/>
                     </LinearLayout>
 
-                    <!--이메일람림-->
+                    <!--인앱 알림-->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:fontFamily="@font/light"
-                            android:text="이메일 알림"
+                            android:text="인앱 알림"
                             android:textSize="17sp" />
                         <com.google.android.material.materialswitch.MaterialSwitch
                             android:id="@+id/settings_email_switch"
@@ -252,11 +252,15 @@
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
-        <!--매칭 카테고리 창 영역-->
-<!--        <FrameLayout-->
-<!--            android:id="@+id/fragment_container"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent" />-->
+        <!--fragment 뜨면 터치 차단용-->
+        <View
+            android:id="@+id/touch_blocker"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone" />
         <!--하단 navBar-->
         <include
             android:id="@+id/custom_navbar"

@@ -19,8 +19,15 @@ public class DeleteAccountDialogFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.settings_delete_account_dialog, container, false);
+        TextView delete = view.findViewById(R.id.account_delete_ok);
+        delete.setOnClickListener(v ->{
+            SettingsFragment.touchBlocker.setVisibility(View.GONE);
+        });
+
+        //취소버틍
         TextView deleteCancel = view.findViewById(R.id.account_delete_cancel);
         deleteCancel.setOnClickListener(v -> {
+            SettingsFragment.touchBlocker.setVisibility(View.GONE);
             requireActivity().getSupportFragmentManager().popBackStack();
         });
         return view;
