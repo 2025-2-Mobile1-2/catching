@@ -1,20 +1,21 @@
 [
   {
+    "email": "ykk11@kookmin.ac.kr",
     "name": "김국민",
     "sex": "남",
-    "domitory":"교내생활관",
+    "dormitory":"교내생활관",
     "age": "2005년생",
     "mbti": "ENTP",
     "drink": "음주 O",
     "smoke": "흡연 X",
-    "clean": 90,
+    "clean": 0,
     "sleep": 50,
     "subtlety": 10
   },
   {
     "name": "홍길동",
     "sex": "여",
-    "domitory":"정릉생활관",
+    "dormitory":"정릉생활관",
     "age": "2004년생",
     "mbti": "ISFP",
     "drink": "음주 X",
@@ -26,7 +27,7 @@
   {
     "name": "국만두",
     "sex": "남",
-    "domitory":"길음생활관",
+    "dormitory":"길음생활관",
     "age": "2001년생",
     "mbti": "INTJ",
     "drink": "음주 X",
@@ -38,7 +39,7 @@
   {
     "name": "쿠민이",
     "sex": "여",
-    "domitory":"정릉2생활관",
+    "dormitory":"제2정릉생활관",
     "age": "2000년생",
     "mbti": "ENFP",
     "drink": "음주 O",

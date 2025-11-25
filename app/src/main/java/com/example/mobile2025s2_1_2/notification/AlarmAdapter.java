@@ -21,16 +21,17 @@ import java.util.List;
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.VH> {
 
     private final List<AlarmItem> items;
-    private final boolean isReceivedList; // 받은/보낸 구분
+    private final boolean isReceivedList;          // 받은/보낸 구분
+    private final OnAlarmClickListener listener;   // 클릭 리스너
 
-    private final OnAlarmClickListener listener;   // ★ 추가된 부분
-
-    // ★ 클릭 리스너 인터페이스 추가
+    // 클릭 리스너 인터페이스
     public interface OnAlarmClickListener {
         void onClick(AlarmItem item, boolean isReceivedList);
     }
 
-    public AlarmAdapter(List<AlarmItem> items, boolean isReceivedList, OnAlarmClickListener listener) {
+    public AlarmAdapter(List<AlarmItem> items,
+                        boolean isReceivedList,
+                        OnAlarmClickListener listener) {
         this.items = items;
         this.isReceivedList = isReceivedList;
         this.listener = listener;
@@ -46,35 +47,41 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.VH> {
         }
 
         void bind(AlarmItem item) {
-            // 텍스트 표시 (특정 카테고리 강조)
+            // 텍스트 표시 (카테고리 강조)
             title.setText(highlightCategory(item.text));
 
-            // N 뱃지 보이기/숨기기
+            // N 뱃지 보이기/숨기기 (데이터만 보고 결정)
             badge.setVisibility(item.isNew ? View.VISIBLE : View.GONE);
 
-            // 🔽 여기 클릭 로직만 수정
+            // 클릭 → Fragment 쪽으로 이벤트 전달
             itemView.setOnClickListener(v -> {
-
-                if (item.isNew) {
-                    item.isNew = false;
-                    badge.setVisibility(View.GONE);
+                // 여기서는 상태 변경 X, 그냥 콜백만
+                if (listener != null) {
+                    listener.onClick(item, isReceivedList);
                 }
-
-                listener.onClick(item, isReceivedList);
+                // 뱃지 UI 갱신은 Fragment에서 item.isNew 바꾼 뒤
+                // 필요하면 adapter.notifyItemChanged(position)으로 반영할 수 있음
             });
-
         }
 
         private CharSequence highlightCategory(String text) {
+            if (text == null) return "";
             SpannableString sp = new SpannableString(text);
-            String[] keys = {"기숙사 룸메이트 매칭", "진로·전공 멘토 매칭", "교내·교외 활동 팀원 매칭"};
+            String[] keys = {
+                    "기숙사 룸메이트 매칭",
+                    "진로·전공 멘토 매칭",
+                    "교내·교외 활동 팀원 매칭"
+            };
             int mint = Color.parseColor("#2DD7A4");
+
             for (String k : keys) {
                 int start = text.indexOf(k);
                 if (start != -1) {
                     int end = start + k.length();
-                    sp.setSpan(new ForegroundColorSpan(mint), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    sp.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    sp.setSpan(new ForegroundColorSpan(mint), start, end,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    sp.setSpan(new StyleSpan(Typeface.BOLD), start, end,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             }
             return sp;

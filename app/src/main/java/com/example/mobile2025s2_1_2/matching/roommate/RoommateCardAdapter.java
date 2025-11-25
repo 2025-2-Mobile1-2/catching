@@ -28,7 +28,7 @@ public class RoommateCardAdapter extends RecyclerView.Adapter<RoommateCardAdapte
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameText;
         TextView sexText;
-        TextView domitoryText;
+        TextView dormitoryText;
         TextView ageText;
         TextView mbtiText;
         TextView drinkText;
@@ -42,7 +42,7 @@ public class RoommateCardAdapter extends RecyclerView.Adapter<RoommateCardAdapte
             super(itemView);
             nameText = itemView.findViewById(R.id.roommate_name);
             sexText = itemView.findViewById(R.id.roommate_sex);
-            domitoryText = itemView.findViewById(R.id.roommate_domitory);
+            dormitoryText = itemView.findViewById(R.id.roommate_dormitory);
             ageText = itemView.findViewById(R.id.roommate_age);
             mbtiText = itemView.findViewById(R.id.roommate_mbti);
             drinkText = itemView.findViewById(R.id.roommate_drink);
@@ -82,7 +82,7 @@ public class RoommateCardAdapter extends RecyclerView.Adapter<RoommateCardAdapte
         RoommateCardData.RoommateData data = roommateList.get(position);
         holder.nameText.setText(data.getName());
         holder.sexText.setText(data.getSex());
-        holder.domitoryText.setText(data.getDomitory());
+        holder.dormitoryText.setText(data.getDormitory());
         holder.ageText.setText(data.getAge());
         holder.mbtiText.setText(data.getMbti());
         holder.drinkText.setText(data.getDrink());

@@ -242,6 +242,12 @@ public class CreateProfileActivity extends AppCompatActivity {
 
         db.collection("Users").document(uid).set(userProfile)
                 .addOnSuccessListener(aVoid -> {
+                    // 🔥 1) SharedPreferences 에 userEmail 저장
+                    getSharedPreferences("user_prefs", MODE_PRIVATE)
+                            .edit()
+                            .putString("user_email", userEmail)
+                            .apply();
+
                     Log.d("DEBUG", "유저 정보 저장됨  ");
                     Toast.makeText(this, "프로필 저장 완료!", Toast.LENGTH_SHORT).show();
 

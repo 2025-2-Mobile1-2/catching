@@ -61,4 +61,132 @@
         <item>X</item>
     </string-array>
 
+
+    <string-array name="kookmin_college_and_major">
+            <!-- 글로벌인문·지역대학 -->
+            <item>한국어문학부 - 국어국문학전공</item>
+            <item>한국어문학부 - 글로벌한국어전공</item>
+            <item>영어영문학부 - 영미어문전공</item>
+            <item>영어영문학부 - 글로벌커뮤니케이션영어전공</item>
+            <item>중국학부 - 중국어문전공</item>
+            <item>중국학부 - 중국정경전공</item>
+            <item>한국역사학과</item>
+            <!-- 사회과학대학 -->
+            <item>행정학과</item>
+            <item>정치외교학과</item>
+            <item>사회학과</item>
+            <item>미디어 · 광고학부 - 미디어전공</item>
+            <item>미디어 · 광고학부 - 광고홍보학전공</item>
+            <item>교육학과</item>
+            <item>러시아 · 유라시아학과</item>
+            <item>일본학과</item>
+            <!-- 법과대학 -->
+            <item>법학부 - 공법학전공</item>
+            <item>법학부 - 사법학전공</item>
+            <item>기업융합법학과</item>
+            <!-- 경상대학 -->
+            <item>경제학과</item>
+            <item>국제통상학과</item>
+            <!-- 경영대학 -->
+            <item>경영학부 - 경영학전공</item>
+            <item>경영학부 - 재무금융전공</item>
+            <item>경영학부 - 회계학전공</item>
+            <item>경영학부 - 글로벌경영전공</item>
+            <item>기업경영학부 - 기업경영전공</item>
+            <item>경영정보학부 _ 경영정보전공</item>
+            <item>AI빅테이터융합경영학과</item>
+
+            <!-- 창의공과대학 -->
+            <item>신소재공학부 - 기계금속재료전공</item>
+            <item>신소재공학부 - 전자화학재료전공</item>
+            <item>기계공학부 - 기계공학전공</item>
+            <item>건설시스템공학부 - 건설시스템공학전공</item>
+            <item>전자공학부 - 지능형반도체융합전자전공</item>
+            <item>전자공학부 - 지능형ICT융합전공</item>
+            <item>전자공학부 - 지능전자공학전공</item>
+            <item>소프트웨어학부 - 소프트웨어전공</item>
+            <item>인공지능학부 - 인공지능전공</item>
+            <item>자동차공학과</item>
+            <item>자동차it융합학과</item>
+            <item>미래모빌리티학과</item>
+            <!-- 과학기술대학 -->
+            <item>산림환경시스템학과</item>
+            <item>임산생명공학과</item>
+            <item>나노전자물리학과</item>
+            <item>응용화학부 - 나노소재전공</item>
+            <item>응용화학부 - 바이오의약전공</item>
+            <item>정보보안암호수학과</item>
+            <item>식품영양학과</item>
+            <item>바이오발효융합학과</item>
+            <item>건축학부 - 건축설계전공</item>
+            <item>건축학부- 건축시스템전공</item>
+            <!-- 조형대학 -->
+            <item>공업디자인학과</item>
+            <item>시각디자인학과</item>
+            <item>금속공예학과</item>
+            <item>도자공예학과</item>
+            <item>의상디자인학과</item>
+            <item>공간디자인학과</item>
+            <item>영상디자인학과</item>
+            <item>자동차 · 운송디자인학과</item>
+            <item>AI디자인학과</item>
+            <!-- 예술대학 -->
+            <item>음악학부 - 성악전공</item>
+            <item>음악학부 - 피아노전공</item>
+            <item>음악학부 - 관현악전공</item>
+            <item>음악학부 - 작곡전공</item>
+
+            <item>미술학부 - 회화전공</item>
+            <item>미술학부 - 입체미술전공</item>
+
+            <item>공연예술학부 - 연극전공</item>
+            <item>공연예술학부 - 영화전공</item>
+            <item>공연예술학부 - 무용전공</item>
+            <!-- 체육대학 -->
+            <item>스포츠교육학과</item>
+            <item>스포츠산업레저학과</item>
+            <item>스포츠건강재활전공</item>
+            <item>인문기술융합학부 - 자유전공</item>
+            <item>인문기술융합학부 - 미래융합전공</item>
+            <item>KMU International Business School</item>
+
+
+
+            <item>연계전공 - 중국통상전공</item>
+            <item>연계전공 - 실내제품디자인전공</item>
+            <item>연계전공 - 도덕·윤리전공</item>
+            <item>연계전공 - 바이오기술전공</item>
+            <item>연계전공 - 바이오헬스케어식품연계전공</item>
+            <item>연계전공 - 응용심리학전공</item>
+            <item>연계전공 - 미디어애널리틱스전공</item>
+            <item>연계전공 - 미래자동차전공</item>
+            <item>연계전공 - 디지털마케팅전공</item>
+            <item>연계전공 - 스마트카ICT전공</item>
+
+            <item>융합전공 - 해외건설융합전공</item>
+            <item>융합전공 - 자동차·소프트웨어·디자인융합전공</item>
+            <item>융합전공 - Entrepreneurship융합전공</item>
+            <item>융합전공 - 미래기술융합디자인전공</item>
+            <item>융합전공 - 오픈소스거버넌스융합전공</item>
+            <item>융합전공 - 소프트웨어광고융합전공</item>
+            <item>융합전공 - 인포메이션테크놀로지전공</item>
+            <item>융합전공 - 디지털엔터테인먼트전공</item>
+            <item>융합전공 - 소프트웨어미디어융합전공</item>
+            <item>융합전공 - 바이오4차산업거버넌스융합전공</item>
+            <item>융합전공 - 지식재산융합전공</item>
+            <item>융합전공 - 바이오헬스산업융합전공</item>
+
+            <item>자기설계융합전공 - 과학기술사회학융합전공</item>
+            <item>자기설계융합전공 - 금융공학융합전공</item>
+            <item>자기설계융합전공 - 문화예술경영학융합전공</item>
+            <item>자기설계융합전공 - 미술·디자인사학융합전공</item>
+            <item>자기설계융합전공 - 문화예술사회학융합전공</item>
+            <item>자기설계융합전공 - 미디어스포츠마케팅융합전공</item>
+            <item>자기설계융합전공 - 경제·수학융합전공</item>
+            <item>자기설계융합전공 - 데이터사이언스융합전공</item>
+            <item>자기설계융합전공 - 식품경영학융합전공</item>
+            <item>자기설계융합전공 - 빅데이터경제학</item>
+    </string-array>
+
+
 </resources>

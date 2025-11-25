@@ -1,80 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="horizontal"
+    android:padding="0dp">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:text="학번"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="1"
-                android:text="경영학전공"
-                android:textAlignment="textEnd" />
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <!-- 1. 성별 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:text="전공"
+                            android:textSize="16sp" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <AutoCompleteTextView
+                            android:id="@+id/autocomplete_major"
+                            android:layout_width="270dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="16dp"
+
+                            android:hint="전공을 입력해주세요!"
+
+                            android:background="@null"
+                            android:gravity="right"
+                            android:textSize="14sp"
+                            android:inputType="text"
+                            android:textColor="@color/black"
+
+                            android:textColorHint="@android:color/darker_gray"  android:completionThreshold="1"
+
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:background="@color/cardview_dark_background" />
+
+                    <!-- 2. 기숙사 종류 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:text="다·부전공"
+                            android:textSize="16sp" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <AutoCompleteTextView
+                            android:id="@+id/autocomplete_secondary_major"
+                            android:layout_width="270dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="16dp"
+
+                            android:hint="전공을 입력해주세요!"
+
+                            android:background="@null"
+                            android:gravity="right"
+                            android:textSize="14sp"
+
+                            android:textColor="@color/black"
+                            android:inputType="text"
+                            android:textColorHint="@android:color/darker_gray"  android:completionThreshold="1"
+
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:background="@color/material_dynamic_neutral40" />
+
+
+
+                </LinearLayout>
+
+                <!--        분리선-->
+
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
-
-        <View
-            android:id="@+id/view"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/cardview_dark_background" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_weight="1"
-                android:text="성별"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_weight="1"
-                android:text="소프트웨어광고융합전공"
-                android:textAlignment="textEnd" />
-        </LinearLayout>
-
-        <View
-            android:id="@+id/view2"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/cardview_dark_background" />
-    </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
