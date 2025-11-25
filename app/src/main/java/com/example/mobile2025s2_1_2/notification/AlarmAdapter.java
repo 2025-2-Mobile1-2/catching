@@ -21,8 +21,8 @@ import java.util.List;
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.VH> {
 
     private final List<AlarmItem> items;
-    private final boolean isReceivedList;          // 받은/보낸 구분
-    private final OnAlarmClickListener listener;   // 클릭 리스너
+    private final boolean isReceivedList; // 받은/보낸 구분
+    private final OnAlarmClickListener listener;
 
     // 클릭 리스너 인터페이스
     public interface OnAlarmClickListener {
@@ -50,22 +50,28 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.VH> {
             // 텍스트 표시 (카테고리 강조)
             title.setText(highlightCategory(item.text));
 
-            // N 뱃지 보이기/숨기기 (데이터만 보고 결정)
+            // N 뱃지 표시/숨김
             badge.setVisibility(item.isNew ? View.VISIBLE : View.GONE);
 
-            // 클릭 → Fragment 쪽으로 이벤트 전달
             itemView.setOnClickListener(v -> {
-                // 여기서는 상태 변경 X, 그냥 콜백만
+                int pos = getBindingAdapterPosition();
+                if (pos == RecyclerView.NO_POSITION) return;
+
+                // 🔥 클릭하자마자 UI에서 N 뱃지 제거 + 데이터 갱신
+                if (item.isNew) {
+                    item.isNew = false;               // 메모리 상태 변경
+                    badge.setVisibility(View.GONE);   // 바로 화면에서 숨김
+                    notifyItemChanged(pos);           // 뷰 재바인딩(스크롤 재사용 대비)
+                }
+
+                // 프래그먼트로 콜백 보내서 Firestore 업데이트/팝업 처리
                 if (listener != null) {
                     listener.onClick(item, isReceivedList);
                 }
-                // 뱃지 UI 갱신은 Fragment에서 item.isNew 바꾼 뒤
-                // 필요하면 adapter.notifyItemChanged(position)으로 반영할 수 있음
             });
         }
 
         private CharSequence highlightCategory(String text) {
-            if (text == null) return "";
             SpannableString sp = new SpannableString(text);
             String[] keys = {
                     "기숙사 룸메이트 매칭",
@@ -73,7 +79,6 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.VH> {
                     "교내·교외 활동 팀원 매칭"
             };
             int mint = Color.parseColor("#2DD7A4");
-
             for (String k : keys) {
                 int start = text.indexOf(k);
                 if (start != -1) {

@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +76,8 @@ public class NotificationFragment extends Fragment {
                 .getSharedPreferences("user_prefs", requireActivity().MODE_PRIVATE);
         currentUserEmail = prefs.getString("user_email", null);
 
+        Log.d("NOTI_USER", "currentUserEmail = " + currentUserEmail);
+
         // 토글
         toggleReceived = view.findViewById(R.id.alarm_toggle_r);
         toggleSent     = view.findViewById(R.id.alarm_toggle_s);
@@ -106,10 +109,10 @@ public class NotificationFragment extends Fragment {
 
     /** Firestore에서 받은 매칭 불러오기 (toID == 나) */
     private void loadReceivedFromFirestore() {
-        if (currentUserEmail == null) return;
+        if (db == null || currentUserEmail == null) return;
 
         db.collection("matching_status")
-                .whereEqualTo("toID", currentUserEmail)
+                .whereEqualTo("toID", currentUserEmail) // ★ 받은 사람 = 나
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(snap -> {
@@ -118,12 +121,19 @@ public class NotificationFragment extends Fragment {
                     for (DocumentSnapshot doc : snap.getDocuments()) {
                         String docId    = doc.getId();
                         String fromId   = doc.getString("fromID");
+                        String toId     = doc.getString("toID");
                         String state    = doc.getString("state");
                         String category = doc.getString("category");
                         Boolean isNewForB = doc.getBoolean("isNewForB");
 
-                        // TODO: 나중에 fromId → fromName (users 컬렉션에서 가져오기)
-                        String fromName = fromId; // 임시로 이메일 그대로 사용
+                        Log.d("NOTI_REC",
+                                "doc=" + docId +
+                                        ", fromID=" + fromId +
+                                        ", toID=" + toId +
+                                        ", state=" + state);
+
+                        // TODO: 나중에 fromId → users 컬렉션에서 이름 가져오기
+                        String fromName = fromId != null ? fromId : "상대";
 
                         String text;
                         if ("accepted".equals(state)) {
@@ -157,10 +167,10 @@ public class NotificationFragment extends Fragment {
 
     /** Firestore에서 보낸 매칭 불러오기 (fromID == 나) */
     private void loadSentFromFirestore() {
-        if (currentUserEmail == null) return;
+        if (db == null || currentUserEmail == null) return;
 
         db.collection("matching_status")
-                .whereEqualTo("fromID", currentUserEmail)
+                .whereEqualTo("fromID", currentUserEmail) // ★ 보낸 사람 = 나
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(snap -> {
@@ -168,13 +178,20 @@ public class NotificationFragment extends Fragment {
 
                     for (DocumentSnapshot doc : snap.getDocuments()) {
                         String docId    = doc.getId();
+                        String fromId   = doc.getString("fromID");
                         String toId     = doc.getString("toID");
                         String state    = doc.getString("state");
                         String category = doc.getString("category");
                         Boolean isNewForA = doc.getBoolean("isNewForA");
 
-                        // TODO: 나중에 toId → toName (users 컬렉션에서 가져오기)
-                        String toName = toId;
+                        Log.d("NOTI_SENT",
+                                "doc=" + docId +
+                                        ", fromID=" + fromId +
+                                        ", toID=" + toId +
+                                        ", state=" + state);
+
+                        // TODO: 나중에 toId → users 컬렉션에서 이름 가져오기
+                        String toName = toId != null ? toId : "상대";
 
                         String text;
                         if ("accepted".equals(state)) {
@@ -210,29 +227,21 @@ public class NotificationFragment extends Fragment {
     private void handleAlarmClick(AlarmItem item, boolean isReceivedList) {
         currentItem = item;
 
-        // 1) N → 읽음 처리 (isNewForA / isNewForB false로)
-        if (item.isNew) {
-            item.isNew = false;
-            markAlarmRead(item, isReceivedList);
-        }
+        // 🔥 클릭하면 무조건 Firestore 읽음 처리 (N 제거)
+        markAlarmRead(item, isReceivedList);
 
         // 2) 보낸 매칭 탭 클릭
         if (!isReceivedList) {
             if ("accepted".equals(item.state)) {
-                // 수락된 매칭 → 카카오톡 아이디 팝업
                 showKakaoPopup();
             } else if ("rejected".equals(item.state)) {
-                // 거절된 매칭 → 거절 확인 팝업
                 showRejectConfirmPopup();
-            } else {
-                // "request" 상태일 때는 아직 대기 중 (원하면 Toast 추가 가능)
             }
             return;
         }
 
         // 3) 받은 매칭 탭 클릭
 
-        // 이미 눌린 적 있음 → 마지막 팝업 다시 띄우기
         if (item.clickedBefore) {
             if (item.lastPopupType == 2) {
                 showConfirmPopup();
@@ -242,7 +251,6 @@ public class NotificationFragment extends Fragment {
             return;
         }
 
-        // 처음 클릭 → 프로필 팝업
         item.clickedBefore = true;
         item.lastPopupType = 1;
         showProfilePopup();
@@ -265,23 +273,19 @@ public class NotificationFragment extends Fragment {
         Typeface reg  = ResourcesCompat.getFont(requireContext(), R.font.regular);
 
         if (isSentActive) {
-            // 보낸 활성
             toggleSent.setBackgroundResource(R.drawable.notification_toggle_r);
             tvSent.setTextColor(Color.WHITE);
             tvSent.setTypeface(semi);
 
-            // 받은 비활성
             toggleReceived.setBackgroundResource(R.drawable.notification_toggle_s);
             tvReceived.setTextColor(Color.parseColor("#2DD7A4"));
             tvReceived.setTypeface(reg);
 
         } else {
-            // 받은 활성
             toggleReceived.setBackgroundResource(R.drawable.notification_toggle_r);
             tvReceived.setTextColor(Color.WHITE);
             tvReceived.setTypeface(semi);
 
-            // 보낸 비활성
             toggleSent.setBackgroundResource(R.drawable.notification_toggle_s);
             tvSent.setTextColor(Color.parseColor("#2DD7A4"));
             tvSent.setTypeface(reg);
