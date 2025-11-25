@@ -2,7 +2,6 @@ package com.example.mobile2025s2_1_2.myprofile;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,54 +35,36 @@ public class MyprofileFragment extends Fragment {
     private LinearLayout bottomNavBar;
     private View btnSave;
 
-    // 상단 프로필 텍스트뷰
     private TextView tvUserName;
     private TextView tvUserEmail;
 
-    // 파이어베이스 관련 변수
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
-    private String myUid;
+    private String myEmail;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.myprofile_main, container, false);
 
-        // 1. 파이어베이스 초기화 (실제 유저 UID 획득)
-        initFirebase();
-
-        // 2. 뷰 연결
-        initViews(view);
-
-        // 3. 어댑터 및 탭 설정
-        setupViewPagerAndTabs();
-
-        // 4. 하단바 설정
-        BottomNavBarHelper.setupCustomNav(requireActivity(), bottomNavBar);
-        BottomNavBarHelper.setActiveTab(bottomNavBar, R.id.nav_myprofile);
-
-        // 5. 이벤트 리스너
-        setupListeners();
-
-        // 6. [핵심] 기본 정보(이름, 이메일) 불러오기 - 카카오ID 제외함
-        loadBasicProfileData();
-
-        return view;
-    }
-
-    private void initFirebase() {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
+        // 현재 로그인한 유저의 이메일 가져오기 (문서 ID로 사용)
         FirebaseUser currentUser = mAuth.getCurrentUser();
-
         if (currentUser != null) {
-            myUid = currentUser.getUid(); // 실제 로그인된 UID
-        } else {
-            myUid = null;
-            // 로그인이 안 된 상태 처리
+            myEmail = currentUser.getEmail();
         }
+
+        initViews(view);
+        setupViewPagerAndTabs();
+        BottomNavBarHelper.setupCustomNav(requireActivity(), bottomNavBar);
+        BottomNavBarHelper.setActiveTab(bottomNavBar, R.id.nav_myprofile);
+        setupListeners();
+
+        loadBasicProfileData();
+
+        return view;
     }
 
     private void initViews(View view) {
@@ -98,32 +79,22 @@ public class MyprofileFragment extends Fragment {
         tvUserEmail = view.findViewById(R.id.tv_user_email);
     }
 
-    // ⭐ 수정됨: 카카오 ID 가져오는 부분 삭제, 이름/이메일만 로드
     private void loadBasicProfileData() {
-        if (myUid == null) return;
+        if (myEmail == null) return;
 
-        DocumentReference docRef = db.collection("Users").document(myUid);
-
+        DocumentReference docRef = db.collection("Users").document(myEmail);
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
-                // 1. 이름 가져오기
                 String name = documentSnapshot.getString("name");
-                if (name != null && tvUserName != null) {
-                    tvUserName.setText(name);
-                }
+                if (name != null && tvUserName != null) tvUserName.setText(name);
 
-                // 2. 이메일 가져오기
                 String email = documentSnapshot.getString("email");
-                if (email == null && mAuth.getCurrentUser() != null) {
-                    email = mAuth.getCurrentUser().getEmail(); // DB에 없으면 인증정보 사용
-                }
-                if (email != null && tvUserEmail != null) {
-                    tvUserEmail.setText(email);
-                }
+                if (email != null && tvUserEmail != null) tvUserEmail.setText(email);
 
-                // 카카오 ID는 가져오지 않음.
+                String kakaoId = documentSnapshot.getString("kakaoId");
+                if (kakaoId != null && etKakaoId != null) etKakaoId.setText(kakaoId);
             }
-        }).addOnFailureListener(e -> Log.e("MyProfile", "데이터 로드 실패", e));
+        });
     }
 
     private void setupViewPagerAndTabs() {
@@ -153,8 +124,7 @@ public class MyprofileFragment extends Fragment {
         });
 
         if (chipGroupTabs.getChildCount() > 0) {
-            Chip initialChip = (Chip) chipGroupTabs.getChildAt(0);
-            if (initialChip != null) initialChip.setChecked(true);
+            ((Chip) chipGroupTabs.getChildAt(0)).setChecked(true);
         }
     }
 
