@@ -113,129 +113,143 @@
                     android:layout_height="wrap_content"/>
             </com.google.android.flexbox.FlexboxLayout>
 
-            <!--특징 percent Bar-->
+            <!-- 특징 percent (제목 → 숫자+바 같은 줄) -->
             <LinearLayout
                 android:orientation="vertical"
-                android:layout_margin="5dp"
+                android:layout_margin="0dp"
+                android:gravity="center_horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <!--청결도-->
+
+                <!-- 청결도 -->
+                <TextView
+                    android:text="청결도"
+                    android:textSize="16sp"
+                    android:textColor="#FF2DD7A4"
+                    android:fontFamily="@font/semibold"
+                    android:layout_marginBottom="0dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
                 <LinearLayout
-                    android:layout_margin="5dp"
-                    android:orientation="vertical"
+                    android:orientation="horizontal"
                     android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp">
+
+                    <!-- 숫자 -->
                     <TextView
-                        android:text="청결도"
+                        android:id="@+id/roommate_clean_value"
+                        android:text="5"
                         android:textSize="16sp"
-                        android:fontFamily="@font/semibold"
-                        android:textColor="#FF2DD7A4"
+                        android:textStyle="bold"
+                        android:textColor="#2DD7A4"
+                        android:layout_marginEnd="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-                        <com.google.android.material.card.MaterialCardView
-                            android:layout_width="220dp"
-                            android:layout_height="15dp"
-                            android:backgroundTint="#FFE0FFF6"
-                            app:cardCornerRadius="12dp"
-                            android:layout_marginHorizontal="25dp"
-                            android:layout_marginTop="6dp"
-                            app:strokeWidth="0dp"
-                            app:strokeColor="@android:color/transparent"/>
-                        <com.google.android.material.card.MaterialCardView
-                            android:id="@+id/roommate_clean"
-                            android:layout_width="80dp"
-                            android:layout_height="15dp"
-                            android:backgroundTint="#FF2DD7A4"
-                            app:cardCornerRadius="12dp"
-                            android:layout_marginHorizontal="25dp"
-                            android:layout_marginTop="6dp"
-                            app:strokeWidth="0dp"
-                            app:strokeColor="@android:color/transparent"/>
-                    </FrameLayout>
-                </LinearLayout>
-                <!--잠꼬대 정도-->
-                <LinearLayout
-                    android:layout_margin="5dp"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:text="잠꼬대 정도"
-                        android:textSize="16sp"
-                        android:fontFamily="@font/semibold"
-                        android:textColor="#FF2DD7A4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-                        <com.google.android.material.card.MaterialCardView
-                            android:layout_width="220dp"
-                            android:layout_height="15dp"
-                            android:backgroundTint="#FFE0FFF6"
-                            app:cardCornerRadius="12dp"
-                            android:layout_marginHorizontal="25dp"
-                            android:layout_marginTop="6dp"
-                            app:strokeWidth="0dp"
-                            app:strokeColor="@android:color/transparent"/>
-                        <com.google.android.material.card.MaterialCardView
-                            android:id="@+id/roommate_sleep"
-                            android:layout_width="150dp"
-                            android:layout_height="15dp"
-                            android:backgroundTint="#FF2DD7A4"
-                            app:cardCornerRadius="12dp"
-                            android:layout_marginHorizontal="25dp"
-                            android:layout_marginTop="6dp"
-                            app:strokeWidth="0dp"
-                            app:strokeColor="@android:color/transparent"/>
-                    </FrameLayout>
-                </LinearLayout>
-                <!--예민 정도-->
-                <LinearLayout
-                    android:layout_margin="5dp"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:text="예민 정도"
-                        android:textSize="16sp"
-                        android:fontFamily="@font/semibold"
-                        android:textColor="#FF2DD7A4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-                        <com.google.android.material.card.MaterialCardView
-                            android:layout_width="220dp"
-                            android:layout_height="15dp"
-                            android:backgroundTint="#FFE0FFF6"
-                            app:cardCornerRadius="12dp"
-                            android:layout_marginHorizontal="25dp"
-                            android:layout_marginTop="6dp"
-                            app:strokeWidth="0dp"
-                            app:strokeColor="@android:color/transparent"/>
-                        <com.google.android.material.card.MaterialCardView
-                            android:id="@+id/roommate_subtlety"
-                            android:layout_width="20dp"
-                            android:layout_height="15dp"
-                            android:backgroundTint="#FF2DD7A4"
-                            app:cardCornerRadius="12dp"
-                            android:layout_marginHorizontal="25dp"
-                            android:layout_marginTop="6dp"
-                            app:strokeWidth="0dp"
-                            app:strokeColor="@android:color/transparent"/>
-                    </FrameLayout>
+
+                    <!-- 바 -->
+                    <SeekBar
+                        android:id="@+id/roommate_clean_seekbar"
+                        android:layout_width="225dp"
+                        android:layout_height="wrap_content"
+                        android:max="10"
+                        android:min="0"
+                        android:progress="5"
+                        android:thumb="@drawable/thumb"
+                        android:progressDrawable="@drawable/custom_seekbar_progress"
+                        android:splitTrack="false"
+                        android:thumbOffset="0dp"/>
                 </LinearLayout>
 
+
+                <!-- 잠꼬대 -->
+                <TextView
+                    android:text="잠꼬대"
+                    android:textSize="16sp"
+                    android:textColor="#FF2DD7A4"
+                    android:fontFamily="@font/semibold"
+                    android:layout_marginBottom="0dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp">
+
+                    <TextView
+                        android:id="@+id/roommate_sleep_value"
+                        android:text="5"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#2DD7A4"
+                        android:layout_marginEnd="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <SeekBar
+                        android:id="@+id/roommate_sleep_seekbar"
+                        android:layout_width="225dp"
+                        android:layout_height="wrap_content"
+                        android:max="10"
+                        android:min="0"
+                        android:progress="5"
+                        android:thumb="@drawable/thumb"
+                        android:progressDrawable="@drawable/custom_seekbar_progress"
+                        android:splitTrack="false"
+                        android:thumbOffset="0dp"/>
+                </LinearLayout>
+
+
+                <!-- 예민도 -->
+                <TextView
+                    android:text="예민도"
+                    android:textSize="16sp"
+                    android:textColor="#FF2DD7A4"
+                    android:fontFamily="@font/semibold"
+                    android:layout_marginBottom="0dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/roommate_sensitive_value"
+                        android:text="5"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#2DD7A4"
+                        android:layout_marginEnd="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <SeekBar
+                        android:id="@+id/roommate_sensitive_seekbar"
+                        android:layout_width="225dp"
+                        android:layout_height="wrap_content"
+                        android:max="10"
+                        android:min="0"
+                        android:progress="5"
+                        android:thumb="@drawable/thumb"
+                        android:progressDrawable="@drawable/custom_seekbar_progress"
+                        android:splitTrack="false"
+                        android:thumbOffset="0dp"/>
+                </LinearLayout>
 
             </LinearLayout>
+
+
+
+
+        </LinearLayout>
         </LinearLayout>
 
         <!-- 잠버릇 & 청결 수준 -->
@@ -245,6 +259,8 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+
 
 </com.google.android.material.card.MaterialCardView>
+
+

@@ -4,27 +4,26 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.mobile2025s2_1_2.R;
-import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
-
 
 public class RoommateCardAdapter extends RecyclerView.Adapter<RoommateCardAdapter.ViewHolder> {
 
     private Context context;
-    private List<RoommateCardData.RoommateData> roommateList; // JSON 데이터 리스트
+    private List<RoommateCardData.RoommateData> roommateList;
 
-    // 🔹 생성자
     public RoommateCardAdapter(Context context, List<RoommateCardData.RoommateData> roommateList) {
         this.context = context;
         this.roommateList = roommateList;
     }
 
-    // 🔹 카드 아이템 하나를 표현하는 내부 클래스
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameText;
         TextView sexText;
@@ -33,13 +32,19 @@ public class RoommateCardAdapter extends RecyclerView.Adapter<RoommateCardAdapte
         TextView mbtiText;
         TextView drinkText;
         TextView smokeText;
-        MaterialCardView cleanPercent;
-        MaterialCardView sleepPercent;
-        MaterialCardView subtletyPercent;
 
+        // ⭐ 수정된 부분 — SeekBar + 숫자 TextView
+        SeekBar cleanSeekBar;
+        SeekBar sleepSeekBar;
+        SeekBar sensitiveSeekBar;
+
+        TextView cleanValue;
+        TextView sleepValue;
+        TextView sensitiveValue;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
             nameText = itemView.findViewById(R.id.roommate_name);
             sexText = itemView.findViewById(R.id.roommate_sex);
             dormitoryText = itemView.findViewById(R.id.roommate_dormitory);
@@ -47,54 +52,65 @@ public class RoommateCardAdapter extends RecyclerView.Adapter<RoommateCardAdapte
             mbtiText = itemView.findViewById(R.id.roommate_mbti);
             drinkText = itemView.findViewById(R.id.roommate_drink);
             smokeText = itemView.findViewById(R.id.roommate_smoke);
-            cleanPercent = itemView.findViewById(R.id.roommate_clean);
-            sleepPercent = itemView.findViewById(R.id.roommate_sleep);
-            subtletyPercent = itemView.findViewById(R.id.roommate_subtlety);
-        }
-    }
 
-    private void setPercent(MaterialCardView bar, int percent) {
-        percent = Math.max(0, Math.min(percent, 100));
-        int finalPercent = percent;
-        bar.post(() -> {
-            int parentWidth = dpToPx(220);  // 최대 길이를 220dp로 고정
-            ViewGroup.LayoutParams params = bar.getLayoutParams();
-            params.width = (int)(parentWidth * (finalPercent / 100f));
-            bar.setLayoutParams(params);
-        });
-    }
-    private int dpToPx(int dp) {
-        float density = context.getResources().getDisplayMetrics().density;
-        return Math.round(dp * density);
+            // ⭐ XML에 있는 새로운 id들로 변경
+            cleanSeekBar = itemView.findViewById(R.id.roommate_clean_seekbar);
+            sleepSeekBar = itemView.findViewById(R.id.roommate_sleep_seekbar);
+            sensitiveSeekBar = itemView.findViewById(R.id.roommate_sensitive_seekbar);
+
+            cleanValue = itemView.findViewById(R.id.roommate_clean_value);
+            sleepValue = itemView.findViewById(R.id.roommate_sleep_value);
+            sensitiveValue = itemView.findViewById(R.id.roommate_sensitive_value);
+        }
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RoommateCardAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context)
-                .inflate(R.layout.matching_roommate_profile_card, parent, false); // 카드 XML 연결
+                .inflate(R.layout.matching_roommate_profile_card, parent, false);
         return new ViewHolder(view);
     }
 
-    //JSON 데이터 연결
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RoommateCardAdapter.ViewHolder holder, int position) {
+
         RoommateCardData.RoommateData data = roommateList.get(position);
+
+        // 기본 프로필 텍스트들
         holder.nameText.setText(data.getName());
-        holder.sexText.setText(data.getSex());
-        holder.dormitoryText.setText(data.getDormitory());
+        holder.sexText.setText(data.getGender());
+        holder.dormitoryText.setText(data.getDorm());
         holder.ageText.setText(data.getAge());
         holder.mbtiText.setText(data.getMbti());
-        holder.drinkText.setText(data.getDrink());
-        holder.smokeText.setText(data.getSmoke());
-        setPercent(holder.cleanPercent, data.getClean());
-        setPercent(holder.sleepPercent, data.getSleep());
-        setPercent(holder.subtletyPercent, data.getSubtlety());
+        holder.drinkText.setText("음주 " + data.getAlcohol());
+        holder.smokeText.setText("흡연 " + data.getSmoking());
+
+        // 문자열 → int 변환
+        int clean = parseInt(data.getClean());
+        int sleep = parseInt(data.getSleep());
+        int sensitive = parseInt(data.getSensitive());
+
+        // ⭐ SeekBar + 숫자 적용
+        holder.cleanSeekBar.setProgress(clean);
+        holder.sleepSeekBar.setProgress(sleep);
+        holder.sensitiveSeekBar.setProgress(sensitive);
+
+        holder.cleanValue.setText(String.valueOf(clean));
+        holder.sleepValue.setText(String.valueOf(sleep));
+        holder.sensitiveValue.setText(String.valueOf(sensitive));
     }
 
-    // 🔹 전체 카드 개수
     @Override
     public int getItemCount() {
         return roommateList.size();
+    }
+
+    private int parseInt(String value) {
+        try {
+            return Integer.parseInt(value);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 }

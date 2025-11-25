@@ -1,5 +1,7 @@
 package com.example.mobile2025s2_1_2.matching.roommate;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,17 +18,19 @@ import androidx.recyclerview.widget.SnapHelper;
 
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collections;
+
+import android.util.Log;
 
 import com.example.mobile2025s2_1_2.R;
 import com.google.android.material.button.MaterialButton;
-import java.util.ArrayList;
 
 public class RoommateFragment extends Fragment {
 
     private List<Map<String, Object>> otherUsers;
     private Map<String, Object> myInfo;
-
-    private List<RoommateCardData.RoommateData> cardList; // 변환된 최종 카드 리스트
+    private List<RoommateCardData.RoommateData> cardList;
 
     @Nullable
     @Override
@@ -36,135 +40,157 @@ public class RoommateFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.matching_roommate_main, container, false);
 
-        // 뒤로가기
         ImageView roommateBack = view.findViewById(R.id.matching_roommate_back);
-        roommateBack.setOnClickListener(v -> {
-            requireActivity().getSupportFragmentManager().popBackStack();
-        });
+        roommateBack.setOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
 
-        // 전달받은 데이터
         Bundle args = getArguments();
         if (args != null) {
             this.myInfo = (Map<String, Object>) args.getSerializable("myInfo");
             this.otherUsers = (List<Map<String, Object>>) args.getSerializable("otherUsers");
         }
 
-        // 카드 리스트
+        // ------------------------------
+        // ⭐ SharedPreferences에서 myEmail 직접 가져오기
+        // ------------------------------
+        SharedPreferences prefs =
+                requireActivity().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+
+        String myEmail = prefs.getString("user_email", "");
+        Log.d("MATCH", "🔵 myEmail = " + myEmail);
+
         RecyclerView recyclerView = view.findViewById(R.id.profile_roommate);
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        // ★ Firestore → 카드 데이터 변환
         cardList = new ArrayList<>();
 
-        // ⭐ 1) 내 정보 먼저 추가
-        if (myInfo != null) {
+        String myGender = safe(myInfo.get("gender"));
+        String myDorm = safe(myInfo.get("dorm"));
+
+        int myClean = toInt(myInfo.get("clean"));
+        int mySleep = toInt(myInfo.get("sleep"));
+        int mySensitive = toInt(myInfo.get("sensitive"));
+
+        List<UserSim> simList = new ArrayList<>();
+
+        if (otherUsers != null) {
+            for (Map<String, Object> u : otherUsers) {
+
+                String userEmail = s(u.get("email"));
+
+                // ------------------------------
+                // ⭐ 자기 자신 제외
+                // ------------------------------
+                if (myEmail.equals(userEmail)) {
+                    Log.d("MATCH", "🛑 자기 자신 제외됨: " + userEmail);
+                    continue;
+                }
+
+                // 성별 + 기숙사 필터
+                if (!safe(u.get("gender")).equals(myGender)) continue;
+                if (!safe(u.get("dorm")).equals(myDorm)) continue;
+
+                // 유사도 계산
+                int clean = toInt(u.get("clean"));
+                int sleep = toInt(u.get("sleep"));
+                int sensitive = toInt(u.get("sensitive"));
+
+                int cleanScore = 10 - Math.abs(clean - myClean);
+                int sleepScore = 10 - Math.abs(sleep - mySleep);
+                int sensitiveScore = 10 - Math.abs(sensitive - mySensitive);
+
+                int totalScore = cleanScore + sleepScore + sensitiveScore;
+
+                Log.d("MATCH",
+                        "🟢 매칭 계산 → " + userEmail +
+                                " (총점=" + totalScore + ")");
+
+                simList.add(new UserSim(u, totalScore));
+            }
+        }
+
+        // 점수 내림차순 정렬
+        Collections.sort(simList, (a, b) -> b.score - a.score);
+
+        int limit = Math.min(5, simList.size());
+        Log.d("MATCH", "🔥 최종 카드 개수 = " + limit);
+
+        // 카드 생성
+        for (int i = 0; i < limit; i++) {
+            Map<String, Object> u = simList.get(i).user;
+
+            Log.d("MATCH", "🟩 카드 추가: " + s(u.get("email")));
+
             cardList.add(new RoommateCardData.RoommateData(
-                    safeToString(myInfo.get("email"), "N/A"),
-                    safeToString(myInfo.get("name"), "미상"),
-                    safeToString(myInfo.get("sex"), "미상"),
-                    safeToString(myInfo.get("department"), "미상"),
-                    safeToString(myInfo.get("grade"), "미상"),
-                    safeToString(myInfo.get("mbti"), "미상"),
-                    safeToString(myInfo.get("drink"), "N/A"),
-                    safeToString(myInfo.get("smoking"), "N/A"),
-                    50, 50, 50
+                    safe(u.get("email")),
+                    safe(u.get("name")),
+                    safe(u.get("gender")),
+                    safe(u.get("dorm")),
+                    safe(u.get("age")),
+                    safe(u.get("mbti")),
+                    safe(u.get("alcohol")),
+                    safe(u.get("smoking")),
+                    safe(u.get("clean")),
+                    safe(u.get("sleep")),
+                    safe(u.get("sensitive")),
+                    safe(u.get("sleepTime")),
+                    safe(u.get("wakeTime"))
             ));
         }
 
-        // ⭐ 2) 다른 사용자 추가
-        if (otherUsers != null) {
-            for (Map<String, Object> user : otherUsers) {
-
-                String email = safeToString(user.get("email"), "N/A");
-                String name = safeToString(user.get("name"), "미상");
-                String sex = safeToString(user.get("sex"), "미상");
-                String domitory = safeToString(user.get("department"), "미상");
-                String age = safeToString(user.get("grade"), "미상");
-                String mbti = safeToString(user.get("mbti"), "미상");
-                String drink = safeToString(user.get("drink"), "N/A");
-                String smoke = safeToString(user.get("smoking"), "N/A");
-
-                int clean = 50;
-                int sleep = 50;
-                int subtle = 50;
-
-                cardList.add(new RoommateCardData.RoommateData(
-                        email, name, sex, domitory, age, mbti, drink, smoke,
-                        clean, sleep, subtle
-                ));
-            }
-        }
-
-        // Adapter 연결
         RoommateCardAdapter adapter = new RoommateCardAdapter(requireContext(), cardList);
         recyclerView.setAdapter(adapter);
 
-        // 스냅 효과
         SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(recyclerView);
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView rv, int dx, int dy) {
-                super.onScrolled(rv, dx, dy);
-
-                View centerView = snapHelper.findSnapView(layoutManager);
-
-                for (int i = 0; i < rv.getChildCount(); i++) {
-                    View child = rv.getChildAt(i);
-
-                    if (child == centerView) {
-                        child.setAlpha(1f);
-                        child.setScaleX(1f);
-                        child.setScaleY(1f);
-                    } else {
-                        child.setAlpha(0.6f);
-                        child.setScaleX(0.9f);
-                        child.setScaleY(0.9f);
-                    }
-                }
-            }
-        });
-
-        // 매칭 버튼
         MaterialButton matchRoomButton = view.findViewById(R.id.match_roommate_button);
 
         matchRoomButton.setOnClickListener(v -> {
-
             View centerCard = snapHelper.findSnapView(layoutManager);
+            if (centerCard == null) return;
 
-            if (centerCard != null) {
-                int position = layoutManager.getPosition(centerCard);
+            int pos = layoutManager.getPosition(centerCard);
+            RoommateCardData.RoommateData selected = cardList.get(pos);
 
-                RoommateCardData.RoommateData selectedCard = cardList.get(position);
+            RoommateMatchingFragment fragment = new RoommateMatchingFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("name", selected.getName());
+            bundle.putString("email", selected.getEmail());
+            fragment.setArguments(bundle);
 
-                String name = selectedCard.getName();
-                String email = selectedCard.getEmail();
-
-                RoommateMatchingFragment fragment = new RoommateMatchingFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("name", name);
-                bundle.putString("email", email);
-                fragment.setArguments(bundle);
-
-                requireActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                        .add(R.id.fragment_container, fragment, "RoommateMatchingDialogFragment")
-                        .addToBackStack(null)
-                        .commit();
-            }
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                    .add(R.id.fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
         });
 
         return view;
     }
 
-    // ★ Boolean → String crash 방지
-    private String safeToString(Object value, String defaultValue) {
-        if (value == null) return defaultValue;
-        if (value instanceof Boolean) return ((Boolean) value) ? "O" : "X";
-        return value.toString();
+    private String safe(Object o) {
+        if (o == null) return "";
+        if (o instanceof Boolean) return ((Boolean) o) ? "O" : "X";
+        return o.toString();
+    }
+
+    private String s(Object o) {
+        if (o == null) return "";
+        return o.toString().trim();
+    }
+
+    private int toInt(Object o) {
+        if (o == null) return 0;
+        try { return Integer.parseInt(o.toString()); }
+        catch (Exception e) { return 0; }
+    }
+
+    private static class UserSim {
+        Map<String, Object> user;
+        int score;
+        UserSim(Map<String, Object> u, int s) { this.user = u; this.score = s; }
     }
 }
