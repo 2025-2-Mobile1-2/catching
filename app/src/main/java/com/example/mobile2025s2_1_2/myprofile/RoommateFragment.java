@@ -14,10 +14,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.Toast;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,7 +37,13 @@ import java.util.Map;
 
 public class RoommateFragment extends Fragment {
 
+    // 기존 스피너
     private Spinner spinnerGender, spinnerDormitory, spinnerAge, spinnerMbti, spinnerAlcohol, spinnerSmoking;
+
+    // ⭐ SeekBar 및 라벨
+    private SeekBar seekBarCleanliness, seekBarSnoring, seekBarSensitivity;
+    private TextView valueLabel1, valueLabel2, valueLabel3;
+
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private String myUid;
@@ -60,14 +66,13 @@ public class RoommateFragment extends Fragment {
             if (currentUser != null) {
                 myUid = currentUser.getUid();
             } else {
-                // 테스트용 강제 ID
-                myUid = "hQlLVKfBya7shEe3adhl";
+                myUid = "hQlLVKfBya7shEe3adhl"; // 테스트용
             }
 
             initFragmentViews(view);
             setupAdapters();
+            setupSeekBars(); // ⭐ SeekBar 설정
 
-            // 데이터 불러오기 시작
             loadDataFromFirestore();
 
         } catch (Exception e) {
@@ -82,6 +87,16 @@ public class RoommateFragment extends Fragment {
         spinnerMbti = view.findViewById(R.id.spinner_mbti);
         spinnerAlcohol = view.findViewById(R.id.spinner_alcohol);
         spinnerSmoking = view.findViewById(R.id.spinner_smoke);
+
+        // ⭐ SeekBar 연결
+        seekBarCleanliness = view.findViewById(R.id.seekbar_cleanliness);
+        valueLabel1 = view.findViewById(R.id.seekbar_value_label1);
+
+        seekBarSnoring = view.findViewById(R.id.seekbar_Sleeptalk);
+        valueLabel2 = view.findViewById(R.id.seekbar_value_label2);
+
+        seekBarSensitivity = view.findViewById(R.id.seekbar_sensitive);
+        valueLabel3 = view.findViewById(R.id.seekbar_value_label3);
     }
 
     private void setupAdapters() {
@@ -104,6 +119,28 @@ public class RoommateFragment extends Fragment {
         }
     }
 
+    // ⭐ SeekBar 리스너 설정
+    private void setupSeekBars() {
+        setupSingleSeekBar(seekBarCleanliness, valueLabel1);
+        setupSingleSeekBar(seekBarSnoring, valueLabel2);
+        setupSingleSeekBar(seekBarSensitivity, valueLabel3);
+    }
+
+    private void setupSingleSeekBar(SeekBar seekBar, TextView label) {
+        if (seekBar != null && label != null) {
+            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    label.setText(String.valueOf(progress));
+                }
+                @Override public void onStartTrackingTouch(SeekBar seekBar) { }
+                @Override public void onStopTrackingTouch(SeekBar seekBar) { }
+            });
+            // 초기값 표시
+            label.setText(String.valueOf(seekBar.getProgress()));
+        }
+    }
+
     private void setSpinnerAdapter(Spinner spinner, int arrayResId) {
         if (spinner == null) return;
         try {
@@ -116,7 +153,6 @@ public class RoommateFragment extends Fragment {
         }
     }
 
-    // 데이터 불러오기
     private void loadDataFromFirestore() {
         if (myUid == null) return;
 
@@ -126,55 +162,39 @@ public class RoommateFragment extends Fragment {
 
             if (documentSnapshot.exists()) {
                 try {
-                    // 1. 일반 항목 (변환기 통과)
+                    // 1. 스피너 데이터 로드
                     setSmartSelect(spinnerGender, documentSnapshot.getString("gender"));
                     setSmartSelect(spinnerDormitory, convertDormName(documentSnapshot.getString("dorm")));
                     setSmartSelect(spinnerAge, documentSnapshot.getString("age"));
                     setSmartSelect(spinnerMbti, documentSnapshot.getString("mbti"));
-
-                    // 2. 음주 ("O" / "음주" 등 처리)
                     setSmartSelect(spinnerAlcohol, convertOX(documentSnapshot.getString("alcohol")));
 
-                    // 3. 흡연 ("true", true, "O", "흡연" 등 모두 처리)
                     Object rawSmoking = documentSnapshot.get("smoking");
                     String smokingVal = String.valueOf(rawSmoking);
                     setSmartSelect(spinnerSmoking, convertOX(smokingVal));
 
-                    // 4. 카톡 ID (화면에는 넣지 않고 내부 변수 확인용으로 둘 수도 있지만, 현재는 부모가 처리)
-                    // 룸메이트 탭에서는 카톡 ID를 표시하는 EditText가 없으면 생략 가능
-                    // 하지만 저장 시 읽어와야 하므로 여기서는 패스
+                    // ⭐ 2. SeekBar 데이터 로드 (clean, sleep, sensitive)
+                    // DB에서 String("5")으로 오든 Number(5)로 오든 처리
+                    setSeekBarValue(seekBarCleanliness, valueLabel1, String.valueOf(documentSnapshot.get("clean")));
+                    setSeekBarValue(seekBarSnoring, valueLabel2, String.valueOf(documentSnapshot.get("sleep")));
+                    setSeekBarValue(seekBarSensitivity, valueLabel3, String.valueOf(documentSnapshot.get("sensitive")));
+
+                    // 3. 카톡 ID
+                    String kakaoId = documentSnapshot.getString("kakaoId");
+                    EditText etKakao = requireActivity().findViewById(R.id.edittext_kakao_id);
+                    if (etKakao != null && kakaoId != null) {
+                        etKakao.setText(kakaoId);
+                    }
 
                     Toast.makeText(requireContext(), "데이터 불러오기 완료", Toast.LENGTH_SHORT).show();
 
                 } catch (Exception e) {
                     Log.e("CrashCheck", "데이터 적용 중 오류", e);
                 }
-            } else {
-                Log.e("CrashCheck", "문서 없음");
             }
         }).addOnFailureListener(e -> Log.e("CrashCheck", "연결 실패", e));
     }
 
-    private String convertDormName(String dbValue) {
-        if (dbValue == null) return "";
-        if (dbValue.contains("B동") || dbValue.contains("A동") || dbValue.contains("C동")) {
-            return "교내생활관";
-        }
-        return dbValue;
-    }
-
-    private String convertOX(String dbValue) {
-        if (dbValue == null) return "";
-        if (dbValue.equalsIgnoreCase("true") || dbValue.equals("음주") || dbValue.equals("흡연") || dbValue.equals("O") || dbValue.equals("있음")) {
-            return "O";
-        }
-        if (dbValue.equalsIgnoreCase("false") || dbValue.equals("비음주") || dbValue.equals("비흡연") || dbValue.equals("X") || dbValue.equals("없음")) {
-            return "X";
-        }
-        return dbValue;
-    }
-
-    // ⭐ [수정됨] 저장할 때 흡연도 "O" / "X"로 저장
     public void saveRoommateData() {
         if (myUid == null || !isAdded()) return;
 
@@ -188,18 +208,25 @@ public class RoommateFragment extends Fragment {
         EditText etKakao = requireActivity().findViewById(R.id.edittext_kakao_id);
         String kakaoId = (etKakao != null) ? etKakao.getText().toString() : "";
 
+        // ⭐ SeekBar 값 가져오기
+        String cleanVal = (seekBarCleanliness != null) ? String.valueOf(seekBarCleanliness.getProgress()) : "1";
+        String sleepVal = (seekBarSnoring != null) ? String.valueOf(seekBarSnoring.getProgress()) : "1";
+        String sensitiveVal = (seekBarSensitivity != null) ? String.valueOf(seekBarSensitivity.getProgress()) : "1";
+
         Map<String, Object> userUpdates = new HashMap<>();
         userUpdates.put("gender", gender);
         userUpdates.put("dorm", dorm);
         userUpdates.put("age", age);
         userUpdates.put("mbti", mbti);
-        userUpdates.put("alcohol", alcohol); // 음주 ("O" or "X")
+        userUpdates.put("alcohol", alcohol);
 
-        // 🔥 [핵심] 흡연 데이터 통일
-        // 화면에 "O"(또는 "흡연")라고 되어 있으면 -> DB에 "O"로 저장
-        // 화면에 "X"(또는 "비흡연")라고 되어 있으면 -> DB에 "X"로 저장
-        String smokingToSave = (smokeStr.equals("O") || smokeStr.equals("흡연")) ? "O" : "X";
-        userUpdates.put("smoking", smokingToSave);
+        boolean isSmoking = smokeStr.equals("O");
+        userUpdates.put("smoking", isSmoking ? "O" : "X");
+
+        // ⭐ SeekBar 데이터 추가
+        userUpdates.put("clean", cleanVal);
+        userUpdates.put("sleep", sleepVal);
+        userUpdates.put("sensitive", sensitiveVal);
 
         userUpdates.put("kakaoId", kakaoId);
 
@@ -233,6 +260,25 @@ public class RoommateFragment extends Fragment {
         dialog.findViewById(android.R.id.content).setOnClickListener(v -> dialog.dismiss());
     }
 
+    private String convertDormName(String dbValue) {
+        if (dbValue == null) return "";
+        if (dbValue.contains("B동") || dbValue.contains("A동") || dbValue.contains("C동")) {
+            return "교내생활관";
+        }
+        return dbValue;
+    }
+
+    private String convertOX(String dbValue) {
+        if (dbValue == null) return "";
+        if (dbValue.equalsIgnoreCase("true") || dbValue.equals("음주") || dbValue.equals("흡연") || dbValue.equals("O") || dbValue.equals("있음")) {
+            return "O";
+        }
+        if (dbValue.equalsIgnoreCase("false") || dbValue.equals("비음주") || dbValue.equals("비흡연") || dbValue.equals("X") || dbValue.equals("없음")) {
+            return "X";
+        }
+        return dbValue;
+    }
+
     private void setSmartSelect(Spinner spinner, String... targets) {
         if (spinner == null || spinner.getAdapter() == null) return;
         ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
@@ -245,6 +291,23 @@ public class RoommateFragment extends Fragment {
                     return;
                 }
             }
+        }
+    }
+
+    // ⭐ SeekBar 값 설정 도우미
+    private void setSeekBarValue(SeekBar seekBar, TextView label, String value) {
+        if (seekBar == null || value == null || value.equals("null")) return;
+        try {
+            // 소수점(.0)이 있을 경우 제거하고 정수로 변환
+            double d = Double.parseDouble(value);
+            int progress = (int) d;
+
+            seekBar.setProgress(progress);
+            if (label != null) {
+                label.setText(String.valueOf(progress));
+            }
+        } catch (NumberFormatException e) {
+            Log.e("CrashCheck", "SeekBar 숫자 변환 실패: " + value);
         }
     }
 }
