@@ -11,8 +11,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mobile2025s2_1_2.home.notice.NoticeCardData;
 import com.example.mobile2025s2_1_2.home.notice.NoticeFragment;
 import com.example.mobile2025s2_1_2.R;
+import com.example.mobile2025s2_1_2.home.schoolnotice.SchoolCardData;
+import com.example.mobile2025s2_1_2.home.schoolnotice.SchoolCrawler;
+import com.example.mobile2025s2_1_2.home.schoolnotice.SchoolFragment;
+import com.example.mobile2025s2_1_2.home.schoolnotice.SchoolPreviewAdapter;
 import com.example.mobile2025s2_1_2.utils.BottomNavBarHelper;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -51,6 +56,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_main);
 
+        //공지사항
         ImageView noticeGo = findViewById(R.id.home_notice_go);
         noticeGo.setOnClickListener(v -> {
             getSupportFragmentManager()
@@ -60,39 +66,51 @@ public class HomeActivity extends AppCompatActivity {
                     .commit();
         });
 
+        TextView previewTitle = findViewById(R.id.home_notice_preview);
+
+        List<NoticeCardData.HomeNoticeData> notices =
+                NoticeCardData.loadHomeNotices(this);
+
+        if (notices != null && !notices.isEmpty()) {
+            int lastIndex = notices.size() - 1;
+            NoticeCardData.HomeNoticeData last = notices.get(lastIndex);
+
+            previewTitle.setText(last.getTitle());
+        }
+
+        //학사공지
+        ImageView schoolGo = findViewById(R.id.home_school_go);
+        schoolGo.setOnClickListener(v -> {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new SchoolFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+        TextView preview1 = findViewById(R.id.school_preview_1);
+        TextView preview2 = findViewById(R.id.school_preview_2);
+        TextView preview3 = findViewById(R.id.school_preview_3);
+
+        new Thread(() -> {
+            List<SchoolCardData> all = SchoolCrawler.fetchNotices();
+
+            // 첫 번째 제외
+            List<SchoolCardData> preview = all.subList(2, Math.min(5, all.size()));
+
+            runOnUiThread(() -> {
+                if (preview.size() > 0) preview1.setText(preview.get(0).getTitle());
+                if (preview.size() > 1) preview2.setText(preview.get(1).getTitle());
+                if (preview.size() > 2) preview3.setText(preview.get(2).getTitle());
+            });
+        }).start();
+
         touchBlocker = findViewById(R.id.touch_blocker);
 
         // 하단 navBar
         bottomNavBar = findViewById(R.id.custom_navbar);
         BottomNavBarHelper.setupCustomNav(this, bottomNavBar);
         BottomNavBarHelper.setActiveTab(bottomNavBar, R.id.nav_home);
-
-        // 교내활동 정보
-        RecyclerView cardschool = findViewById(R.id.card_school);
-        List<Integer> images_school = Arrays.asList(
-                R.drawable.test,
-                R.drawable.test,
-                R.drawable.test
-        );
-        HomeCardAdapter adapter_school = new HomeCardAdapter(images_school);
-        cardschool.setLayoutManager(
-                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        );
-        cardschool.setAdapter(adapter_school);
-
-        // 교외활동 정보
-        RecyclerView cardout = findViewById(R.id.card_out);
-        List<Integer> images_out = Arrays.asList(
-                R.drawable.test,
-                R.drawable.test,
-                R.drawable.test,
-                R.drawable.test
-        );
-        HomeCardAdapter adapter_out = new HomeCardAdapter(images_out);
-        cardout.setLayoutManager(
-                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        );
-        cardout.setAdapter(adapter_out);
 
         // 🔥 인앱 배너 뷰 찾기
         inAppBanner = findViewById(R.id.inapp_banner_root);
