@@ -1,6 +1,7 @@
 package com.example.mobile2025s2_1_2.matching.roommate;
 
 import android.content.Context;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -14,63 +15,62 @@ import com.example.mobile2025s2_1_2.R;
 public class RoommateCardData {
 
     public static class RoommateData {
+
         private String email;
         private String name;
-        private String sex;
-        private String dormitory;
+        private String gender;
+        private String dorm;
         private String age;
         private String mbti;
-        private String drink;
-        private String smoke;
-        private int clean;
-        private int sleep;
-        private int subtlety;
+        private String alcohol;
+        private String smoking;
+        private String clean;
+        private String sleep;
+        private String sensitive;
+        private String sleepTime;
+        private String wakeTime;
 
-        // 🔥 [추가됨] Firestore 데이터 → 카드 객체로 생성할 수 있게 하는 생성자
-        public RoommateData(String email, String name, String sex, String dormitory, String age,
-                            String mbti, String drink, String smoke,
-                            int clean, int sleep, int subtlety) {
+        // 🔥 Firestore 데이터 → 카드 객체 생성자
+        public RoommateData(String email, String name, String gender, String dorm, String age,
+                            String mbti, String alcohol, String smoking,
+                            String clean, String sleep, String sensitive,
+                            String sleepTime, String wakeTime) {
 
             this.email = email;
             this.name = name;
-            this.sex = sex;
-            this.dormitory = dormitory;
+            this.gender = gender;
+            this.dorm = dorm;
             this.age = age;
             this.mbti = mbti;
-            this.drink = drink;
-            this.smoke = smoke;
+            this.alcohol = alcohol;
+            this.smoking = smoking;
             this.clean = clean;
             this.sleep = sleep;
-            this.subtlety = subtlety;
-            this.dormitory=dormitory;
+            this.sensitive = sensitive;
+            this.sleepTime = sleepTime;
+            this.wakeTime = wakeTime;
         }
 
-        // 🔥 Gson/Firestore가 필요로 하는 기본 생성자
+        // 🔥 Firebase / Gson 용 기본 생성자
         public RoommateData() {}
 
-        public String getEmail() {
-            return email;
-        }
-
-        // Getter 메서드
+        // Getter
+        public String getEmail() { return email; }
         public String getName() { return name; }
-        public String getSex() { return sex; }
-        public String getDomitory() { return dormitory; }
+        public String getGender() { return gender; }
+        public String getDorm() { return dorm; }
         public String getAge() { return age; }
         public String getMbti() { return mbti; }
-        public String getDrink() { return drink; }
-        public String getSmoke() { return smoke; }
-        public int getClean() { return clean; }
-        public int getSleep() { return sleep; }
-        public int getSubtlety() { return subtlety; }
-
-        public String  getDormitory() {
-            return dormitory;
-        }
+        public String getAlcohol() { return alcohol; }
+        public String getSmoking() { return smoking; }
+        public String getClean() { return clean; }
+        public String getSleep() { return sleep; }
+        public String getSensitive() { return sensitive; }
+        public String getSleepTime() { return sleepTime; }
+        public String getWakeTime() { return wakeTime; }
     }
 
-
-    // (⚠ Firestore 사용하면 JSON 필요한 경우가 거의 없지만, 혹시 raw JSON도 쓸 수 있으니 유지)
+    // 🔥 JSON 로드 기능(선택)
     public static List<RoommateData> loadRoommates(Context context) {
         try {
             InputStream inputStream = context.getResources().openRawResource(R.raw.user_data);
