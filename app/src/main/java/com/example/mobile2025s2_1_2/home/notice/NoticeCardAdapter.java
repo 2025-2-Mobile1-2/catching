@@ -34,7 +34,7 @@ public class NoticeCardAdapter extends RecyclerView.Adapter<NoticeCardAdapter.No
 
     @Override
     public void onBindViewHolder(@NonNull NoticeViewHolder holder, int position) {
-        NoticeCardData.HomeNoticeData item = noticeList.get(position);
+        NoticeCardData.HomeNoticeData item = noticeList.get(noticeList.size() - 1 - position);
 
         holder.title.setText(item.getTitle());
         holder.text.setText(item.getNoticeText());
