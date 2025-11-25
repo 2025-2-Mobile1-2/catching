@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="0dp">
 
     <ScrollView
@@ -50,7 +50,7 @@
 
                         <Spinner
                             android:id="@+id/spinner_gender"
-                            android:layout_width="80dp"
+                            android:layout_width="85dp"
                             android:layout_height="30dp"
                             android:layout_marginTop="16dp"
                             android:layout_marginRight="16dp"
@@ -261,7 +261,7 @@
                     <!-- 7. 청결도 -->
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="60dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -278,22 +278,41 @@
                             android:layout_weight="1" />
 
                         <TextView
-                            android:id="@+id/text_select_clean"
-                            android:layout_width="90dp"
-                            android:layout_height="30dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginRight="16dp"
-                            android:layout_marginBottom="16dp"
-                            android:background="@drawable/ic_dropdown"
-                            android:clickable="true"
-                            android:drawableEnd="@drawable/ic_filled_arrow_down"
-                            android:drawablePadding="2dp"
-                            android:focusable="true"
-                            android:gravity="center_vertical|start"
-                            android:paddingStart="12dp"
-                            android:paddingEnd="12dp"
-                            android:text="선택"
-                            android:textSize="14sp" />
+                            android:id="@+id/seekbar_value_label1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:layout_marginEnd="-10dp"
+                            android:padding="2dp"
+                            android:text="5"
+                            android:textColor="#2DD7A4"
+                            android:textSize="14sp"
+
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toStartOf="@+id/seekbar_cleanliness"
+                            app:layout_constraintTop_toBottomOf="@+id/seekbar_cleanliness" />
+                        <SeekBar
+                            android:id="@+id/seekbar_cleanliness"
+                            android:layout_width="200dp"
+                            android:layout_height="10dp"
+
+                            android:max="10"
+                            android:min="0"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"
+
+                            android:progress="5"
+
+                            android:progressDrawable="@drawable/custom_seekbar_progress"
+
+                            android:splitTrack="false"
+                            android:thumb="@drawable/thumb"
+                            android:thumbOffset="0dp"
+
+
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/text_cleanliness" />
 
                     </LinearLayout>
 
@@ -305,7 +324,7 @@
                     <!-- 8. 잠꼬대 정도 -->
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="60dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -320,24 +339,41 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1" />
-
                         <TextView
-                            android:id="@+id/text_select_sleep"
-                            android:layout_width="90dp"
-                            android:layout_height="30dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginRight="16dp"
-                            android:layout_marginBottom="16dp"
-                            android:background="@drawable/ic_dropdown"
-                            android:clickable="true"
-                            android:drawableEnd="@drawable/ic_filled_arrow_down"
-                            android:drawablePadding="2dp"
-                            android:focusable="true"
-                            android:gravity="center_vertical|start"
-                            android:paddingStart="12dp"
-                            android:paddingEnd="12dp"
-                            android:text="선택"
-                            android:textSize="14sp" />
+                            android:id="@+id/seekbar_value_label2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:layout_marginEnd="-10dp"
+                            android:padding="2dp"
+                            android:text="5"
+                            android:textColor="#2DD7A4"
+                            android:textSize="14sp"
+
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toStartOf="@+id/seekbar_Sleeptalk"
+                            app:layout_constraintTop_toBottomOf="@+id/seekbar_Sleeptalk" />
+                        <SeekBar
+                            android:id="@+id/seekbar_Sleeptalk"
+                            android:layout_width="200dp"
+                            android:layout_height="10dp"
+                            android:layout_marginStart="0.5dp"
+                            android:max="10"
+                            android:min="0"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"
+
+                            android:progress="5"
+
+                            android:progressDrawable="@drawable/custom_seekbar_progress"
+
+                            android:splitTrack="false"
+                            android:thumb="@drawable/thumb"
+                            android:thumbOffset="0dp"
+
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/text_sleeptalk" />
 
                     </LinearLayout>
 
@@ -349,7 +385,7 @@
                     <!-- 9. 예민 정도 -->
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="60dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -364,24 +400,41 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1" />
-
                         <TextView
-                            android:id="@+id/text_select_sensitive"
-                            android:layout_width="90dp"
-                            android:layout_height="30dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginRight="16dp"
-                            android:layout_marginBottom="16dp"
-                            android:background="@drawable/ic_dropdown"
-                            android:clickable="true"
-                            android:drawableEnd="@drawable/ic_filled_arrow_down"
-                            android:drawablePadding="2dp"
-                            android:focusable="true"
-                            android:gravity="center_vertical|start"
-                            android:paddingStart="12dp"
-                            android:paddingEnd="12dp"
-                            android:text="선택"
-                            android:textSize="14sp" />
+                            android:id="@+id/seekbar_value_label3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:layout_marginEnd="-10dp"
+                            android:padding="2dp"
+                            android:text="5"
+                            android:textColor="#2DD7A4"
+                            android:textSize="14sp"
+
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toStartOf="@+id/seekbar_Sleeptalk"
+                            app:layout_constraintTop_toBottomOf="@+id/seekbar_Sleeptalk" />
+                        <SeekBar
+                            android:id="@+id/seekbar_sensitive"
+                            android:layout_width="200dp"
+                            android:layout_height="10dp"
+
+                            android:max="10"
+                            android:min="0"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"
+
+                            android:progress="5"
+
+                            android:progressDrawable="@drawable/custom_seekbar_progress"
+
+                            android:splitTrack="false"
+                            android:thumb="@drawable/thumb"
+                            android:thumbOffset="0dp"
+
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/text_sensitive" />
 
                     </LinearLayout>
 
