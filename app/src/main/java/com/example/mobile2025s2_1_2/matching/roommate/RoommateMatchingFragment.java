@@ -81,7 +81,7 @@ public class RoommateMatchingFragment extends Fragment {
             RoommateMatchingSuccessFragment fragment = new RoommateMatchingSuccessFragment();
             Bundle args = new Bundle();
             args.putString("name", name);
-            args.putString("email", email);
+            args.putString("email", toID);
             fragment.setArguments(args);
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
