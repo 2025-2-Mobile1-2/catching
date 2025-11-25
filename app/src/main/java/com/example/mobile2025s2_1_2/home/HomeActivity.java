@@ -11,10 +11,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mobile2025s2_1_2.home.notice.NoticeCardData;
 import com.example.mobile2025s2_1_2.home.notice.NoticeFragment;
 import com.example.mobile2025s2_1_2.R;
 import com.example.mobile2025s2_1_2.home.schoolnotice.SchoolCardData;
 import com.example.mobile2025s2_1_2.home.schoolnotice.SchoolCrawler;
+import com.example.mobile2025s2_1_2.home.schoolnotice.SchoolFragment;
+import com.example.mobile2025s2_1_2.home.schoolnotice.SchoolPreviewAdapter;
 import com.example.mobile2025s2_1_2.utils.BottomNavBarHelper;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -44,19 +47,63 @@ public class HomeActivity extends AppCompatActivity {
     private String bannerReceivedText = null;
     private String bannerSentText = null;
 
+    // 🔥 첫 스냅샷 무시용 플래그
+    private boolean firstReceivedSnapshot = true;
+    private boolean firstSentSnapshot = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_main);
 
+        //공지사항
         ImageView noticeGo = findViewById(R.id.home_notice_go);
         noticeGo.setOnClickListener(v -> {
             getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, new NoticeFragment())
-                .addToBackStack(null)
-                .commit();
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new NoticeFragment())
+                    .addToBackStack(null)
+                    .commit();
         });
+
+        TextView previewTitle = findViewById(R.id.home_notice_preview);
+
+        List<NoticeCardData.HomeNoticeData> notices =
+                NoticeCardData.loadHomeNotices(this);
+
+        if (notices != null && !notices.isEmpty()) {
+            int lastIndex = notices.size() - 1;
+            NoticeCardData.HomeNoticeData last = notices.get(lastIndex);
+
+            previewTitle.setText(last.getTitle());
+        }
+
+        //학사공지
+        ImageView schoolGo = findViewById(R.id.home_school_go);
+        schoolGo.setOnClickListener(v -> {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new SchoolFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+        TextView preview1 = findViewById(R.id.school_preview_1);
+        TextView preview2 = findViewById(R.id.school_preview_2);
+        TextView preview3 = findViewById(R.id.school_preview_3);
+
+        new Thread(() -> {
+            List<SchoolCardData> all = SchoolCrawler.fetchNotices();
+
+            // 첫 번째 제외
+            List<SchoolCardData> preview = all.subList(2, Math.min(5, all.size()));
+
+            runOnUiThread(() -> {
+                if (preview.size() > 0) preview1.setText(preview.get(0).getTitle());
+                if (preview.size() > 1) preview2.setText(preview.get(1).getTitle());
+                if (preview.size() > 2) preview3.setText(preview.get(2).getTitle());
+            });
+        }).start();
 
         touchBlocker = findViewById(R.id.touch_blocker);
 
@@ -64,33 +111,6 @@ public class HomeActivity extends AppCompatActivity {
         bottomNavBar = findViewById(R.id.custom_navbar);
         BottomNavBarHelper.setupCustomNav(this, bottomNavBar);
         BottomNavBarHelper.setActiveTab(bottomNavBar, R.id.nav_home);
-
-        // 교내활동 정보
-        RecyclerView cardschool = findViewById(R.id.card_school);
-        List<Integer> images_school = Arrays.asList(
-                R.drawable.test,
-                R.drawable.test,
-                R.drawable.test
-        );
-        HomeCardAdapter adapter_school = new HomeCardAdapter(images_school);
-        cardschool.setLayoutManager(
-                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        );
-        cardschool.setAdapter(adapter_school);
-
-        // 교외활동 정보
-        RecyclerView cardout = findViewById(R.id.card_out);
-        List<Integer> images_out = Arrays.asList(
-                R.drawable.test,
-                R.drawable.test,
-                R.drawable.test,
-                R.drawable.test
-        );
-        HomeCardAdapter adapter_out = new HomeCardAdapter(images_out);
-        cardout.setLayoutManager(
-                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        );
-        cardout.setAdapter(adapter_out);
 
         // 🔥 인앱 배너 뷰 찾기
         inAppBanner = findViewById(R.id.inapp_banner_root);
@@ -103,12 +123,10 @@ public class HomeActivity extends AppCompatActivity {
 
             // 배너 클릭 시 → 알림 탭으로 이동
             inAppBanner.setOnClickListener(v -> {
-                // 하단 navBar에서 알림 탭 뷰 찾아서 클릭 시키기
                 View navNotification = bottomNavBar.findViewById(R.id.nav_notification);
                 if (navNotification != null) {
                     navNotification.performClick();
                 }
-                // 배너는 클릭 후 숨길지 말지는 취향
                 inAppBanner.setVisibility(View.GONE);
                 hasNewReceived = false;
                 hasNewSent = false;
@@ -134,6 +152,12 @@ public class HomeActivity extends AppCompatActivity {
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener((snap, error) -> {
                     if (error != null || snap == null) return;
+
+                    // ✅ 앱 켤 때 첫 스냅샷은 “초기 데이터”로 보고 무시
+                    if (firstReceivedSnapshot) {
+                        firstReceivedSnapshot = false;
+                        return;
+                    }
 
                     boolean hasNew = false;
                     String latestText = null;
@@ -178,6 +202,12 @@ public class HomeActivity extends AppCompatActivity {
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener((snap, error) -> {
                     if (error != null || snap == null) return;
+
+                    // ✅ 앱 켤 때 첫 스냅샷은 “초기 데이터”로 보고 무시
+                    if (firstSentSnapshot) {
+                        firstSentSnapshot = false;
+                        return;
+                    }
 
                     boolean hasNew = false;
                     String latestText = null;

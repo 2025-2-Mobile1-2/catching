@@ -1,25 +1,52 @@
 package com.example.mobile2025s2_1_2.myprofile;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.mobile2025s2_1_2.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RoommateFragment extends Fragment {
+
+    // 기존 스피너
+    private Spinner spinnerGender, spinnerDormitory, spinnerAge, spinnerMbti, spinnerAlcohol, spinnerSmoking;
+
+    // ⭐ SeekBar 및 라벨
+    private SeekBar seekBarCleanliness, seekBarSnoring, seekBarSensitivity;
+    private TextView valueLabel1, valueLabel2, valueLabel3;
+
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+    private String myUid;
 
     @Nullable
     @Override
@@ -31,173 +58,256 @@ public class RoommateFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 1. 성별 (spinner_gender)
-        Spinner spinnerGender = view.findViewById(R.id.spinner_gender);
-        ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(
-                requireContext(),
-                R.array.gender_array,
-                android.R.layout.simple_spinner_item // ★ 기본 레이아웃 사용 (오류 방지)
-        );
-        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerGender.setAdapter(genderAdapter);
+        try {
+            mAuth = FirebaseAuth.getInstance();
+            db = FirebaseFirestore.getInstance();
 
-        spinnerGender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // 로직 없음
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+            if (currentUser != null) {
+                myUid = currentUser.getUid();
+            } else {
+                myUid = "hQlLVKfBya7shEe3adhl"; // 테스트용
             }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) { }
-        });
 
+            initFragmentViews(view);
+            setupAdapters();
+            setupSeekBars(); // ⭐ SeekBar 설정
 
-        // 2. 기숙사 (spinner_dormitory)
-        Spinner spinnerDormitory = view.findViewById(R.id.spinner_dormitory);
-        ArrayAdapter<CharSequence> dormitoryAdapter = ArrayAdapter.createFromResource(
-                requireContext(),
-                R.array.dormitory_array,
-                android.R.layout.simple_spinner_item // ★ 기본 레이아웃 사용
-        );
-        dormitoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerDormitory.setAdapter(dormitoryAdapter);
+            loadDataFromFirestore();
 
-
-        // 3. 나이 (spinner_age)
-        Spinner spinnerAge = view.findViewById(R.id.spinner_age);
-        List<String> ageList = new ArrayList<>();
-        ageList.add("선택");
-        for (int year = 2008; year >= 1980; year--) {
-            ageList.add(year + "년생");
+        } catch (Exception e) {
+            Log.e("CrashCheck", "초기화 중 오류 발생", e);
         }
-        ArrayAdapter<String> ageAdapter = new ArrayAdapter<>(
-                requireContext(),
-                android.R.layout.simple_spinner_item, // ★ 기본 레이아웃 사용
-                ageList
-        );
-        ageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerAge.setAdapter(ageAdapter);
+    }
 
+    private void initFragmentViews(View view) {
+        spinnerGender = view.findViewById(R.id.spinner_gender);
+        spinnerDormitory = view.findViewById(R.id.spinner_dormitory);
+        spinnerAge = view.findViewById(R.id.spinner_age);
+        spinnerMbti = view.findViewById(R.id.spinner_mbti);
+        spinnerAlcohol = view.findViewById(R.id.spinner_alcohol);
+        spinnerSmoking = view.findViewById(R.id.spinner_smoke);
 
-        // 4. MBTI (spinner_mbti)
-        Spinner spinnerMbti = view.findViewById(R.id.spinner_mbti);
-        ArrayAdapter<CharSequence> mbtiAdapter = ArrayAdapter.createFromResource(
-                requireContext(),
-                R.array.mbti_array,
-                android.R.layout.simple_spinner_item // ★ 기본 레이아웃 사용
-        );
-        mbtiAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerMbti.setAdapter(mbtiAdapter);
+        // ⭐ SeekBar 연결
+        seekBarCleanliness = view.findViewById(R.id.seekbar_cleanliness);
+        valueLabel1 = view.findViewById(R.id.seekbar_value_label1);
 
+        seekBarSnoring = view.findViewById(R.id.seekbar_Sleeptalk);
+        valueLabel2 = view.findViewById(R.id.seekbar_value_label2);
 
-        // 5. 음주 여부 (spinner_alcohol)
-        Spinner spinnerAlcohol = view.findViewById(R.id.spinner_alcohol);
-        ArrayAdapter<CharSequence> alcoholAdapter = ArrayAdapter.createFromResource(
-                requireContext(),
-                R.array.ox_array,
-                android.R.layout.simple_spinner_item // ★ 기본 레이아웃 사용
-        );
-        alcoholAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerAlcohol.setAdapter(alcoholAdapter);
+        seekBarSensitivity = view.findViewById(R.id.seekbar_sensitive);
+        valueLabel3 = view.findViewById(R.id.seekbar_value_label3);
+    }
 
+    private void setupAdapters() {
+        if (getContext() == null) return;
+        setSpinnerAdapter(spinnerGender, R.array.gender_array);
+        setSpinnerAdapter(spinnerDormitory, R.array.dormitory_array);
+        setSpinnerAdapter(spinnerMbti, R.array.mbti_array);
+        setSpinnerAdapter(spinnerAlcohol, R.array.ox_array);
+        setSpinnerAdapter(spinnerSmoking, R.array.ox_array);
 
-        // 6. 흡연 여부 (spinner_smoke)
-        Spinner spinnerSmoking = view.findViewById(R.id.spinner_smoke);
-        ArrayAdapter<CharSequence> smokingAdapter = ArrayAdapter.createFromResource(
-                requireContext(),
-                R.array.ox_array,
-                android.R.layout.simple_spinner_item // ★ 기본 레이아웃 사용
-        );
-        smokingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerSmoking.setAdapter(smokingAdapter);
-        // RoommateFragment.java - onViewCreated 메서드 끝 부분에 추가
+        if (spinnerAge != null) {
+            List<String> ageList = new ArrayList<>();
+            ageList.add("선택");
+            for (int year = 2008; year >= 1980; year--) {
+                ageList.add(year + "년생");
+            }
+            ArrayAdapter<String> ageAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, ageList);
+            ageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerAge.setAdapter(ageAdapter);
+        }
+    }
 
-// 1. 위젯 참조
-        SeekBar seekBarCleanliness = view.findViewById(R.id.seekbar_cleanliness);
-        TextView valueLabel1 = view.findViewById(R.id.seekbar_value_label1);
+    // ⭐ SeekBar 리스너 설정
+    private void setupSeekBars() {
+        setupSingleSeekBar(seekBarCleanliness, valueLabel1);
+        setupSingleSeekBar(seekBarSnoring, valueLabel2);
+        setupSingleSeekBar(seekBarSensitivity, valueLabel3);
+    }
 
-// 2. Null 체크를 통해 충돌 방지 (가장 중요)
-        if (seekBarCleanliness != null && valueLabel1 != null) {
-
-            // 3. 리스너 설정: 값 업데이트 기능만 구현
-            seekBarCleanliness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+    private void setupSingleSeekBar(SeekBar seekBar, TextView label) {
+        if (seekBar != null && label != null) {
+            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-                    // ⭐ 이 부분이 progress 값을 TextView에 표시하는 유일한 방법입니다.
-                    valueLabel1.setText(String.valueOf(progress));
+                    label.setText(String.valueOf(progress));
                 }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) { }
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) { }
+                @Override public void onStartTrackingTouch(SeekBar seekBar) { }
+                @Override public void onStopTrackingTouch(SeekBar seekBar) { }
             });
-
-            // 4. 초기값 설정 (화면 로딩 시 초기 Progress 값(5)을 TextView에 표시)
-            valueLabel1.setText(String.valueOf(seekBarCleanliness.getProgress()));
+            // 초기값 표시
+            label.setText(String.valueOf(seekBar.getProgress()));
         }
-        // RoommateFragment.java - onViewCreated 메서드 끝 부분에 추가
+    }
 
-// ... (기존 청결도(seekbar_cleanliness) 로직 다음에 이어서) ...
-
-// ----------------------------------------------------------------------
-// ⭐ 8. 잠꼬대 정도 (SeekBar) 및 동적 라벨 기능 추가
-// ----------------------------------------------------------------------
-
-// 1. 위젯 참조
-        SeekBar seekBarSnoring = view.findViewById(R.id.seekbar_Sleeptalk);
-        TextView valueLabel2 = view.findViewById(R.id.seekbar_value_label2);
-
-// 2. Null 체크를 통해 충돌 방지
-        if (seekBarSnoring != null && valueLabel2 != null) {
-
-            // 3. 리스너 설정: 값 업데이트 기능만 구현
-            seekBarSnoring.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-                    // 값을 TextView에 표시
-                    valueLabel2.setText(String.valueOf(progress));
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) { }
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) { }
-            });
-
-            // 4. 초기값 설정
-            valueLabel2.setText(String.valueOf(seekBarSnoring.getProgress()));
+    private void setSpinnerAdapter(Spinner spinner, int arrayResId) {
+        if (spinner == null) return;
+        try {
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                    requireContext(), arrayResId, android.R.layout.simple_spinner_item);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(adapter);
+        } catch (Exception e) {
+            Log.e("CrashCheck", "어댑터 설정 오류 ID: " + arrayResId);
         }
+    }
 
-// ----------------------------------------------------------------------
-// ⭐ 9. 예민 정도 (SeekBar) 및 동적 라벨 기능 추가
-// ----------------------------------------------------------------------
+    private void loadDataFromFirestore() {
+        if (myUid == null) return;
 
-// 1. 위젯 참조
-        SeekBar seekBarSensitivity = view.findViewById(R.id.seekbar_sensitive);
-        TextView valueLabel3 = view.findViewById(R.id.seekbar_value_label3);
+        DocumentReference docRef = db.collection("Users").document(myUid);
+        docRef.get().addOnSuccessListener(documentSnapshot -> {
+            if (!isAdded() || getContext() == null) return;
 
-// 2. Null 체크를 통해 충돌 방지
-        if (seekBarSensitivity != null && valueLabel3 != null) {
+            if (documentSnapshot.exists()) {
+                try {
+                    // 1. 스피너 데이터 로드
+                    setSmartSelect(spinnerGender, documentSnapshot.getString("gender"));
+                    setSmartSelect(spinnerDormitory, convertDormName(documentSnapshot.getString("dorm")));
+                    setSmartSelect(spinnerAge, documentSnapshot.getString("age"));
+                    setSmartSelect(spinnerMbti, documentSnapshot.getString("mbti"));
+                    setSmartSelect(spinnerAlcohol, convertOX(documentSnapshot.getString("alcohol")));
 
-            // 3. 리스너 설정: 값 업데이트 기능만 구현
-            seekBarSensitivity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    Object rawSmoking = documentSnapshot.get("smoking");
+                    String smokingVal = String.valueOf(rawSmoking);
+                    setSmartSelect(spinnerSmoking, convertOX(smokingVal));
 
-                    // 값을 TextView에 표시
-                    valueLabel3.setText(String.valueOf(progress));
+                    // ⭐ 2. SeekBar 데이터 로드 (clean, sleep, sensitive)
+                    // DB에서 String("5")으로 오든 Number(5)로 오든 처리
+                    setSeekBarValue(seekBarCleanliness, valueLabel1, String.valueOf(documentSnapshot.get("clean")));
+                    setSeekBarValue(seekBarSnoring, valueLabel2, String.valueOf(documentSnapshot.get("sleep")));
+                    setSeekBarValue(seekBarSensitivity, valueLabel3, String.valueOf(documentSnapshot.get("sensitive")));
+
+                    // 3. 카톡 ID
+                    String kakaoId = documentSnapshot.getString("kakaoId");
+                    EditText etKakao = requireActivity().findViewById(R.id.edittext_kakao_id);
+                    if (etKakao != null && kakaoId != null) {
+                        etKakao.setText(kakaoId);
+                    }
+
+                    Toast.makeText(requireContext(), "데이터 불러오기 완료", Toast.LENGTH_SHORT).show();
+
+                } catch (Exception e) {
+                    Log.e("CrashCheck", "데이터 적용 중 오류", e);
                 }
+            }
+        }).addOnFailureListener(e -> Log.e("CrashCheck", "연결 실패", e));
+    }
 
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) { }
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) { }
-            });
+    public void saveRoommateData() {
+        if (myUid == null || !isAdded()) return;
 
-            // 4. 초기값 설정
-            valueLabel3.setText(String.valueOf(seekBarSensitivity.getProgress()));
+        String gender = getSpinnerString(spinnerGender);
+        String dorm = getSpinnerString(spinnerDormitory);
+        String age = getSpinnerString(spinnerAge);
+        String mbti = getSpinnerString(spinnerMbti);
+        String alcohol = getSpinnerString(spinnerAlcohol);
+        String smokeStr = getSpinnerString(spinnerSmoking);
+
+        EditText etKakao = requireActivity().findViewById(R.id.edittext_kakao_id);
+        String kakaoId = (etKakao != null) ? etKakao.getText().toString() : "";
+
+        // ⭐ SeekBar 값 가져오기
+        String cleanVal = (seekBarCleanliness != null) ? String.valueOf(seekBarCleanliness.getProgress()) : "1";
+        String sleepVal = (seekBarSnoring != null) ? String.valueOf(seekBarSnoring.getProgress()) : "1";
+        String sensitiveVal = (seekBarSensitivity != null) ? String.valueOf(seekBarSensitivity.getProgress()) : "1";
+
+        Map<String, Object> userUpdates = new HashMap<>();
+        userUpdates.put("gender", gender);
+        userUpdates.put("dorm", dorm);
+        userUpdates.put("age", age);
+        userUpdates.put("mbti", mbti);
+        userUpdates.put("alcohol", alcohol);
+
+        boolean isSmoking = smokeStr.equals("O");
+        userUpdates.put("smoking", isSmoking ? "O" : "X");
+
+        // ⭐ SeekBar 데이터 추가
+        userUpdates.put("clean", cleanVal);
+        userUpdates.put("sleep", sleepVal);
+        userUpdates.put("sensitive", sensitiveVal);
+
+        userUpdates.put("kakaoId", kakaoId);
+
+        db.collection("Users").document(myUid)
+                .set(userUpdates, SetOptions.merge())
+                .addOnSuccessListener(aVoid -> showSaveCompleteDialog())
+                .addOnFailureListener(e -> Toast.makeText(requireContext(), "저장 실패", Toast.LENGTH_SHORT).show());
+    }
+
+    private String getSpinnerString(Spinner spinner) {
+        if (spinner != null && spinner.getSelectedItem() != null) {
+            return spinner.getSelectedItem().toString();
+        }
+        return "";
+    }
+
+    private void showSaveCompleteDialog() {
+        if (!isAdded() || getContext() == null) return;
+
+        Dialog dialog = new Dialog(requireContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.matching_save_complete);
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.getWindow().setDimAmount(0.6f);
+            dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        }
+        dialog.show();
+        new Handler(Looper.getMainLooper()).postDelayed(dialog::dismiss, 1500);
+        dialog.findViewById(android.R.id.content).setOnClickListener(v -> dialog.dismiss());
+    }
+
+    private String convertDormName(String dbValue) {
+        if (dbValue == null) return "";
+        if (dbValue.contains("B동") || dbValue.contains("A동") || dbValue.contains("C동")) {
+            return "교내생활관";
+        }
+        return dbValue;
+    }
+
+    private String convertOX(String dbValue) {
+        if (dbValue == null) return "";
+        if (dbValue.equalsIgnoreCase("true") || dbValue.equals("음주") || dbValue.equals("흡연") || dbValue.equals("O") || dbValue.equals("있음")) {
+            return "O";
+        }
+        if (dbValue.equalsIgnoreCase("false") || dbValue.equals("비음주") || dbValue.equals("비흡연") || dbValue.equals("X") || dbValue.equals("없음")) {
+            return "X";
+        }
+        return dbValue;
+    }
+
+    private void setSmartSelect(Spinner spinner, String... targets) {
+        if (spinner == null || spinner.getAdapter() == null) return;
+        ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
+        for (String target : targets) {
+            if (target == null) continue;
+            for (int i = 0; i < adapter.getCount(); i++) {
+                String item = adapter.getItem(i).toString();
+                if (item.trim().equals(target.trim())) {
+                    spinner.setSelection(i);
+                    return;
+                }
+            }
+        }
+    }
+
+    // ⭐ SeekBar 값 설정 도우미
+    private void setSeekBarValue(SeekBar seekBar, TextView label, String value) {
+        if (seekBar == null || value == null || value.equals("null")) return;
+        try {
+            // 소수점(.0)이 있을 경우 제거하고 정수로 변환
+            double d = Double.parseDouble(value);
+            int progress = (int) d;
+
+            seekBar.setProgress(progress);
+            if (label != null) {
+                label.setText(String.valueOf(progress));
+            }
+        } catch (NumberFormatException e) {
+            Log.e("CrashCheck", "SeekBar 숫자 변환 실패: " + value);
         }
     }
 }
