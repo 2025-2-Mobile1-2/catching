@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mobile2025s2_1_2.home.notice.NoticeFragment;
 import com.example.mobile2025s2_1_2.R;
-import com.example.mobile2025s2_1_2.home.schoolnotice.SchoolCardData;
-import com.example.mobile2025s2_1_2.home.schoolnotice.SchoolCrawler;
 import com.example.mobile2025s2_1_2.utils.BottomNavBarHelper;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -44,6 +42,10 @@ public class HomeActivity extends AppCompatActivity {
     private String bannerReceivedText = null;
     private String bannerSentText = null;
 
+    // 🔥 첫 스냅샷 무시용 플래그
+    private boolean firstReceivedSnapshot = true;
+    private boolean firstSentSnapshot = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,10 +54,10 @@ public class HomeActivity extends AppCompatActivity {
         ImageView noticeGo = findViewById(R.id.home_notice_go);
         noticeGo.setOnClickListener(v -> {
             getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, new NoticeFragment())
-                .addToBackStack(null)
-                .commit();
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new NoticeFragment())
+                    .addToBackStack(null)
+                    .commit();
         });
 
         touchBlocker = findViewById(R.id.touch_blocker);
@@ -103,12 +105,10 @@ public class HomeActivity extends AppCompatActivity {
 
             // 배너 클릭 시 → 알림 탭으로 이동
             inAppBanner.setOnClickListener(v -> {
-                // 하단 navBar에서 알림 탭 뷰 찾아서 클릭 시키기
                 View navNotification = bottomNavBar.findViewById(R.id.nav_notification);
                 if (navNotification != null) {
                     navNotification.performClick();
                 }
-                // 배너는 클릭 후 숨길지 말지는 취향
                 inAppBanner.setVisibility(View.GONE);
                 hasNewReceived = false;
                 hasNewSent = false;
@@ -134,6 +134,12 @@ public class HomeActivity extends AppCompatActivity {
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener((snap, error) -> {
                     if (error != null || snap == null) return;
+
+                    // ✅ 앱 켤 때 첫 스냅샷은 “초기 데이터”로 보고 무시
+                    if (firstReceivedSnapshot) {
+                        firstReceivedSnapshot = false;
+                        return;
+                    }
 
                     boolean hasNew = false;
                     String latestText = null;
@@ -178,6 +184,12 @@ public class HomeActivity extends AppCompatActivity {
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener((snap, error) -> {
                     if (error != null || snap == null) return;
+
+                    // ✅ 앱 켤 때 첫 스냅샷은 “초기 데이터”로 보고 무시
+                    if (firstSentSnapshot) {
+                        firstSentSnapshot = false;
+                        return;
+                    }
 
                     boolean hasNew = false;
                     String latestText = null;
