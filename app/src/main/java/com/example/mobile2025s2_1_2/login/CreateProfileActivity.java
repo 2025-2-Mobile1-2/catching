@@ -348,7 +348,7 @@ public class CreateProfileActivity extends AppCompatActivity {
         // 3. Firestore 저장
         Log.d("Users", "🔥 Firestore 저장 시도 중...");
         if (myUid != null) {
-            db.collection("Users").document(myUid).set(userProfile, SetOptions.merge())
+            db.collection("Users").document(userEmail).set(userProfile, SetOptions.merge())
                     .addOnSuccessListener(aVoid -> {
                         // SharedPreferences 저장
                         getSharedPreferences("user_prefs", MODE_PRIVATE)
