@@ -1,6 +1,5 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -17,26 +16,21 @@
                 android:orientation="vertical"
                 android:gravity="top"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_above="@id/custom_navbar">
+                android:layout_height="match_parent">
                 <!--캐칭 앱 로고와 이름-->
                 <LinearLayout
                     android:orientation="horizontal"
-                    android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="68dp"
+                    android:padding="20dp"
                     android:background="#FFF5F5F5">
                     <ImageView
-                        android:layout_margin="4dp"
+                        android:id="@+id/home_school_back"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_catching"/>
-                    <ImageView
-                        android:layout_margin="4dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/name_catching_mint"/>
+                        android:src="@drawable/ic_arrow_left"/>
                 </LinearLayout>
+
 
                 <!--캐칭 앱 배너 광고-->
                 <RelativeLayout
@@ -62,54 +56,36 @@
                     </FrameLayout>
                 </RelativeLayout>
 
-                <!--공지사항-->
+                <!--학사공지-->
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="7dp">
                     <!--공지사항문구-->
-                    <LinearLayout
-                        android:orientation="horizontal"
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="7dp"
-                        android:layout_marginTop="7dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="학사공지"
-                            android:fontFamily="@font/medium"
-                            android:textSize="18sp"
-                            android:textColor="#FF2DD7A4"/>
-                    </LinearLayout>
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="7dp"
+                        android:text="학사공지"
+                        android:fontFamily="@font/medium"
+                        android:textSize="18sp"
+                        android:textColor="#FF2DD7A4"/>
 
-                    <!--공지사항 내용-->
-                    <com.google.android.material.card.MaterialCardView
+                    <ScrollView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="7dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="0dp"
-                        app:strokeWidth="0dp"
-                        app:strokeColor="@android:color/transparent"
-                        app:rippleColor="@android:color/transparent"
-                        android:backgroundTint="@android:color/white">
-
-                        <LinearLayout
+                        android:scrollbars="none"
+                        android:overScrollMode="never"
+                        android:fillViewport="true"
+                        android:layout_margin="5dp">
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/home_school_card"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="7dp"
-                            android:padding="3dp"
-                            android:background="#FFFFFF">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="[공지사항] 어쩌고 저ㅓㅉ고"
-                                android:textColor="#FF808080" />
-                            <!-- 내용 -->
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
+                            android:layout_height="match_parent"
+                            android:padding="5dp" />
+                    </ScrollView>
 
                 </LinearLayout>
             </LinearLayout>
