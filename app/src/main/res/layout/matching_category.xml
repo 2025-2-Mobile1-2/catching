@@ -1,11 +1,13 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/match_category_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#BF212121"> <!--반투명 배경-->
+    android:background="#BF212121">
 
-    <!--여기가 카테고리 선택 페이지 화면-->
+
+<!--여기가 카테고리 선택 페이지 화면-->
     <LinearLayout
         android:layout_gravity="center"
         android:orientation="vertical"
@@ -39,7 +41,7 @@
 
         <!--진로 버튼-->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/match_cate_mentorship"
+            android:id="@+id/match_cate_career"
             android:text="진로·전공 멘토 매칭"
             android:textColor="@color/black"
             android:fontFamily="@font/semibold"
@@ -88,22 +90,9 @@
             android:layout_height="100dp">
         </FrameLayout>
 
+
+
     </LinearLayout>
     <!--디자인을 위한 여백용-->
 
-    <FrameLayout
-        android:id="@+id/mentorship_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
-    <FrameLayout
-        android:id="@+id/roommate_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
-    <FrameLayout
-        android:id="@+id/activity_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
 </FrameLayout>
