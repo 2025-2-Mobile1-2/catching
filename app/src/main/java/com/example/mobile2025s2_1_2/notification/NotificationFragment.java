@@ -112,7 +112,7 @@ public class NotificationFragment extends Fragment {
         if (db == null || currentUserEmail == null) return;
 
         db.collection("matching_status")
-                .whereEqualTo("toID", currentUserEmail) // ★ 받은 사람 = 나
+                // ★ 여기서는 전체 가져오고
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(snap -> {
@@ -125,6 +125,11 @@ public class NotificationFragment extends Fragment {
                         String state    = doc.getString("state");
                         String category = doc.getString("category");
                         Boolean isNewForB = doc.getBoolean("isNewForB");
+
+                        // 🔥 내가 받은 알림만 남기기
+                        if (toId == null || !toId.equals(currentUserEmail)) {
+                            continue;
+                        }
 
                         Log.d("NOTI_REC",
                                 "doc=" + docId +
@@ -162,6 +167,9 @@ public class NotificationFragment extends Fragment {
                             (item, isReceivedList) -> handleAlarmClick(item, isReceivedList)
                     );
                     recycler.setAdapter(adapter);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("NOTI_REC", "loadReceivedFromFirestore error", e);
                 });
     }
 
@@ -170,7 +178,7 @@ public class NotificationFragment extends Fragment {
         if (db == null || currentUserEmail == null) return;
 
         db.collection("matching_status")
-                .whereEqualTo("fromID", currentUserEmail) // ★ 보낸 사람 = 나
+                // ★ 여기서도 전체 가져오고
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(snap -> {
@@ -183,6 +191,11 @@ public class NotificationFragment extends Fragment {
                         String state    = doc.getString("state");
                         String category = doc.getString("category");
                         Boolean isNewForA = doc.getBoolean("isNewForA");
+
+                        // 🔥 내가 보낸 알림만 남기기
+                        if (fromId == null || !fromId.equals(currentUserEmail)) {
+                            continue;
+                        }
 
                         Log.d("NOTI_SENT",
                                 "doc=" + docId +
@@ -220,6 +233,9 @@ public class NotificationFragment extends Fragment {
                             (item, isReceivedList) -> handleAlarmClick(item, isReceivedList)
                     );
                     recycler.setAdapter(adapter);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("NOTI_SENT", "loadSentFromFirestore error", e);
                 });
     }
 
@@ -227,7 +243,7 @@ public class NotificationFragment extends Fragment {
     private void handleAlarmClick(AlarmItem item, boolean isReceivedList) {
         currentItem = item;
 
-        // 🔥 클릭하면 무조건 Firestore 읽음 처리 (N 제거)
+        // 1) Firestore에 읽음 처리 요청 (배지는 Adapter 쪽에서 바로 숨김)
         markAlarmRead(item, isReceivedList);
 
         // 2) 보낸 매칭 탭 클릭
@@ -241,7 +257,6 @@ public class NotificationFragment extends Fragment {
         }
 
         // 3) 받은 매칭 탭 클릭
-
         if (item.clickedBefore) {
             if (item.lastPopupType == 2) {
                 showConfirmPopup();
@@ -264,7 +279,10 @@ public class NotificationFragment extends Fragment {
 
         db.collection("matching_status")
                 .document(item.docId)
-                .update(field, false);
+                .update(field, false)
+                .addOnFailureListener(e ->
+                        Log.e("NOTI", "markAlarmRead update error", e)
+                );
     }
 
     /** 토글의 활성/비활성 색상 및 폰트 전환(UI) */
@@ -331,8 +349,8 @@ public class NotificationFragment extends Fragment {
                         .document(currentItem.docId)
                         .update(
                                 "state", "accepted",
-                                "isNewForA", true,   // A에게 새 알림
-                                "isNewForB", false   // B는 읽음
+                                "isNewForA", true,
+                                "isNewForB", false
                         );
 
                 currentItem.state = "accepted";
