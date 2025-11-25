@@ -16,7 +16,7 @@ public class RoommateCardData {
     public static class RoommateData {
         private String name;
         private String sex;
-        private String domitory;
+        private String dormitory;
         private String age;
         private String mbti;
         private String drink;
@@ -26,13 +26,13 @@ public class RoommateCardData {
         private int subtlety;
 
         // 🔥 [추가됨] Firestore 데이터 → 카드 객체로 생성할 수 있게 하는 생성자
-        public RoommateData(String name, String sex, String domitory, String age,
+        public RoommateData(String name, String sex, String dormitory, String age,
                             String mbti, String drink, String smoke,
                             int clean, int sleep, int subtlety) {
 
             this.name = name;
             this.sex = sex;
-            this.domitory = domitory;
+            this.dormitory = dormitory;
             this.age = age;
             this.mbti = mbti;
             this.drink = drink;
@@ -40,6 +40,7 @@ public class RoommateCardData {
             this.clean = clean;
             this.sleep = sleep;
             this.subtlety = subtlety;
+            this.dormitory=dormitory;
         }
 
         // 🔥 Gson/Firestore가 필요로 하는 기본 생성자
@@ -48,7 +49,7 @@ public class RoommateCardData {
         // Getter 메서드
         public String getName() { return name; }
         public String getSex() { return sex; }
-        public String getDomitory() { return domitory; }
+        public String getDomitory() { return dormitory; }
         public String getAge() { return age; }
         public String getMbti() { return mbti; }
         public String getDrink() { return drink; }
@@ -56,6 +57,10 @@ public class RoommateCardData {
         public int getClean() { return clean; }
         public int getSleep() { return sleep; }
         public int getSubtlety() { return subtlety; }
+
+        public String  getDormitory() {
+            return dormitory;
+        }
     }
 
 

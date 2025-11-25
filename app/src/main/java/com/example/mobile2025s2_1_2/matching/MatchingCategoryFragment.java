@@ -45,12 +45,12 @@ public class MatchingCategoryFragment extends Fragment {
         }
 
         //진로, 전공 멘토 매칭 버튼
-        View mentorshipView = view.findViewById(R.id.match_cate_mentorship);
+        View mentorshipView = view.findViewById(R.id.match_cate_career);
         mentorshipView.setOnClickListener(v -> {
             ActivityFragment activityFragment = new ActivityFragment();
             getParentFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.mentorship_container, activityFragment)
+                    .replace(R.id.match_cate_career, activityFragment)
                     .addToBackStack(null)
                     .commit();
         });
