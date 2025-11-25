@@ -30,6 +30,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;   // ☁️ Firestore
 
 import java.util.HashMap;
@@ -235,9 +236,11 @@ public class CreateProfileActivity extends AppCompatActivity {
 
 
 
-        Log.d("DEBUG", "🔥 Firestore 저장 시도 중...");
+        Log.d("Users", "🔥 Firestore 저장 시도 중...");
 
-        db.collection("catchingdatabase").document(userEmail).set(userProfile)
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        db.collection("Users").document(uid).set(userProfile)
                 .addOnSuccessListener(aVoid -> {
                     Log.d("DEBUG", "유저 정보 저장됨  ");
                     Toast.makeText(this, "프로필 저장 완료!", Toast.LENGTH_SHORT).show();

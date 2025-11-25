@@ -26,6 +26,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
@@ -86,37 +89,62 @@ public class LoginActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            // ✅ 로그인 성공 시
-            String email = account.getEmail();
-            //Toast.makeText(this, "로그인 성공: " + email, Toast.LENGTH_SHORT).show();
-            Log.d("GoogleSignIn", "Success: " + email);
-            // ✨ 이메일 도메인 검사 추가
-            if (email != null && email.endsWith("@kookmin.ac.kr")) {
-                // ✨ InfoRecordActivity로 이동
-                Intent intent = new Intent(this, CreateProfileActivity.class);
-                intent.putExtra("user_email", email); // 필요하면 이메일 전달
-                startActivity(intent);
-                finish(); // ✨ MainActivity 종료 (뒤로가기 방지)
-            } else {
-                // 커스텀 AlertDialog
-                View dialogView = getLayoutInflater().inflate(R.layout.dialog_message, null);
 
-                AlertDialog dialog = new AlertDialog.Builder(this)
-                        .setView(dialogView)
-                        .setCancelable(false)
-                        .create();
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-                Button btnConfirm = dialogView.findViewById(R.id.dialog_button);
-                btnConfirm.setOnClickListener(v -> dialog.dismiss());
-
-                dialog.show();
+            if (account == null) {
+                Toast.makeText(this, "로그인 실패: 계정 정보 없음", Toast.LENGTH_SHORT).show();
+                return;
             }
 
+            String email = account.getEmail();
+            Log.d("GoogleSignIn", "Success: " + email);
+
+            // 📌 1) 국민대 이메일인지 검사
+            if (email == null || !email.endsWith("@kookmin.ac.kr")) {
+                showDomainErrorDialog();
+                return;
+            }
+
+            // 📌 2) FirebaseAuth 인증 연결 (가장 중요!! MUST HAVE)
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+
+            auth.signInWithCredential(credential)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.d("GoogleSignIn", "🔥 FirebaseAuth 로그인 성공: " + auth.getCurrentUser().getUid());
+
+                            // 📌 3) 프로필 작성 화면으로 이동
+                            Intent intent = new Intent(this, CreateProfileActivity.class);
+                            intent.putExtra("user_email", email);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Log.e("GoogleSignIn", "❌ FirebaseAuth 인증 실패", task.getException());
+                            Toast.makeText(this, "Firebase 인증 실패", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
         } catch (ApiException e) {
-            // ❌ 로그인 실패 시
             Log.w("GoogleSignIn", "signInResult:failed code=" + e.getStatusCode());
             Toast.makeText(this, "로그인 실패", Toast.LENGTH_SHORT).show();
         }
     }
+
+
+    private void showDomainErrorDialog() {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_message, null);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .setCancelable(false)
+                .create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        Button btnConfirm = dialogView.findViewById(R.id.dialog_button);
+        btnConfirm.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+    }
+
+
 }
