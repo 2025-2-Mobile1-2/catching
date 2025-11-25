@@ -36,11 +36,11 @@ public class MyprofileFragment extends Fragment {
     private LinearLayout bottomNavBar;
     private View btnSave;
 
-    // ⭐ 상단 프로필 텍스트뷰 추가
+    // 상단 프로필 텍스트뷰
     private TextView tvUserName;
     private TextView tvUserEmail;
 
-    // ⭐ 파이어베이스 관련 변수
+    // 파이어베이스 관련 변수
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private String myUid;
@@ -50,7 +50,7 @@ public class MyprofileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.myprofile_main, container, false);
 
-        // 1. 파이어베이스 초기화 & UID 확인
+        // 1. 파이어베이스 초기화 (실제 유저 UID 획득)
         initFirebase();
 
         // 2. 뷰 연결
@@ -63,10 +63,10 @@ public class MyprofileFragment extends Fragment {
         BottomNavBarHelper.setupCustomNav(requireActivity(), bottomNavBar);
         BottomNavBarHelper.setActiveTab(bottomNavBar, R.id.nav_myprofile);
 
-        // 5. 이벤트 리스너 설정 (카톡 수정, 저장 버튼)
+        // 5. 이벤트 리스너
         setupListeners();
 
-        // 6. ⭐ [핵심] 화면 열리자마자 기본 정보(이름, 이메일, 카톡ID) 불러오기
+        // 6. [핵심] 기본 정보(이름, 이메일) 불러오기 - 카카오ID 제외함
         loadBasicProfileData();
 
         return view;
@@ -77,11 +77,12 @@ public class MyprofileFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
+
         if (currentUser != null) {
-            myUid = currentUser.getUid();
+            myUid = currentUser.getUid(); // 실제 로그인된 UID
         } else {
-            // 테스트용 강제 ID
-            myUid = "hQlLVKfBya7shEe3adhl";
+            myUid = null;
+            // 로그인이 안 된 상태 처리
         }
     }
 
@@ -91,18 +92,18 @@ public class MyprofileFragment extends Fragment {
         etKakaoId = view.findViewById(R.id.edittext_kakao_id);
         iconEditKakaoId = view.findViewById(R.id.icon_edit_kakao_id);
         bottomNavBar = view.findViewById(R.id.custom_navbar);
-        btnSave = view.findViewById(R.id.edit_button); // 저장 버튼 ID 확인!
+        btnSave = view.findViewById(R.id.edit_button);
 
-        // ⭐ 상단 프로필 영역 ID 연결 (myprofile_main.xml에 이 ID가 있어야 함)
         tvUserName = view.findViewById(R.id.tv_user_name);
         tvUserEmail = view.findViewById(R.id.tv_user_email);
     }
 
-    // ⭐ [핵심 기능] 기본 정보 불러오기
+    // ⭐ 수정됨: 카카오 ID 가져오는 부분 삭제, 이름/이메일만 로드
     private void loadBasicProfileData() {
         if (myUid == null) return;
 
         DocumentReference docRef = db.collection("Users").document(myUid);
+
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 // 1. 이름 가져오기
@@ -111,22 +112,18 @@ public class MyprofileFragment extends Fragment {
                     tvUserName.setText(name);
                 }
 
-                // 2. 이메일 가져오기 (DB에 없으면 Auth 정보 사용)
+                // 2. 이메일 가져오기
                 String email = documentSnapshot.getString("email");
                 if (email == null && mAuth.getCurrentUser() != null) {
-                    email = mAuth.getCurrentUser().getEmail();
+                    email = mAuth.getCurrentUser().getEmail(); // DB에 없으면 인증정보 사용
                 }
                 if (email != null && tvUserEmail != null) {
                     tvUserEmail.setText(email);
                 }
 
-                // 3. 카카오톡 ID 가져오기
-                String kakaoId = documentSnapshot.getString("kakaoId");
-                if (kakaoId != null && etKakaoId != null) {
-                    etKakaoId.setText(kakaoId);
-                }
+                // 카카오 ID는 가져오지 않음.
             }
-        }).addOnFailureListener(e -> Log.e("MyProfile", "기본 정보 로드 실패", e));
+        }).addOnFailureListener(e -> Log.e("MyProfile", "데이터 로드 실패", e));
     }
 
     private void setupViewPagerAndTabs() {
@@ -162,7 +159,6 @@ public class MyprofileFragment extends Fragment {
     }
 
     private void setupListeners() {
-        // 카톡 ID 수정 모드 전환
         iconEditKakaoId.setOnClickListener(v -> {
             etKakaoId.setEnabled(true);
             etKakaoId.requestFocus();
@@ -171,16 +167,13 @@ public class MyprofileFragment extends Fragment {
             if (imm != null) imm.showSoftInput(etKakaoId, InputMethodManager.SHOW_IMPLICIT);
         });
 
-        // 저장 버튼 클릭
         btnSave.setOnClickListener(v -> {
-            // 현재 룸메이트 탭(2번)일 때만 저장 로직 실행
             if (viewPager.getCurrentItem() == 2) {
                 Fragment fragment = getChildFragmentManager().findFragmentByTag("f2");
                 if (fragment instanceof RoommateFragment) {
                     ((RoommateFragment) fragment).saveRoommateData();
                 }
             } else {
-                // 다른 탭일 때 저장 버튼 눌렀을 때의 동작 (필요하면 추가)
                 Toast.makeText(requireContext(), "저장되었습니다.", Toast.LENGTH_SHORT).show();
             }
         });

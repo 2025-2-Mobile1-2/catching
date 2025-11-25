@@ -40,7 +40,7 @@ public class RoommateFragment extends Fragment {
     // 기존 스피너
     private Spinner spinnerGender, spinnerDormitory, spinnerAge, spinnerMbti, spinnerAlcohol, spinnerSmoking;
 
-    // ⭐ SeekBar 및 라벨
+    // SeekBar 및 라벨
     private SeekBar seekBarCleanliness, seekBarSnoring, seekBarSensitivity;
     private TextView valueLabel1, valueLabel2, valueLabel3;
 
@@ -63,17 +63,23 @@ public class RoommateFragment extends Fragment {
             db = FirebaseFirestore.getInstance();
 
             FirebaseUser currentUser = mAuth.getCurrentUser();
+
+            // ⭐ [핵심 수정] 더미 ID 삭제 -> 실제 로그인 UID 사용
             if (currentUser != null) {
                 myUid = currentUser.getUid();
             } else {
-                myUid = "hQlLVKfBya7shEe3adhl"; // 테스트용
+                myUid = null; // 로그인이 안 된 상태
+                Toast.makeText(getContext(), "로그인 정보가 없습니다.", Toast.LENGTH_SHORT).show();
             }
 
             initFragmentViews(view);
             setupAdapters();
-            setupSeekBars(); // ⭐ SeekBar 설정
+            setupSeekBars();
 
-            loadDataFromFirestore();
+            // UID가 있을 때만 데이터 로드
+            if (myUid != null) {
+                loadDataFromFirestore();
+            }
 
         } catch (Exception e) {
             Log.e("CrashCheck", "초기화 중 오류 발생", e);
@@ -88,7 +94,7 @@ public class RoommateFragment extends Fragment {
         spinnerAlcohol = view.findViewById(R.id.spinner_alcohol);
         spinnerSmoking = view.findViewById(R.id.spinner_smoke);
 
-        // ⭐ SeekBar 연결
+        // SeekBar 연결
         seekBarCleanliness = view.findViewById(R.id.seekbar_cleanliness);
         valueLabel1 = view.findViewById(R.id.seekbar_value_label1);
 
@@ -119,7 +125,6 @@ public class RoommateFragment extends Fragment {
         }
     }
 
-    // ⭐ SeekBar 리스너 설정
     private void setupSeekBars() {
         setupSingleSeekBar(seekBarCleanliness, valueLabel1);
         setupSingleSeekBar(seekBarSnoring, valueLabel2);
@@ -153,6 +158,7 @@ public class RoommateFragment extends Fragment {
         }
     }
 
+    // DB에서 데이터 불러오기
     private void loadDataFromFirestore() {
         if (myUid == null) return;
 
@@ -173,13 +179,12 @@ public class RoommateFragment extends Fragment {
                     String smokingVal = String.valueOf(rawSmoking);
                     setSmartSelect(spinnerSmoking, convertOX(smokingVal));
 
-                    // ⭐ 2. SeekBar 데이터 로드 (clean, sleep, sensitive)
-                    // DB에서 String("5")으로 오든 Number(5)로 오든 처리
+                    // 2. SeekBar 데이터 로드
                     setSeekBarValue(seekBarCleanliness, valueLabel1, String.valueOf(documentSnapshot.get("clean")));
                     setSeekBarValue(seekBarSnoring, valueLabel2, String.valueOf(documentSnapshot.get("sleep")));
                     setSeekBarValue(seekBarSensitivity, valueLabel3, String.valueOf(documentSnapshot.get("sensitive")));
 
-                    // 3. 카톡 ID
+                    // 3. 카톡 ID (상위 액티비티의 EditText에 설정)
                     String kakaoId = documentSnapshot.getString("kakaoId");
                     EditText etKakao = requireActivity().findViewById(R.id.edittext_kakao_id);
                     if (etKakao != null && kakaoId != null) {
@@ -192,8 +197,14 @@ public class RoommateFragment extends Fragment {
         }).addOnFailureListener(e -> Log.e("CrashCheck", "연결 실패", e));
     }
 
+    // 저장하기 (MyProfileFragment에서 호출됨)
     public void saveRoommateData() {
-        if (myUid == null || !isAdded()) return;
+        // UID가 없으면 저장 불가
+        if (myUid == null) {
+            Toast.makeText(getContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!isAdded()) return;
 
         String gender = getSpinnerString(spinnerGender);
         String dorm = getSpinnerString(spinnerDormitory);
@@ -205,7 +216,7 @@ public class RoommateFragment extends Fragment {
         EditText etKakao = requireActivity().findViewById(R.id.edittext_kakao_id);
         String kakaoId = (etKakao != null) ? etKakao.getText().toString() : "";
 
-        // ⭐ SeekBar 값 가져오기
+        // SeekBar 값 가져오기
         String cleanVal = (seekBarCleanliness != null) ? String.valueOf(seekBarCleanliness.getProgress()) : "1";
         String sleepVal = (seekBarSnoring != null) ? String.valueOf(seekBarSnoring.getProgress()) : "1";
         String sensitiveVal = (seekBarSensitivity != null) ? String.valueOf(seekBarSensitivity.getProgress()) : "1";
@@ -218,15 +229,16 @@ public class RoommateFragment extends Fragment {
         userUpdates.put("alcohol", alcohol);
 
         boolean isSmoking = smokeStr.equals("O");
-        userUpdates.put("smoking", isSmoking ? "O" : "X");
+        userUpdates.put("smoking", isSmoking ? "O" : "X"); // O/X로 통일
 
-        // ⭐ SeekBar 데이터 추가
+        // SeekBar 데이터 추가
         userUpdates.put("clean", cleanVal);
         userUpdates.put("sleep", sleepVal);
         userUpdates.put("sensitive", sensitiveVal);
 
         userUpdates.put("kakaoId", kakaoId);
 
+        // DB 저장 (merge 옵션 사용)
         db.collection("Users").document(myUid)
                 .set(userUpdates, SetOptions.merge())
                 .addOnSuccessListener(aVoid -> showSaveCompleteDialog())
@@ -291,11 +303,9 @@ public class RoommateFragment extends Fragment {
         }
     }
 
-    // ⭐ SeekBar 값 설정 도우미
     private void setSeekBarValue(SeekBar seekBar, TextView label, String value) {
         if (seekBar == null || value == null || value.equals("null")) return;
         try {
-            // 소수점(.0)이 있을 경우 제거하고 정수로 변환
             double d = Double.parseDouble(value);
             int progress = (int) d;
 
