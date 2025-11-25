@@ -3,6 +3,7 @@ package com.example.mobile2025s2_1_2.login;
 import androidx.appcompat.app.AlertDialog;
 
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.widget.Button;
@@ -29,6 +30,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
@@ -113,11 +115,35 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d("GoogleSignIn", "🔥 FirebaseAuth 로그인 성공: " + auth.getCurrentUser().getUid());
 
-                            // 📌 3) 프로필 작성 화면으로 이동
-                            Intent intent = new Intent(this, CreateProfileActivity.class);
-                            intent.putExtra("user_email", email);
-                            startActivity(intent);
-                            finish();
+                            // ✅ 자동 로그인 정보 저장
+                            SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putString("user_email", email);
+                            editor.putBoolean("isLoggedIn", true);
+                            editor.apply();
+
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            db.collection("Users").document(email).get()
+                                    .addOnSuccessListener(doc -> {
+                                        if (doc.exists()) {
+                                            // 🔥 이미 가입된 사용자 → HomeActivity
+                                            Intent intent = new Intent(this, com.example.mobile2025s2_1_2.home.HomeActivity.class);
+                                            intent.putExtra("user_email", email);
+                                            startActivity(intent);
+                                            finish();
+                                        } else {
+                                            // 🔥 신규 사용자 → CreateProfileActivity
+                                            Intent intent = new Intent(this, CreateProfileActivity.class);
+                                            intent.putExtra("user_email", email);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        android.util.Log.e("Firestore", "사용자 확인 실패", e);
+                                        Toast.makeText(this, "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                                    });
+
                         } else {
                             Log.e("GoogleSignIn", "❌ FirebaseAuth 인증 실패", task.getException());
                             Toast.makeText(this, "Firebase 인증 실패", Toast.LENGTH_SHORT).show();

@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -203,7 +204,8 @@ public class StartActivity extends AppCompatActivity {
         // [테스트용 설정]
         // true  : 재실행 (메인 화면)
         // false : 첫 실행 (로그인 화면)
-        boolean isLogined = false;
+        SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        boolean isLogined = prefs.getBoolean("isLoggedIn", false);
 
         Intent intent;
         if (isLogined) {
