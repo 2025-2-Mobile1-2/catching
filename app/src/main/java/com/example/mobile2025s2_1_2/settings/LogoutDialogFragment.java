@@ -21,6 +21,7 @@ public class LogoutDialogFragment extends Fragment {
         View view = inflater.inflate(R.layout.settings_logout_dialog, container, false);
         TextView logoutCancel = view.findViewById(R.id.logout_cancel);
         logoutCancel.setOnClickListener(v -> {
+            SettingsFragment.touchBlocker.setVisibility(View.GONE);
             requireActivity().getSupportFragmentManager().popBackStack();
         });
         return view;

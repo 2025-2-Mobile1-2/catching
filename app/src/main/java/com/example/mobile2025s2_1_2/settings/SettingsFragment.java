@@ -17,15 +17,19 @@ import com.example.mobile2025s2_1_2.utils.BottomNavBarHelper;
 import com.google.android.material.materialswitch.MaterialSwitch;
 
 public class SettingsFragment extends Fragment {
+    public static View touchBlocker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.settings_main, container, false);
+        touchBlocker = view.findViewById(R.id.touch_blocker);
 
+        //하단바
         LinearLayout bottomNavBar = view.findViewById(R.id.custom_navbar);
         BottomNavBarHelper.setupCustomNav(requireActivity(), bottomNavBar);
         BottomNavBarHelper.setActiveTab(bottomNavBar, R.id.nav_settings);
 
+        //푸시알림
         MaterialSwitch pushSwitch = view.findViewById(R.id.settings_push_switch);
         pushSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -35,6 +39,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        //이메일 알림
         MaterialSwitch emailSwitch = view.findViewById(R.id.settings_email_switch);
         emailSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -44,6 +49,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        //문의하기
         LinearLayout questionLayout = view.findViewById(R.id.question_layout);
         ImageView questionIcon = view.findViewById(R.id.question_icon);
         TextView questionText = view.findViewById(R.id.question);
@@ -59,24 +65,28 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        //로그아웃
         ImageView logout = view.findViewById(R.id.settings_logout_icon);
         logout.setOnClickListener(v -> {
+            touchBlocker.setVisibility(View.VISIBLE);
             LogoutDialogFragment fragment = new LogoutDialogFragment();
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                    .replace(R.id.fragment_container, fragment, "LogoutDialogFragment")
+                    .add(R.id.fragment_container, fragment, "LogoutDialogFragment")
                     .addToBackStack(null)
                     .commit();
         });
 
+        //계정삭제
         ImageView deleteAccount = view.findViewById(R.id.settings_delete_account_icon);
         deleteAccount.setOnClickListener(v -> {
+            touchBlocker.setVisibility(View.VISIBLE);
             DeleteAccountDialogFragment fragment = new DeleteAccountDialogFragment();
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                    .replace(R.id.fragment_container, fragment, "DeleteAccountDialogFragment")
+                    .add(R.id.fragment_container, fragment, "DeleteAccountDialogFragment")
                     .addToBackStack(null)
                     .commit();
         });
