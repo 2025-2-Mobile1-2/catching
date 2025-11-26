@@ -2,6 +2,7 @@ package com.example.mobile2025s2_1_2.myprofile;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,24 +37,30 @@ public class MyprofileFragment extends Fragment {
     private View btnSave;
 
     private TextView tvUserName;
-    private TextView tvUserEmail;
+    private TextView tvUserEmail; // 이메일 표시용 (필요하다면)
 
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
-    private String myEmail;
+
+    // ⭐ 변수명은 myUid로 두겠지만, 실제로는 '이메일'이 들어갑니다.
+    private String myUid;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.myprofile_main, container, false);
 
+        // 1. 파이어베이스 초기화
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        // 현재 로그인한 유저의 이메일 가져오기 (문서 ID로 사용)
+        // ⭐ [핵심 수정] UID 대신 Email을 문서 ID로 사용!
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            myEmail = currentUser.getEmail();
+            myUid = currentUser.getEmail(); // <--- 여기가 바뀜! (getUid -> getEmail)
+            Log.d("MyProfile", "현재 문서 ID(이메일): " + myUid);
+        } else {
+            Toast.makeText(requireContext(), "로그인 정보가 없습니다.", Toast.LENGTH_SHORT).show();
         }
 
         initViews(view);
@@ -62,6 +69,7 @@ public class MyprofileFragment extends Fragment {
         BottomNavBarHelper.setActiveTab(bottomNavBar, R.id.nav_myprofile);
         setupListeners();
 
+        // 상단 정보 불러오기
         loadBasicProfileData();
 
         return view;
@@ -75,24 +83,38 @@ public class MyprofileFragment extends Fragment {
         bottomNavBar = view.findViewById(R.id.custom_navbar);
         btnSave = view.findViewById(R.id.edit_button);
 
-        tvUserName = view.findViewById(R.id.tv_user_name);
-        tvUserEmail = view.findViewById(R.id.tv_user_email);
+        // XML ID 확인 (profile_name이 맞는지 roommate_name인지 확인 필수)
+        tvUserName = view.findViewById(R.id.tv_user_name);   // 이름
+        tvUserEmail = view.findViewById(R.id.tv_user_email); // 이메일
+
+        // XML에 tv_user_email이 있다면 연결
+        // tvUserEmail = view.findViewById(R.id.tv_user_email);
     }
 
     private void loadBasicProfileData() {
-        if (myEmail == null) return;
+        if (myUid == null) return;
 
-        DocumentReference docRef = db.collection("Users").document(myEmail);
+        // Users -> [이메일주소] 문서를 찾음
+        DocumentReference docRef = db.collection("Users").document(myUid);
+
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
+                // 1. 이름
                 String name = documentSnapshot.getString("name");
-                if (name != null && tvUserName != null) tvUserName.setText(name);
+                if (name != null && tvUserName != null) {
+                    tvUserName.setText(name);
+                }
 
-                String email = documentSnapshot.getString("email");
-                if (email != null && tvUserEmail != null) tvUserEmail.setText(email);
-
+                // 2. 카카오톡 ID
                 String kakaoId = documentSnapshot.getString("kakaoId");
-                if (kakaoId != null && etKakaoId != null) etKakaoId.setText(kakaoId);
+                if (kakaoId != null && etKakaoId != null) {
+                    etKakaoId.setText(kakaoId);
+                }
+
+                // 3. 이메일 (DB에 없으면 로그인 정보에서 가져옴)
+                if (tvUserEmail != null) {
+                    tvUserEmail.setText(myUid); // myUid가 곧 이메일임
+                }
             }
         });
     }
@@ -124,7 +146,8 @@ public class MyprofileFragment extends Fragment {
         });
 
         if (chipGroupTabs.getChildCount() > 0) {
-            ((Chip) chipGroupTabs.getChildAt(0)).setChecked(true);
+            Chip initialChip = (Chip) chipGroupTabs.getChildAt(0);
+            if (initialChip != null) initialChip.setChecked(true);
         }
     }
 
