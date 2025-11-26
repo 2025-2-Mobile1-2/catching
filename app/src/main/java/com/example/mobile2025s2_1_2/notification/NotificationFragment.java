@@ -14,6 +14,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -137,9 +138,7 @@ public class NotificationFragment extends Fragment {
                                         ", toID=" + toId +
                                         ", state=" + state);
 
-                        // TODO: 나중에 fromId → users 컬렉션에서 이름 가져오기
-                        String fromName = fromId != null ? fromId : "상대";
-
+                        String fromName = "  ";
                         String text;
                         if ("accepted".equals(state)) {
                             text = fromName + " 님이 매칭을 수락했습니다.";
@@ -153,12 +152,31 @@ public class NotificationFragment extends Fragment {
                                 docId,
                                 text,
                                 Boolean.TRUE.equals(isNewForB),
+                                fromId,
                                 state != null ? state : "request",
                                 category != null ? category : "roommate",
                                 true   // 받은 탭
                         );
-
                         receivedList.add(item);
+                        // 🔥 Firestore에서 이름 가져오면 item.text만 업데이트
+                        db.collection("Users")
+                                .document(fromId)
+                                .get()
+                                .addOnSuccessListener(docUser -> {
+                                    String fetchedName = docUser.getString("name");
+                                    if (fetchedName != null) {
+
+                                        if ("accepted".equals(item.state)) {
+                                            item.text = fetchedName + " 님이 매칭을 수락했습니다.";
+                                        } else if ("rejected".equals(item.state)) {
+                                            item.text = fetchedName + " 님이 매칭을 거절했습니다.";
+                                        } else {
+                                            item.text = fetchedName + " 님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!";
+                                        }
+
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                });
                     }
 
                     adapter = new AlarmAdapter(
@@ -204,6 +222,7 @@ public class NotificationFragment extends Fragment {
                                         ", state=" + state);
 
                         // TODO: 나중에 toId → users 컬렉션에서 이름 가져오기
+
                         String toName = toId != null ? toId : "상대";
 
                         String text;
@@ -219,6 +238,7 @@ public class NotificationFragment extends Fragment {
                                 docId,
                                 text,
                                 Boolean.TRUE.equals(isNewForA),
+                                fromId,
                                 state != null ? state : "request",
                                 category != null ? category : "roommate",
                                 false  // 보낸 탭
@@ -312,6 +332,7 @@ public class NotificationFragment extends Fragment {
 
     // ================== 팝업 로직들 ==================
 
+    //룸메이트 팝업
     public void showProfilePopup() {
         profileDialog = new Dialog(requireContext());
         profileDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -327,6 +348,7 @@ public class NotificationFragment extends Fragment {
             );
         }
 
+        //닫기 버튼
         ImageView btnClose = profileDialog.findViewById(R.id.btn_close);
         btnClose.setOnClickListener(v -> {
             profileDialog.dismiss();
@@ -337,6 +359,83 @@ public class NotificationFragment extends Fragment {
             }
         });
 
+
+        //상대 유저 정보
+        db.collection("Users")
+                .document(currentItem.fromID)
+                .get()
+                .addOnSuccessListener(doc -> {
+                    String name = doc.getString("name");
+                    String gender = doc.getString("gender");
+                    String dorm = doc.getString("dorm");
+                    String age = doc.getString("age");
+                    String mbti = doc.getString("mbti");
+                    String drink = doc.getString("drink");
+                    String smoking = doc.getString("smoking");
+                    String clean = doc.getString("clean");
+                    String sleep = doc.getString("sleep");
+                    String sensitive = doc.getString("sensitive");
+                    String sleepTime = doc.getString("sleepTime");
+                    String wakeTime = doc.getString("wakeTime");
+
+                    //정보 연결하기
+                    TextView userName = profileDialog.findViewById(R.id.roommate_name);
+                    userName.setText(name != null ? name : "정보 없음");
+
+                    TextView userGender = profileDialog.findViewById(R.id.roommate_gender);
+                    userGender.setText(gender != null ? gender : "정보 없음");
+
+                    TextView userDorm = profileDialog.findViewById(R.id.roommate_dormitory);
+                    userDorm.setText(dorm != null ? dorm : "정보 없음");
+
+                    TextView userAge = profileDialog.findViewById(R.id.roommate_age);
+                    userAge.setText(age != null ? age : "정보 없음");
+
+                    TextView userMbti = profileDialog.findViewById(R.id.roommate_mbti);
+                    userMbti.setText(mbti != null ? mbti : "정보 없음");
+
+                    TextView userDrink = profileDialog.findViewById(R.id.roommate_drink);
+                    userDrink.setText(drink != null ? "음주 " + drink : "정보 없음");
+
+                    TextView userSmoke = profileDialog.findViewById(R.id.roommate_smoke);
+                    userSmoke.setText(smoking != null ? "흡연 " + smoking : "정보 없음");
+
+                    //자고 일어나는 시간
+                    TextView userSleepTime = profileDialog.findViewById(R.id.roommate_time);
+                    String timeText;
+                    if (sleepTime != null && wakeTime != null) {
+                        timeText = sleepTime + " ~ " + wakeTime;
+                    } else if (sleepTime != null) {
+                        timeText = sleepTime;
+                    } else if (wakeTime != null) {
+                        timeText = wakeTime;
+                    } else {
+                        timeText = "정보 없음";
+                    }
+                    userSleepTime.setText(timeText);
+
+                    TextView userCleanValue = profileDialog.findViewById(R.id.roommate_clean_value);
+                    userCleanValue.setText(clean != null ? clean : "정보 없음");
+                    SeekBar userCleanBar = profileDialog.findViewById(R.id.roommate_clean_seekbar);
+                    userCleanBar.setProgress(Integer.parseInt(clean != null ? clean : "0"));
+
+                    TextView userSleepValue = profileDialog.findViewById(R.id.roommate_sleep_value);
+                    userSleepValue.setText(sleep != null ? sleep : "정보 없음");
+                    SeekBar userSleepBar = profileDialog.findViewById(R.id.roommate_sleep_seekbar);
+                    userSleepBar.setProgress(Integer.parseInt(sleep != null ? sleep : "0"));
+
+                    TextView userSensitiveValue = profileDialog.findViewById(R.id.roommate_sensitive_value);
+                    userSensitiveValue.setText(sensitive != null ? sensitive : "정보 없음");
+                    SeekBar userSensitivepBar = profileDialog.findViewById(R.id.roommate_sensitive_seekbar);
+                    userSensitivepBar.setProgress(Integer.parseInt(sensitive != null ? sensitive : "0"));
+
+
+                });
+
+
+
+
+        //수락, 취소 버튼
         ImageView btnAccept = profileDialog.findViewById(R.id.btn_accept);
         ImageView btnReject = profileDialog.findViewById(R.id.btn_reject);
 
