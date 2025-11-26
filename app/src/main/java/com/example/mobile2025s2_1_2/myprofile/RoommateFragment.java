@@ -89,9 +89,9 @@ public class RoommateFragment extends Fragment {
     }
 
     private void setupSeekBars() {
-        if (seekBarCleanliness != null) seekBarCleanliness.setMax(5);
-        if (seekBarSnoring != null) seekBarSnoring.setMax(5);
-        if (seekBarSensitivity != null) seekBarSensitivity.setMax(5);
+        if (seekBarCleanliness != null) seekBarCleanliness.setMax(10);
+        if (seekBarSnoring != null) seekBarSnoring.setMax(10);
+        if (seekBarSensitivity != null) seekBarSensitivity.setMax(10);
 
         SeekBar.OnSeekBarChangeListener listener = new SeekBar.OnSeekBarChangeListener() {
             @Override
