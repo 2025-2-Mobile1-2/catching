@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.mobile2025s2_1_2.R;
 import com.example.mobile2025s2_1_2.login.StartActivity;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class DeleteAccountDialogFragment extends Fragment {
@@ -36,6 +37,28 @@ public class DeleteAccountDialogFragment extends Fragment {
         TextView delete = view.findViewById(R.id.account_delete_ok);
         delete.setOnClickListener(v ->{
             SettingsFragment.touchBlocker.setVisibility(View.GONE);
+            // 1) fromID == myEmail
+            db.collection("matching_status")
+                    .whereEqualTo("fromID", myemail)
+                    .get()
+                    .addOnSuccessListener(query -> {
+                        for (DocumentSnapshot doc : query.getDocuments()) {
+                            db.collection("matching_status").document(doc.getId()).delete();
+                        }
+                    })
+                    .addOnFailureListener(e -> Log.e("DELETE", "fromID 삭제 실패", e));
+
+            // 2) toID == myEmail
+            db.collection("matching_status")
+                    .whereEqualTo("toID", myemail)
+                    .get()
+                    .addOnSuccessListener(query -> {
+                        for (DocumentSnapshot doc : query.getDocuments()) {
+                            db.collection("matching_status").document(doc.getId()).delete();
+                        }
+                    })
+                    .addOnFailureListener(e -> Log.e("DELETE", "toID 삭제 실패", e));
+
             db.collection("Users")
                     .document(myemail)
                     .delete()
