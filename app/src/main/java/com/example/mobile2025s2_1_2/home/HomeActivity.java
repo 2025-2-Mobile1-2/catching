@@ -134,23 +134,73 @@ public class HomeActivity extends AppCompatActivity {
                         String fromId   = doc.getString("fromID");
                         String state    = doc.getString("state");
                         String category = doc.getString("category");
-                        String fromName = fromId != null ? fromId : "상대";
 
-                        String message;
-                        if ("accepted".equals(state)) {
-                            message = fromName + " 님이 매칭을 수락했습니다.";
-                        } else if ("rejected".equals(state)) {
-                            message = fromName + " 님이 매칭을 거절했습니다.";
-                        } else {
-                            if ("roommate".equals(category)) {
-                                message = fromName + " 님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!";
+                        // 이메일이 null이면 그냥 "상대"로 처리
+                        if (fromId == null || fromId.isEmpty()) {
+                            String fromName = "상대";
+                            String message;
+                            if ("accepted".equals(state)) {
+                                message = fromName + "님이 매칭을 수락했습니다.";
+                            } else if ("rejected".equals(state)) {
+                                message = fromName + "님이 매칭을 거절했습니다.";
                             } else {
-                                message = fromName + " 님으로부터 새로운 매칭 신청이 왔습니다!";
+                                if ("roommate".equals(category)) {
+                                    message = fromName + "님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!";
+                                } else {
+                                    message = fromName + "님으로부터 새로운 매칭 신청이 왔습니다!";
+                                }
                             }
+                            showTopInAppBanner(message);
+                            break;
                         }
 
-                        showTopInAppBanner(message);
-                        break; // 새 알림 하나만 배너로
+                        // 🔥 여기서 Users 컬렉션에서 name 가져와서 배너 텍스트 구성
+                        final String finalState = state;
+                        final String finalCategory = category;
+                        db.collection("Users")
+                                .document(fromId)
+                                .get()
+                                .addOnSuccessListener(userDoc -> {
+                                    String name = userDoc.getString("name");
+                                    String fromName = (name != null && !name.trim().isEmpty())
+                                            ? name
+                                            : fromId; // fallback: 이메일
+
+                                    String message;
+                                    if ("accepted".equals(finalState)) {
+                                        message = fromName + "님이 매칭을 수락했습니다.";
+                                    } else if ("rejected".equals(finalState)) {
+                                        message = fromName + "님이 매칭을 거절했습니다.";
+                                    } else {
+                                        if ("roommate".equals(finalCategory)) {
+                                            message = fromName + "님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!";
+                                        } else {
+                                            message = fromName + "님으로부터 새로운 매칭 신청이 왔습니다!";
+                                        }
+                                    }
+
+                                    showTopInAppBanner(message);
+                                })
+                                .addOnFailureListener(e -> {
+                                    // 이름 가져오기 실패 시 이메일 그대로 사용
+                                    String fromName = fromId;
+                                    String message;
+                                    if ("accepted".equals(finalState)) {
+                                        message = fromName + "님이 매칭을 수락했습니다.";
+                                    } else if ("rejected".equals(finalState)) {
+                                        message = fromName + "님이 매칭을 거절했습니다.";
+                                    } else {
+                                        if ("roommate".equals(finalCategory)) {
+                                            message = fromName + "님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!";
+                                        } else {
+                                            message = fromName + "님으로부터 새로운 매칭 신청이 왔습니다!";
+                                        }
+                                    }
+                                    showTopInAppBanner(message);
+                                });
+
+                        // ✅ 새 알림 하나만 처리
+                        break;
                     }
                 });
 
@@ -173,22 +223,70 @@ public class HomeActivity extends AppCompatActivity {
                         String toId     = doc.getString("toID");
                         String state    = doc.getString("state");
                         String category = doc.getString("category");
-                        String toName   = toId != null ? toId : "상대";
 
-                        String message;
-                        if ("accepted".equals(state)) {
-                            message = toName + " 님이 매칭을 수락했습니다. 카카오톡 아이디를 확인해 보세요.";
-                        } else if ("rejected".equals(state)) {
-                            message = toName + " 님이 매칭을 거절했습니다.";
-                        } else {
-                            if ("roommate".equals(category)) {
-                                message = toName + " 님께 기숙사 룸메이트 매칭 신청을 보냈습니다!";
+                        if (toId == null || toId.isEmpty()) {
+                            String toName = "상대";
+                            String message;
+                            if ("accepted".equals(state)) {
+                                message = toName + "님이 매칭을 수락했습니다. 카카오톡 아이디를 확인해 보세요.";
+                            } else if ("rejected".equals(state)) {
+                                message = toName + "님이 매칭을 거절했습니다.";
                             } else {
-                                message = toName + " 님께 새로운 매칭 신청을 보냈습니다!";
+                                if ("roommate".equals(category)) {
+                                    message = toName + "님께 기숙사 룸메이트 매칭 신청을 보냈습니다!";
+                                } else {
+                                    message = toName + "님께 새로운 매칭 신청을 보냈습니다!";
+                                }
                             }
+                            showTopInAppBanner(message);
+                            break;
                         }
 
-                        showTopInAppBanner(message);
+                        // 🔥 toID 기준으로 Users.name 가져오기
+                        final String finalState = state;
+                        final String finalCategory = category;
+                        db.collection("Users")
+                                .document(toId)
+                                .get()
+                                .addOnSuccessListener(userDoc -> {
+                                    String name = userDoc.getString("name");
+                                    String toName = (name != null && !name.trim().isEmpty())
+                                            ? name
+                                            : toId;
+
+                                    String message;
+                                    if ("accepted".equals(finalState)) {
+                                        message = toName + "님이 매칭을 수락했습니다. 카카오톡 아이디를 확인해 보세요.";
+                                    } else if ("rejected".equals(finalState)) {
+                                        message = toName + "님이 매칭을 거절했습니다.";
+                                    } else {
+                                        if ("roommate".equals(finalCategory)) {
+                                            message = toName + "님께 기숙사 룸메이트 매칭 신청을 보냈습니다!";
+                                        } else {
+                                            message = toName + "님께 새로운 매칭 신청을 보냈습니다!";
+                                        }
+                                    }
+
+                                    showTopInAppBanner(message);
+                                })
+                                .addOnFailureListener(e -> {
+                                    String toName = toId;
+                                    String message;
+                                    if ("accepted".equals(finalState)) {
+                                        message = toName + "님이 매칭을 수락했습니다. 카카오톡 아이디를 확인해 보세요.";
+                                    } else if ("rejected".equals(finalState)) {
+                                        message = toName + "님이 매칭을 거절했습니다.";
+                                    } else {
+                                        if ("roommate".equals(finalCategory)) {
+                                            message = toName + "님께 기숙사 룸메이트 매칭 신청을 보냈습니다!";
+                                        } else {
+                                            message = toName + "님께 새로운 매칭 신청을 보냈습니다!";
+                                        }
+                                    }
+                                    showTopInAppBanner(message);
+                                });
+
+                        // ✅ 새 알림 하나만 처리
                         break;
                     }
                 });
