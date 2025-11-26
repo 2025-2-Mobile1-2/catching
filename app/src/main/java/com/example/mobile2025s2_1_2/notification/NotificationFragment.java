@@ -151,7 +151,6 @@ public class NotificationFragment extends Fragment {
 
                         String fromName = "  ";
                         String text;
-                        int popupType=0;
                         if ("accepted".equals(state)) {
                             text = fromName + " 님이 매칭을 수락했습니다.";
                         } else if ("rejected".equals(state)) {
@@ -168,8 +167,7 @@ public class NotificationFragment extends Fragment {
                                 fromId,
                                 state != null ? state : "request",
                                 category != null ? category : "roommate",
-                                true,
-                                popupType// 받은 탭
+                                true// 받은 탭
                         );
 
                         receivedList.add(item);
@@ -182,8 +180,10 @@ public class NotificationFragment extends Fragment {
                                     if (fetchedName != null) {
                                         if ("accepted".equals(item.state)) {
                                             item.text = fetchedName + " 님의 매칭을 수락했습니다.";
+                                            item.lastPopupType = 2;
                                         } else if ("rejected".equals(item.state)) {
                                             item.text = fetchedName + " 님의 매칭을 거절했습니다.";
+                                            item.lastPopupType = 4;
                                         } else {
                                             item.text = fetchedName + " 님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!";
                                         }
@@ -255,8 +255,7 @@ public class NotificationFragment extends Fragment {
                                 fromId,
                                 state != null ? state : "request",
                                 category != null ? category : "roommate",
-                                false,
-                                0  // 보낸 탭
+                                false// 보낸 탭
                         );
 
                         sentList.add(item);
@@ -290,20 +289,18 @@ public class NotificationFragment extends Fragment {
             }
             return;
         }
+        Log.d("NOTI_T", "k=" + item.lastPopupType );
 
         // 3) 받은 매칭 탭 클릭
-        if (item.clickedBefore) {
-            if (item.lastPopupType == 2) {
-                showConfirmPopup();
-            } else if (item.lastPopupType == 4) {
-                showRejectConfirmPopup();
-            }
-            return;
+        if (item.lastPopupType == 2) {
+            showConfirmPopup();
+        } else if (item.lastPopupType == 4) {
+            showRejectConfirmPopup();
+        }else{
+            item.clickedBefore = true;
+            item.lastPopupType = 1;
+            showProfilePopup();
         }
-
-        item.clickedBefore = true;
-        item.lastPopupType = 1;
-        showProfilePopup();
     }
 
     /** N 뱃지 읽음 처리 (isNewForA / isNewForB false로) */
@@ -467,26 +464,13 @@ public class NotificationFragment extends Fragment {
                 currentItem.state = "accepted";
                 currentItem.lastPopupType = 2;
             }
-
+            loadReceivedFromFirestore();
             showConfirmPopup();
         });
 
         // ✅ 거절 버튼
         btnReject.setOnClickListener(v -> {
             profileDialog.dismiss();
-
-            if (currentItem != null && currentItem.docId != null) {
-                db.collection("matching_status")
-                        .document(currentItem.docId)
-                        .update(
-                                "state", "rejected",
-                                "isNewForA", true,
-                                "isNewForB", false
-                        );
-
-                currentItem.state = "rejected";
-            }
-
             showRejectPopup();
         });
 
@@ -532,7 +516,6 @@ public class NotificationFragment extends Fragment {
         //확인 버튼
         View btnConfirm = confirmDialog.findViewById(R.id.btn_confirm_layout);
         btnConfirm.setOnClickListener(v -> confirmDialog.dismiss());
-
         confirmDialog.show();
     }
 
@@ -564,6 +547,18 @@ public class NotificationFragment extends Fragment {
         View btnReject = rejectDialog.findViewById(R.id.btn_reject_layout);
         btnReject.setOnClickListener(v -> {
             rejectDialog.dismiss();
+            if (currentItem != null && currentItem.docId != null) {
+                db.collection("matching_status")
+                        .document(currentItem.docId)
+                        .update(
+                                "state", "rejected",
+                                "isNewForA", true,
+                                "isNewForB", false
+                        );
+
+                currentItem.state = "rejected";
+            }
+            loadReceivedFromFirestore();
             showRejectConfirmPopup();
         });
 
@@ -619,7 +614,6 @@ public class NotificationFragment extends Fragment {
         //확인 버튼
         View btnConfirm = deleteDialog.findViewById(R.id.btn_confirm_layout);
         btnConfirm.setOnClickListener(v -> deleteDialog.dismiss());
-
         deleteDialog.show();
     }
 
