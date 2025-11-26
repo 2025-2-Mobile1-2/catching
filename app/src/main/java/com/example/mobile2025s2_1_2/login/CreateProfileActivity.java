@@ -346,7 +346,7 @@ public class CreateProfileActivity extends AppCompatActivity {
         String sleepTime = textViewSleepTime.getText().toString();
         String wakeTime = textViewWakeTime.getText().toString();
 
-        // 2. Map 생성
+        // 2. Map 생성//
         Map<String, Object> userProfile = new HashMap<>();
         userProfile.put("email", userEmail);
         userProfile.put("name", name);
