@@ -50,6 +50,7 @@ public class NotificationFragment extends Fragment {
     // 현재 클릭된 알람
     private AlarmItem currentItem;
     private String matchedUserName;
+    private String currnetUserName;
 
     // Firestore
     private FirebaseFirestore db;
@@ -80,6 +81,14 @@ public class NotificationFragment extends Fragment {
         currentUserEmail = prefs.getString("user_email", null);
 
         Log.d("NOTI_USER", "currentUserEmail = " + currentUserEmail);
+
+        db.collection("Users")
+                .document(currentUserEmail)
+                .get()
+                .addOnSuccessListener(docMyEmail ->{
+                    String userName = docMyEmail.getString("name");
+                    currnetUserName = userName;
+                });
 
         // 토글
         toggleReceived = view.findViewById(R.id.alarm_toggle_r);
@@ -142,6 +151,7 @@ public class NotificationFragment extends Fragment {
 
                         String fromName = "  ";
                         String text;
+                        int popupType=0;
                         if ("accepted".equals(state)) {
                             text = fromName + " 님이 매칭을 수락했습니다.";
                         } else if ("rejected".equals(state)) {
@@ -150,6 +160,7 @@ public class NotificationFragment extends Fragment {
                             text = fromName + " 님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!";
                         }
 
+
                         AlarmItem item = new AlarmItem(
                                 docId,
                                 text,
@@ -157,8 +168,10 @@ public class NotificationFragment extends Fragment {
                                 fromId,
                                 state != null ? state : "request",
                                 category != null ? category : "roommate",
-                                true   // 받은 탭
+                                true,
+                                popupType// 받은 탭
                         );
+
                         receivedList.add(item);
                         // 🔥 Firestore에서 이름 가져오면 item.text만 업데이트
                         db.collection("Users")
@@ -168,9 +181,9 @@ public class NotificationFragment extends Fragment {
                                     String fetchedName = docUser.getString("name");
                                     if (fetchedName != null) {
                                         if ("accepted".equals(item.state)) {
-                                            item.text = fetchedName + " 님이 매칭을 수락했습니다.";
+                                            item.text = fetchedName + " 님의 매칭을 수락했습니다.";
                                         } else if ("rejected".equals(item.state)) {
-                                            item.text = fetchedName + " 님이 매칭을 거절했습니다.";
+                                            item.text = fetchedName + " 님의 매칭을 거절했습니다.";
                                         } else {
                                             item.text = fetchedName + " 님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!";
                                         }
@@ -242,7 +255,8 @@ public class NotificationFragment extends Fragment {
                                 fromId,
                                 state != null ? state : "request",
                                 category != null ? category : "roommate",
-                                false  // 보낸 탭
+                                false,
+                                0  // 보낸 탭
                         );
 
                         sentList.add(item);
@@ -507,7 +521,7 @@ public class NotificationFragment extends Fragment {
         }else if(currentItem.category.equals("mentorship")){
             confirmCate.setText("진로·전공 멘토 매칭을 수락했어요!");
         }else{
-            confirmCate.setText("교내·교외 활동 팀원 매칭!");
+            confirmCate.setText("교내·교외 활동 팀원 매칭을 수락했어요!");
         }
 
         //매칭 메세지
@@ -537,12 +551,23 @@ public class NotificationFragment extends Fragment {
             );
         }
 
+        //이름
+        TextView userName = rejectDialog.findViewById(R.id.tv_name_reject);
+        userName.setText(matchedUserName);
+
+        //매칭 메세지
+        TextView rejectText = rejectDialog.findViewById(R.id.tv_sub_message);
+        rejectText.setText(currnetUserName+" 님께 더 좋은 매칭이 이뤄질 수 있게 캐칭이 더 \n노력할게요!");
+
+
+        //거절 버튼
         View btnReject = rejectDialog.findViewById(R.id.btn_reject_layout);
         btnReject.setOnClickListener(v -> {
             rejectDialog.dismiss();
             showRejectConfirmPopup();
         });
 
+        //취소 버튼
         View btnClose = rejectDialog.findViewById(R.id.btn_delete_layout);
         btnClose.setOnClickListener(v -> {
             rejectDialog.dismiss();
@@ -573,6 +598,25 @@ public class NotificationFragment extends Fragment {
             );
         }
 
+        //이름
+        TextView userName = deleteDialog.findViewById(R.id.tv_name_delete);
+        userName.setText(matchedUserName);
+
+        //매칭 카테고리 메세지
+        TextView deleteCate = deleteDialog.findViewById(R.id.tv_message);
+        if(currentItem.category.equals("roommate")){
+            deleteCate.setText("기숙사 룸메이트 매칭을 거절했어요!");
+        }else if(currentItem.category.equals("mentorship")){
+            deleteCate.setText("진로·전공 멘토 매칭을 거절했어요!");
+        }else{
+            deleteCate.setText("교내·교외 활동 팀원 매칭을 거절했어요!");
+        }
+
+        //매칭 메세지
+        TextView deletetText = deleteDialog.findViewById(R.id.tv_sub_message);
+        deletetText.setText(currnetUserName+" 님께 더 좋은 매칭이 이뤄질 수 있게 캐칭이 더 \n노력할게요!");
+
+        //확인 버튼
         View btnConfirm = deleteDialog.findViewById(R.id.btn_confirm_layout);
         btnConfirm.setOnClickListener(v -> deleteDialog.dismiss());
 

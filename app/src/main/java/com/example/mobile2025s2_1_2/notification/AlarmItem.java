@@ -23,7 +23,8 @@ public class AlarmItem {
                      String fromID,
                      String state,
                      String category,
-                     boolean isReceived) {
+                     boolean isReceived,
+                     int lastPopupType) {
         this.docId = docId;
         this.text = text;
         this.isNew = isNew;
@@ -32,7 +33,7 @@ public class AlarmItem {
         this.category = category;
         this.isReceived = isReceived;
         this.clickedBefore = false;
-        this.lastPopupType = 0;
+        this.lastPopupType = lastPopupType;
     }
 }
 
