@@ -152,11 +152,17 @@ public class NotificationFragment extends Fragment {
                         String fromName = "  ";
                         String text;
                         if ("accepted".equals(state)) {
-                            text = fromName + " 님이 매칭을 수락했습니다.";
+                            text = fromName + " 님의 매칭을 수락했습니다.";
                         } else if ("rejected".equals(state)) {
-                            text = fromName + " 님이 매칭을 거절했습니다.";
+                            text = fromName + " 님의 매칭을 거절했습니다.";
                         } else { // "request" 또는 null
-                            text = fromName + " 님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!";
+                            if(category.equals("roommate")){
+                                text = fromName + " 님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!";
+                            } else if(category.equals("mentorship")){
+                                text = fromName + " 님으로부터 진로·전공 멘토 매칭 신청이 왔습니다!";
+                            }else{
+                                text = fromName + " 님으로부터 교내·교외 활동 팀원 신청이 왔습니다!";
+                            }
                         }
 
 
@@ -185,7 +191,13 @@ public class NotificationFragment extends Fragment {
                                             item.text = fetchedName + " 님의 매칭을 거절했습니다.";
                                             item.lastPopupType = 4;
                                         } else {
-                                            item.text = fetchedName + " 님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!";
+                                            if(item.category.equals("roommate")){
+                                                item.text = fetchedName + " 님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!";
+                                            } else if(item.category.equals("mentorship")){
+                                                item.text = fetchedName + " 님으로부터 진로·전공 멘토 매칭 신청이 왔습니다!";
+                                            }else{
+                                                item.text = fetchedName + " 님으로부터 교내·교외 활동 팀원 신청이 왔습니다!";
+                                            }
                                         }
                                         matchedUserName = fetchedName;
                                         adapter.notifyDataSetChanged();
@@ -235,9 +247,7 @@ public class NotificationFragment extends Fragment {
                                         ", toID=" + toId +
                                         ", state=" + state);
 
-                        // TODO: 나중에 toId → users 컬렉션에서 이름 가져오기
-
-                        String toName = toId != null ? toId : "상대";
+                        String toName ="  ";
 
                         String text;
                         if ("accepted".equals(state)) {
@@ -245,7 +255,13 @@ public class NotificationFragment extends Fragment {
                         } else if ("rejected".equals(state)) {
                             text = toName + " 님이 매칭을 거절했습니다.";
                         } else { // "request" 또는 null
-                            text = toName + " 님께 기숙사 룸메이트 매칭 신청을 보냈습니다!";
+                            if(category.equals("roommate")){
+                                text = toName + " 님께 기숙사 룸메이트 매칭 신청을 보냈습니다!";
+                            } else if(category.equals("mentorship")){
+                                text = toName + " 님께 진로·전공 멘토 매칭 신청을 보냈습니다!";
+                            }else{
+                                text = toName + " 님께 교내·교외 활동 팀원 신청을 보냈습니다!";
+                            }
                         }
 
                         AlarmItem item = new AlarmItem(
@@ -259,6 +275,30 @@ public class NotificationFragment extends Fragment {
                         );
 
                         sentList.add(item);
+                        // 🔥 Firestore에서 이름 가져오면 item.text만 업데이트
+                        db.collection("Users")
+                                .document(toId)
+                                .get()
+                                .addOnSuccessListener(doctoUser -> {
+                                    String fetchedName = doctoUser.getString("name");
+                                    if (fetchedName != null) {
+                                        if ("accepted".equals(item.state)) {
+                                            item.text = fetchedName + " 님이 매칭을 수락했습니다.";
+                                        } else if ("rejected".equals(item.state)) {
+                                            item.text = fetchedName + " 님이 매칭을 거절했습니다.";
+                                        } else {
+                                            if(item.category.equals("roommate")){
+                                                item.text = fetchedName + " 님께 기숙사 룸메이트 매칭 신청을 보냈습니다!";
+                                            } else if(item.category.equals("mentorship")){
+                                                item.text = fetchedName + " 님께 진로·전공 멘토 매칭 신청을 보냈습니다!";
+                                            }else{
+                                                item.text = fetchedName + " 님께 교내·교외 활동 팀원 신청을 보냈습니다!";
+                                            }
+                                        }
+                                        matchedUserName = fetchedName;
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                });
                     }
 
                     adapter = new AlarmAdapter(
@@ -631,6 +671,9 @@ public class NotificationFragment extends Fragment {
                     ViewGroup.LayoutParams.MATCH_PARENT
             );
         }
+
+        TextView userName = kakaoDialog.findViewById(R.id.tv_line1);
+        userName.setText(matchedUserName+" 님의 카카오톡 아이디는");
 
         View btnCopy = kakaoDialog.findViewById(R.id.btn_copy);
         if (btnCopy != null) {
