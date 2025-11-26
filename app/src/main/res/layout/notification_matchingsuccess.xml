@@ -9,7 +9,7 @@
     android:background="@drawable/notification_matchingsuccess"
     android:paddingStart="20dp"
     android:paddingEnd="20dp"
-    android:paddingTop="22dp"
+    android:paddingTop="30dp"
     android:paddingBottom="22dp"
     android:elevation="6dp"
     android:layout_gravity="center">
