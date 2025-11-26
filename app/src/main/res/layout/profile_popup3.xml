@@ -54,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="정말 거절할 건가요? ㅜㅜ"
+                android:text="정말 거절하실 건가요? ㅜㅜ"
                 android:textSize="14sp"
                 android:textColor="#6BDBB4"
                 android:gravity="center" />
@@ -64,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="김국민 님께 더 좋은 매칭이 이뤄질 수 있게 캐칭이 더 \n노력할게요!"
+                android:text="김국민님께 더 좋은 매칭이 이뤄질 수 있게\n캐칭이 더 노력할게요!"
                 android:textSize="12sp"
                 android:textColor="#666666"
                 android:gravity="center" />
