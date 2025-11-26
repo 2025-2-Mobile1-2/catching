@@ -50,7 +50,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.home_main);
 
         // ───────── 공지사항 미리보기 ─────────
-        ImageView noticeGo = findViewById(R.id.home_notice_go);
+        View noticeGo = findViewById(R.id.home_notice_go);
         noticeGo.setOnClickListener(v -> getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, new NoticeFragment())
@@ -66,7 +66,7 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         // ───────── 학사공지 미리보기 ─────────
-        ImageView schoolGo = findViewById(R.id.home_school_go);
+        View schoolGo = findViewById(R.id.home_school_go);
         schoolGo.setOnClickListener(v -> getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, new SchoolFragment())
