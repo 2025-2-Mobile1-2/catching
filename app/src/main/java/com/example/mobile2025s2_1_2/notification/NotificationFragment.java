@@ -1,6 +1,9 @@
 package com.example.mobile2025s2_1_2.notification;
 
 import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -14,7 +17,6 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,12 +28,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mobile2025s2_1_2.R;
 import com.example.mobile2025s2_1_2.utils.BottomNavBarHelper;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NotificationFragment extends Fragment {
 
@@ -49,8 +54,6 @@ public class NotificationFragment extends Fragment {
 
     // 현재 클릭된 알람
     private AlarmItem currentItem;
-    private String matchedUserName;
-    private String currnetUserName;
 
     // Firestore
     private FirebaseFirestore db;
@@ -60,6 +63,14 @@ public class NotificationFragment extends Fragment {
     private final List<AlarmItem> receivedList = new ArrayList<>();
     private final List<AlarmItem> sentList     = new ArrayList<>();
 
+    // 이메일 → 이름 / 카카오 아이디 캐시
+    private final Map<String, String> nameCache  = new HashMap<>();
+    private final Map<String, String> kakaoCache = new HashMap<>();
+
+    // 콜백용 인터페이스
+    private interface StringCallback {
+        void onResult(@Nullable String value);
+    }
 
     @Nullable
     @Override
@@ -81,14 +92,6 @@ public class NotificationFragment extends Fragment {
         currentUserEmail = prefs.getString("user_email", null);
 
         Log.d("NOTI_USER", "currentUserEmail = " + currentUserEmail);
-
-        db.collection("Users")
-                .document(currentUserEmail)
-                .get()
-                .addOnSuccessListener(docMyEmail ->{
-                    String userName = docMyEmail.getString("name");
-                    currnetUserName = userName;
-                });
 
         // 토글
         toggleReceived = view.findViewById(R.id.alarm_toggle_r);
@@ -119,12 +122,16 @@ public class NotificationFragment extends Fragment {
         return view;
     }
 
+    // ============================================================
+    //  Firestore에서 데이터 불러오기
+    // ============================================================
+
     /** Firestore에서 받은 매칭 불러오기 (toID == 나) */
     private void loadReceivedFromFirestore() {
         if (db == null || currentUserEmail == null) return;
 
         db.collection("matching_status")
-                // ★ 여기서는 전체 가져오고
+                // 지금은 전체를 가져온 뒤, 코드에서 toID == currentUserEmail만 필터
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(snap -> {
@@ -138,7 +145,7 @@ public class NotificationFragment extends Fragment {
                         String category = doc.getString("category");
                         Boolean isNewForB = doc.getBoolean("isNewForB");
 
-                        // 🔥 내가 받은 알림만 남기기
+                        // 내가 받은 알림만 남기기
                         if (toId == null || !toId.equals(currentUserEmail)) {
                             continue;
                         }
@@ -149,60 +156,25 @@ public class NotificationFragment extends Fragment {
                                         ", toID=" + toId +
                                         ", state=" + state);
 
-                        String fromName = "  ";
-                        String text;
-                        if ("accepted".equals(state)) {
-                            text = fromName + " 님의 매칭을 수락했습니다.";
-                        } else if ("rejected".equals(state)) {
-                            text = fromName + " 님의 매칭을 거절했습니다.";
-                        } else { // "request" 또는 null
-                            if(category.equals("roommate")){
-                                text = fromName + " 님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!";
-                            } else if(category.equals("mentorship")){
-                                text = fromName + " 님으로부터 진로·전공 멘토 매칭 신청이 왔습니다!";
-                            }else{
-                                text = fromName + " 님으로부터 교내·교외 활동 팀원 신청이 왔습니다!";
-                            }
-                        }
+                        String display = (fromId != null) ? fromId : "상대";
+                        String safeState    = (state != null) ? state : "request";
+                        String safeCategory = (category != null) ? category : "roommate";
 
+                        // 일단 이메일 기준으로 문장 생성 (이름은 나중에 갱신)
+                        String text = buildReceivedText(display, safeState, safeCategory);
 
                         AlarmItem item = new AlarmItem(
                                 docId,
                                 text,
                                 Boolean.TRUE.equals(isNewForB),
                                 fromId,
-                                state != null ? state : "request",
-                                category != null ? category : "roommate",
-                                true// 받은 탭
+                                safeState,
+                                safeCategory,
+                                true,       // 받은 탭
+                                fromId      // otherEmail: 상대 이메일 = fromID
                         );
 
                         receivedList.add(item);
-                        // 🔥 Firestore에서 이름 가져오면 item.text만 업데이트
-                        db.collection("Users")
-                                .document(fromId)
-                                .get()
-                                .addOnSuccessListener(docUser -> {
-                                    String fetchedName = docUser.getString("name");
-                                    if (fetchedName != null) {
-                                        if ("accepted".equals(item.state)) {
-                                            item.text = fetchedName + " 님의 매칭을 수락했습니다.";
-                                            item.lastPopupType = 2;
-                                        } else if ("rejected".equals(item.state)) {
-                                            item.text = fetchedName + " 님의 매칭을 거절했습니다.";
-                                            item.lastPopupType = 4;
-                                        } else {
-                                            if(item.category.equals("roommate")){
-                                                item.text = fetchedName + " 님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!";
-                                            } else if(item.category.equals("mentorship")){
-                                                item.text = fetchedName + " 님으로부터 진로·전공 멘토 매칭 신청이 왔습니다!";
-                                            }else{
-                                                item.text = fetchedName + " 님으로부터 교내·교외 활동 팀원 신청이 왔습니다!";
-                                            }
-                                        }
-                                        matchedUserName = fetchedName;
-                                        adapter.notifyDataSetChanged();
-                                    }
-                                });
                     }
 
                     adapter = new AlarmAdapter(
@@ -211,10 +183,24 @@ public class NotificationFragment extends Fragment {
                             (item, isReceivedList) -> handleAlarmClick(item, isReceivedList)
                     );
                     recycler.setAdapter(adapter);
+
+                    // 🔥 이메일 → 이름으로 갱신
+                    for (int i = 0; i < receivedList.size(); i++) {
+                        final int index = i;
+                        AlarmItem item = receivedList.get(i);
+                        final String email = item.otherEmail;
+
+                        if (email == null) continue;
+
+                        fetchUserNameByEmail(email, name -> {
+                            if (name == null) return;
+                            String newText = buildReceivedText(name, item.state, item.category);
+                            item.text = newText;
+                            adapter.notifyItemChanged(index);
+                        });
+                    }
                 })
-                .addOnFailureListener(e -> {
-                    Log.e("NOTI_REC", "loadReceivedFromFirestore error", e);
-                });
+                .addOnFailureListener(e -> Log.e("NOTI_REC", "loadReceivedFromFirestore error", e));
     }
 
     /** Firestore에서 보낸 매칭 불러오기 (fromID == 나) */
@@ -222,7 +208,6 @@ public class NotificationFragment extends Fragment {
         if (db == null || currentUserEmail == null) return;
 
         db.collection("matching_status")
-                // ★ 여기서도 전체 가져오고
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(snap -> {
@@ -236,7 +221,7 @@ public class NotificationFragment extends Fragment {
                         String category = doc.getString("category");
                         Boolean isNewForA = doc.getBoolean("isNewForA");
 
-                        // 🔥 내가 보낸 알림만 남기기
+                        // 내가 보낸 알림만 남기기
                         if (fromId == null || !fromId.equals(currentUserEmail)) {
                             continue;
                         }
@@ -247,58 +232,24 @@ public class NotificationFragment extends Fragment {
                                         ", toID=" + toId +
                                         ", state=" + state);
 
-                        String toName ="  ";
+                        String display = (toId != null) ? toId : "상대";
+                        String safeState    = (state != null) ? state : "request";
+                        String safeCategory = (category != null) ? category : "roommate";
 
-                        String text;
-                        if ("accepted".equals(state)) {
-                            text = toName + " 님이 매칭을 수락했습니다. 카카오톡 아이디를 확인해 보세요.";
-                        } else if ("rejected".equals(state)) {
-                            text = toName + " 님이 매칭을 거절했습니다.";
-                        } else { // "request" 또는 null
-                            if(category.equals("roommate")){
-                                text = toName + " 님께 기숙사 룸메이트 매칭 신청을 보냈습니다!";
-                            } else if(category.equals("mentorship")){
-                                text = toName + " 님께 진로·전공 멘토 매칭 신청을 보냈습니다!";
-                            }else{
-                                text = toName + " 님께 교내·교외 활동 팀원 신청을 보냈습니다!";
-                            }
-                        }
+                        String text = buildSentText(display, safeState, safeCategory);
 
                         AlarmItem item = new AlarmItem(
                                 docId,
                                 text,
                                 Boolean.TRUE.equals(isNewForA),
                                 fromId,
-                                state != null ? state : "request",
-                                category != null ? category : "roommate",
-                                false// 보낸 탭
+                                safeState,
+                                safeCategory,
+                                false,      // 보낸 탭
+                                toId        // otherEmail: 상대 이메일 = toID
                         );
 
                         sentList.add(item);
-                        // 🔥 Firestore에서 이름 가져오면 item.text만 업데이트
-                        db.collection("Users")
-                                .document(toId)
-                                .get()
-                                .addOnSuccessListener(doctoUser -> {
-                                    String fetchedName = doctoUser.getString("name");
-                                    if (fetchedName != null) {
-                                        if ("accepted".equals(item.state)) {
-                                            item.text = fetchedName + " 님이 매칭을 수락했습니다.";
-                                        } else if ("rejected".equals(item.state)) {
-                                            item.text = fetchedName + " 님이 매칭을 거절했습니다.";
-                                        } else {
-                                            if(item.category.equals("roommate")){
-                                                item.text = fetchedName + " 님께 기숙사 룸메이트 매칭 신청을 보냈습니다!";
-                                            } else if(item.category.equals("mentorship")){
-                                                item.text = fetchedName + " 님께 진로·전공 멘토 매칭 신청을 보냈습니다!";
-                                            }else{
-                                                item.text = fetchedName + " 님께 교내·교외 활동 팀원 신청을 보냈습니다!";
-                                            }
-                                        }
-                                        matchedUserName = fetchedName;
-                                        adapter.notifyDataSetChanged();
-                                    }
-                                });
                     }
 
                     adapter = new AlarmAdapter(
@@ -307,40 +258,167 @@ public class NotificationFragment extends Fragment {
                             (item, isReceivedList) -> handleAlarmClick(item, isReceivedList)
                     );
                     recycler.setAdapter(adapter);
+
+                    // 🔥 이메일 → 이름으로 갱신
+                    for (int i = 0; i < sentList.size(); i++) {
+                        final int index = i;
+                        AlarmItem item = sentList.get(i);
+                        final String email = item.otherEmail;
+
+                        if (email == null) continue;
+
+                        fetchUserNameByEmail(email, name -> {
+                            if (name == null) return;
+                            String newText = buildSentText(name, item.state, item.category);
+                            item.text = newText;
+                            adapter.notifyItemChanged(index);
+                        });
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("NOTI_SENT", "loadSentFromFirestore error", e));
+    }
+
+    // ============================================================
+    //  이메일 → 이름 / 카카오아이디 유틸
+    // ============================================================
+
+    private void fetchUserNameByEmail(@Nullable String email, @NonNull StringCallback callback) {
+        if (email == null || db == null) {
+            callback.onResult(null);
+            return;
+        }
+
+        // 캐시 먼저 확인
+        if (nameCache.containsKey(email)) {
+            callback.onResult(nameCache.get(email));
+            return;
+        }
+
+        db.collection("Users")
+                .whereEqualTo("email", email)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(snap -> {
+                    String name = null;
+                    if (!snap.isEmpty()) {
+                        name = snap.getDocuments().get(0).getString("name");
+                    }
+                    if (name == null || name.isEmpty()) {
+                        name = email;  // fallback
+                    }
+                    nameCache.put(email, name);
+                    callback.onResult(name);
                 })
                 .addOnFailureListener(e -> {
-                    Log.e("NOTI_SENT", "loadSentFromFirestore error", e);
+                    Log.e("USER_NAME", "fetchUserNameByEmail error", e);
+                    callback.onResult(email);  // 실패 시 이메일 그대로
                 });
     }
+
+    private void fetchKakaoIdByEmail(@Nullable String email, @NonNull StringCallback callback) {
+        if (email == null || db == null) {
+            callback.onResult(null);
+            return;
+        }
+
+        // 캐시 먼저 확인
+        if (kakaoCache.containsKey(email)) {
+            callback.onResult(kakaoCache.get(email));
+            return;
+        }
+
+        db.collection("Users")
+                .whereEqualTo("email", email)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(snap -> {
+                    String kakaoId = null;
+                    if (!snap.isEmpty()) {
+                        kakaoId = snap.getDocuments().get(0).getString("kakaoId");
+                    }
+                    if (kakaoId == null || kakaoId.isEmpty()) {
+                        kakaoId = null; // 아이디 없으면 null로 두고, 나중에 문구 처리
+                    }
+                    kakaoCache.put(email, kakaoId);
+                    callback.onResult(kakaoId);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("USER_KAKAO", "fetchKakaoIdByEmail error", e);
+                    callback.onResult(null);
+                });
+    }
+
+    // ============================================================
+    //  알림 문구 생성
+    // ============================================================
+
+    private String buildReceivedText(String displayName, String state, String category) {
+        if ("accepted".equals(state)) {
+            return displayName + " 님이 매칭을 수락했습니다.";
+        } else if ("rejected".equals(state)) {
+            return displayName + " 님이 매칭을 거절했습니다.";
+        } else {
+            if ("roommate".equals(category)) {
+                return displayName + " 님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!";
+            } else {
+                return displayName + " 님으로부터 새로운 매칭 신청이 왔습니다!";
+            }
+        }
+    }
+
+    private String buildSentText(String displayName, String state, String category) {
+        if ("accepted".equals(state)) {
+            return displayName + " 님이 매칭을 수락했습니다. 카카오톡 아이디를 확인해 보세요.";
+        } else if ("rejected".equals(state)) {
+            return displayName + " 님이 매칭을 거절했습니다.";
+        } else {
+            if ("roommate".equals(category)) {
+                return displayName + " 님께 기숙사 룸메이트 매칭 신청을 보냈습니다!";
+            } else {
+                return displayName + " 님께 새로운 매칭 신청을 보냈습니다!";
+            }
+        }
+    }
+
+    // ============================================================
+    //  클릭 처리 & 배지 처리
+    // ============================================================
 
     /** 알람 아이템 클릭 처리 공통 로직 */
     private void handleAlarmClick(AlarmItem item, boolean isReceivedList) {
         currentItem = item;
 
-        // 1) Firestore에 읽음 처리 요청 (배지는 Adapter 쪽에서 바로 숨김)
+        // 1) Firestore에 읽음 처리 (배지는 AlarmAdapter에서 바로 숨김)
         markAlarmRead(item, isReceivedList);
 
         // 2) 보낸 매칭 탭 클릭
         if (!isReceivedList) {
             if ("accepted".equals(item.state)) {
+                // 수락된 매칭 → 카카오톡 아이디 팝업
                 showKakaoPopup();
             } else if ("rejected".equals(item.state)) {
+                // 거절된 매칭 → 거절 확인 팝업
                 showRejectConfirmPopup();
             }
             return;
         }
-        Log.d("NOTI_T", "k=" + item.lastPopupType );
 
         // 3) 받은 매칭 탭 클릭
-        if (item.lastPopupType == 2) {
-            showConfirmPopup();
-        } else if (item.lastPopupType == 4) {
-            showRejectConfirmPopup();
-        }else{
-            item.clickedBefore = true;
-            item.lastPopupType = 1;
-            showProfilePopup();
+
+        // 이미 눌린 적 있음 → 마지막 팝업 다시 띄우기
+        if (item.clickedBefore) {
+            if (item.lastPopupType == 2) {
+                showConfirmPopup();
+            } else if (item.lastPopupType == 4) {
+                showRejectConfirmPopup();
+            }
+            return;
         }
+
+        // 처음 클릭 → 프로필 팝업
+        item.clickedBefore = true;
+        item.lastPopupType = 1;
+        showProfilePopup();
     }
 
     /** N 뱃지 읽음 처리 (isNewForA / isNewForB false로) */
@@ -382,9 +460,10 @@ public class NotificationFragment extends Fragment {
         }
     }
 
-    // ================== 팝업 로직들 ==================
+    // ============================================================
+    //  팝업들
+    // ============================================================
 
-    //룸메이트 팝업
     public void showProfilePopup() {
         profileDialog = new Dialog(requireContext());
         profileDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -400,7 +479,6 @@ public class NotificationFragment extends Fragment {
             );
         }
 
-        //닫기 버튼
         ImageView btnClose = profileDialog.findViewById(R.id.btn_close);
         btnClose.setOnClickListener(v -> {
             profileDialog.dismiss();
@@ -411,80 +489,6 @@ public class NotificationFragment extends Fragment {
             }
         });
 
-
-        //상대 유저 정보
-        db.collection("Users")
-                .document(currentItem.fromID)
-                .get()
-                .addOnSuccessListener(doc -> {
-                    String name = doc.getString("name");
-                    String gender = doc.getString("gender");
-                    String dorm = doc.getString("dorm");
-                    String age = doc.getString("age");
-                    String mbti = doc.getString("mbti");
-                    String drink = doc.getString("drink");
-                    String smoking = doc.getString("smoking");
-                    String clean = doc.getString("clean");
-                    String sleep = doc.getString("sleep");
-                    String sensitive = doc.getString("sensitive");
-                    String sleepTime = doc.getString("sleepTime");
-                    String wakeTime = doc.getString("wakeTime");
-
-                    //정보 연결하기
-                    TextView userName = profileDialog.findViewById(R.id.roommate_name);
-                    userName.setText(name != null ? name : "정보 없음");
-
-                    TextView userGender = profileDialog.findViewById(R.id.roommate_gender);
-                    userGender.setText(gender != null ? gender : "정보 없음");
-
-                    TextView userDorm = profileDialog.findViewById(R.id.roommate_dormitory);
-                    userDorm.setText(dorm != null ? dorm : "정보 없음");
-
-                    TextView userAge = profileDialog.findViewById(R.id.roommate_age);
-                    userAge.setText(age != null ? age : "정보 없음");
-
-                    TextView userMbti = profileDialog.findViewById(R.id.roommate_mbti);
-                    userMbti.setText(mbti != null ? mbti : "정보 없음");
-
-                    TextView userDrink = profileDialog.findViewById(R.id.roommate_drink);
-                    userDrink.setText(drink != null ? "음주 " + drink : "정보 없음");
-
-                    TextView userSmoke = profileDialog.findViewById(R.id.roommate_smoke);
-                    userSmoke.setText(smoking != null ? "흡연 " + smoking : "정보 없음");
-
-                    //자고 일어나는 시간
-                    TextView userSleepTime = profileDialog.findViewById(R.id.roommate_time);
-                    String timeText;
-                    if (sleepTime != null && wakeTime != null) {
-                        timeText = sleepTime + " ~ " + wakeTime;
-                    } else if (sleepTime != null) {
-                        timeText = sleepTime;
-                    } else if (wakeTime != null) {
-                        timeText = wakeTime;
-                    } else {
-                        timeText = "정보 없음";
-                    }
-                    userSleepTime.setText(timeText);
-
-                    TextView userCleanValue = profileDialog.findViewById(R.id.roommate_clean_value);
-                    userCleanValue.setText(clean != null ? clean : "정보 없음");
-                    SeekBar userCleanBar = profileDialog.findViewById(R.id.roommate_clean_seekbar);
-                    userCleanBar.setProgress(Integer.parseInt(clean != null ? clean : "0"));
-
-                    TextView userSleepValue = profileDialog.findViewById(R.id.roommate_sleep_value);
-                    userSleepValue.setText(sleep != null ? sleep : "정보 없음");
-                    SeekBar userSleepBar = profileDialog.findViewById(R.id.roommate_sleep_seekbar);
-                    userSleepBar.setProgress(Integer.parseInt(sleep != null ? sleep : "0"));
-
-                    TextView userSensitiveValue = profileDialog.findViewById(R.id.roommate_sensitive_value);
-                    userSensitiveValue.setText(sensitive != null ? sensitive : "정보 없음");
-                    SeekBar userSensitivepBar = profileDialog.findViewById(R.id.roommate_sensitive_seekbar);
-                    userSensitivepBar.setProgress(Integer.parseInt(sensitive != null ? sensitive : "0"));
-
-
-                });
-
-        //수락, 취소 버튼
         ImageView btnAccept = profileDialog.findViewById(R.id.btn_accept);
         ImageView btnReject = profileDialog.findViewById(R.id.btn_reject);
 
@@ -504,13 +508,26 @@ public class NotificationFragment extends Fragment {
                 currentItem.state = "accepted";
                 currentItem.lastPopupType = 2;
             }
-            loadReceivedFromFirestore();
+
             showConfirmPopup();
         });
 
         // ✅ 거절 버튼
         btnReject.setOnClickListener(v -> {
             profileDialog.dismiss();
+
+            if (currentItem != null && currentItem.docId != null) {
+                db.collection("matching_status")
+                        .document(currentItem.docId)
+                        .update(
+                                "state", "rejected",
+                                "isNewForA", true,
+                                "isNewForB", false
+                        );
+
+                currentItem.state = "rejected";
+            }
+
             showRejectPopup();
         });
 
@@ -534,28 +551,9 @@ public class NotificationFragment extends Fragment {
             );
         }
 
-        //매칭 유저 이름
-        TextView userName = confirmDialog.findViewById(R.id.tv_name_confirm);
-        userName.setText(matchedUserName);
-
-        //매칭 카테고리 메세지
-        TextView confirmCate = confirmDialog.findViewById(R.id.tv_message);
-        if(currentItem.category.equals("roommate")){
-            confirmCate.setText("기숙사 룸메이트 매칭을 수락했어요!");
-        }else if(currentItem.category.equals("mentorship")){
-            confirmCate.setText("진로·전공 멘토 매칭을 수락했어요!");
-        }else{
-            confirmCate.setText("교내·교외 활동 팀원 매칭을 수락했어요!");
-        }
-
-        //매칭 메세지
-        TextView confirmText = confirmDialog.findViewById(R.id.tv_sub_message);
-        confirmText.setText(matchedUserName+" 님과 24시간 이야기나 정말 수준의\n 대화를 기대하세요!");
-
-
-        //확인 버튼
         View btnConfirm = confirmDialog.findViewById(R.id.btn_confirm_layout);
         btnConfirm.setOnClickListener(v -> confirmDialog.dismiss());
+
         confirmDialog.show();
     }
 
@@ -574,35 +572,12 @@ public class NotificationFragment extends Fragment {
             );
         }
 
-        //이름
-        TextView userName = rejectDialog.findViewById(R.id.tv_name_reject);
-        userName.setText(matchedUserName);
-
-        //매칭 메세지
-        TextView rejectText = rejectDialog.findViewById(R.id.tv_sub_message);
-        rejectText.setText(currnetUserName+" 님께 더 좋은 매칭이 이뤄질 수 있게 캐칭이 더 \n노력할게요!");
-
-
-        //거절 버튼
         View btnReject = rejectDialog.findViewById(R.id.btn_reject_layout);
         btnReject.setOnClickListener(v -> {
             rejectDialog.dismiss();
-            if (currentItem != null && currentItem.docId != null) {
-                db.collection("matching_status")
-                        .document(currentItem.docId)
-                        .update(
-                                "state", "rejected",
-                                "isNewForA", true,
-                                "isNewForB", false
-                        );
-
-                currentItem.state = "rejected";
-            }
-            loadReceivedFromFirestore();
             showRejectConfirmPopup();
         });
 
-        //취소 버튼
         View btnClose = rejectDialog.findViewById(R.id.btn_delete_layout);
         btnClose.setOnClickListener(v -> {
             rejectDialog.dismiss();
@@ -633,27 +608,9 @@ public class NotificationFragment extends Fragment {
             );
         }
 
-        //이름
-        TextView userName = deleteDialog.findViewById(R.id.tv_name_delete);
-        userName.setText(matchedUserName);
-
-        //매칭 카테고리 메세지
-        TextView deleteCate = deleteDialog.findViewById(R.id.tv_message);
-        if(currentItem.category.equals("roommate")){
-            deleteCate.setText("기숙사 룸메이트 매칭을 거절했어요!");
-        }else if(currentItem.category.equals("mentorship")){
-            deleteCate.setText("진로·전공 멘토 매칭을 거절했어요!");
-        }else{
-            deleteCate.setText("교내·교외 활동 팀원 매칭을 거절했어요!");
-        }
-
-        //매칭 메세지
-        TextView deletetText = deleteDialog.findViewById(R.id.tv_sub_message);
-        deletetText.setText(currnetUserName+" 님께 더 좋은 매칭이 이뤄질 수 있게 캐칭이 더 \n노력할게요!");
-
-        //확인 버튼
         View btnConfirm = deleteDialog.findViewById(R.id.btn_confirm_layout);
         btnConfirm.setOnClickListener(v -> deleteDialog.dismiss());
+
         deleteDialog.show();
     }
 
@@ -672,15 +629,53 @@ public class NotificationFragment extends Fragment {
             );
         }
 
-        TextView userName = kakaoDialog.findViewById(R.id.tv_line1);
-        userName.setText(matchedUserName+" 님의 카카오톡 아이디는");
+        TextView tvLine1   = kakaoDialog.findViewById(R.id.tv_line1);
+        TextView tvKakaoId = kakaoDialog.findViewById(R.id.tv_kakao_id);
+        MaterialButton btnCopy = kakaoDialog.findViewById(R.id.btn_copy);
 
-        View btnCopy = kakaoDialog.findViewById(R.id.btn_copy);
+        // 현재 선택된 알림의 상대 이메일
+        final String email = (currentItem != null) ? currentItem.otherEmail : null;
+
+        // 복사용으로 실제 kakaoId를 보관
+        final String[] kakaoHolder = new String[1];
+        kakaoHolder[0] = null;
+
+        // 1) 이름 세팅
+        fetchUserNameByEmail(email, name -> {
+            if (tvLine1 == null) return;
+            String who = (name != null && !name.isEmpty())
+                    ? name
+                    : (email != null ? email : "상대");
+            tvLine1.setText(who + "님의 카카오톡 아이디는");
+        });
+
+        // 2) 카카오 아이디 세팅
+        fetchKakaoIdByEmail(email, kakaoId -> {
+            if (tvKakaoId == null) return;
+
+            if (kakaoId == null || kakaoId.isEmpty()) {
+                tvKakaoId.setText("등록된 아이디 없음");
+                kakaoHolder[0] = null;
+            } else {
+                tvKakaoId.setText(kakaoId);
+                kakaoHolder[0] = kakaoId;
+            }
+        });
+
+        // 3) 복사 버튼
         if (btnCopy != null) {
-            btnCopy.setOnClickListener(v -> kakaoDialog.dismiss());
+            btnCopy.setOnClickListener(v -> {
+                if (kakaoHolder[0] != null) {
+                    ClipboardManager cm = (ClipboardManager)
+                            requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                    if (cm != null) {
+                        cm.setPrimaryClip(ClipData.newPlainText("kakaoId", kakaoHolder[0]));
+                    }
+                }
+                kakaoDialog.dismiss();
+            });
         }
 
         kakaoDialog.show();
     }
 }
-//
