@@ -44,7 +44,7 @@
                 android:layout_marginTop="16dp"
                 android:text="최북악"
                 android:textSize="20sp"
-                android:textStyle="bold"
+                android:fontFamily="@font/bold"
                 android:textColor="@android:color/black" />
 
             <!-- 메시지 -->

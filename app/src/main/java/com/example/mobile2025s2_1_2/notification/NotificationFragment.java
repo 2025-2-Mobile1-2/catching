@@ -49,6 +49,7 @@ public class NotificationFragment extends Fragment {
 
     // 현재 클릭된 알람
     private AlarmItem currentItem;
+    private String matchedUserName;
 
     // Firestore
     private FirebaseFirestore db;
@@ -57,6 +58,7 @@ public class NotificationFragment extends Fragment {
     // 메모리 캐시용 리스트
     private final List<AlarmItem> receivedList = new ArrayList<>();
     private final List<AlarmItem> sentList     = new ArrayList<>();
+
 
     @Nullable
     @Override
@@ -165,7 +167,6 @@ public class NotificationFragment extends Fragment {
                                 .addOnSuccessListener(docUser -> {
                                     String fetchedName = docUser.getString("name");
                                     if (fetchedName != null) {
-
                                         if ("accepted".equals(item.state)) {
                                             item.text = fetchedName + " 님이 매칭을 수락했습니다.";
                                         } else if ("rejected".equals(item.state)) {
@@ -173,7 +174,7 @@ public class NotificationFragment extends Fragment {
                                         } else {
                                             item.text = fetchedName + " 님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!";
                                         }
-
+                                        matchedUserName = fetchedName;
                                         adapter.notifyDataSetChanged();
                                     }
                                 });
@@ -432,9 +433,6 @@ public class NotificationFragment extends Fragment {
 
                 });
 
-
-
-
         //수락, 취소 버튼
         ImageView btnAccept = profileDialog.findViewById(R.id.btn_accept);
         ImageView btnReject = profileDialog.findViewById(R.id.btn_reject);
@@ -498,6 +496,26 @@ public class NotificationFragment extends Fragment {
             );
         }
 
+        //매칭 유저 이름
+        TextView userName = confirmDialog.findViewById(R.id.tv_name_confirm);
+        userName.setText(matchedUserName);
+
+        //매칭 카테고리 메세지
+        TextView confirmCate = confirmDialog.findViewById(R.id.tv_message);
+        if(currentItem.category.equals("roommate")){
+            confirmCate.setText("기숙사 룸메이트 매칭을 수락했어요!");
+        }else if(currentItem.category.equals("mentorship")){
+            confirmCate.setText("진로·전공 멘토 매칭을 수락했어요!");
+        }else{
+            confirmCate.setText("교내·교외 활동 팀원 매칭!");
+        }
+
+        //매칭 메세지
+        TextView confirmText = confirmDialog.findViewById(R.id.tv_sub_message);
+        confirmText.setText(matchedUserName+" 님과 24시간 이야기나 정말 수준의\n 대화를 기대하세요!");
+
+
+        //확인 버튼
         View btnConfirm = confirmDialog.findViewById(R.id.btn_confirm_layout);
         btnConfirm.setOnClickListener(v -> confirmDialog.dismiss());
 

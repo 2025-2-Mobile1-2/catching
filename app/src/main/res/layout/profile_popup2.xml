@@ -69,7 +69,6 @@
                 android:gravity="center" />
 
             <!-- 확인 버튼 -->
-            <!-- 확인 버튼 -->
             <FrameLayout
                 android:id="@+id/btn_confirm_layout"
                 android:layout_width="200dp"
