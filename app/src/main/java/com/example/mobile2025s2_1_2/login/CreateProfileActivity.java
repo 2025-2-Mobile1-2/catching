@@ -45,6 +45,7 @@ public class CreateProfileActivity extends AppCompatActivity {
 
     // UI 멤버 변수
     private EditText editTextName;
+    private EditText editTextKakao;
     private Spinner spinnerGender, spinnerDormitory, spinnerAge, spinnerMbti, spinnerAlcohol, spinnerSmoking;
     private SeekBar seekBarCleanliness, seekBarSnoring, seekBarSensitivity;
     private TextView valueLabel1, valueLabel2, valueLabel3;
@@ -103,6 +104,7 @@ public class CreateProfileActivity extends AppCompatActivity {
 
     private void initViews() {
         editTextName = findViewById(R.id.editTextName);
+        editTextKakao = findViewById(R.id.editTextKakao); // ⭐ 추가
 
         spinnerGender = findViewById(R.id.spinner_gender);
         spinnerDormitory = findViewById(R.id.spinner_dormitory);
@@ -186,6 +188,13 @@ public class CreateProfileActivity extends AppCompatActivity {
             @Override public void afterTextChanged(Editable s) {}
         });
 
+        // ⭐ 카카오톡 ID 입력 체크 추가
+        editTextKakao.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { checkRequiredFields(); }
+            @Override public void afterTextChanged(Editable s) {}
+        });
+
         AdapterView.OnItemSelectedListener spinnerListener = new AdapterView.OnItemSelectedListener() {
             @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) { checkRequiredFields(); }
             @Override public void onNothingSelected(AdapterView<?> parent) { checkRequiredFields(); }
@@ -251,13 +260,16 @@ public class CreateProfileActivity extends AppCompatActivity {
         // 필수 입력 조건 설정 (닉네임 필수, 나머지는 선택 or 0번째 인덱스 제외 등)
         // 예시: 닉네임 비어있지 않음 & 성별 선택됨 & 기숙사 선택됨 ...
         boolean isNameFilled = !editTextName.getText().toString().trim().isEmpty();
+        boolean isKakaoFilled = !editTextKakao.getText().toString().trim().isEmpty(); // ⭐ 추가
 
         // 스피너 선택 여부 (0번째 항목이 '선택' 등의 기본값이라 가정할 때)
         boolean isGenderSelected = spinnerGender != null && spinnerGender.getSelectedItemPosition() != 0;
         boolean isDormSelected = spinnerDormitory != null && spinnerDormitory.getSelectedItemPosition() != 0;
 
+        // ⭐ 카카오톡 ID도 필수 조건에 추가
+        boolean allFilled = isNameFilled && isKakaoFilled && isGenderSelected && isDormSelected;
+
         // 필요에 따라 조건 추가
-        boolean allFilled = isNameFilled && isGenderSelected && isDormSelected;
 
         buttonComplete.setEnabled(allFilled);
         buttonComplete.setAlpha(allFilled ? 1.0f : 0.5f);
@@ -275,6 +287,10 @@ public class CreateProfileActivity extends AppCompatActivity {
                     // 텍스트 필드
                     String name = documentSnapshot.getString("name");
                     if (name != null) editTextName.setText(name);
+
+                    // ⭐ 카카오톡 ID 로드
+                    String kakaoId = documentSnapshot.getString("kakaoId");
+                    if (kakaoId != null) editTextKakao.setText(kakaoId);
 
                     // 스피너 데이터 로드
                     setSmartSelect(spinnerGender, documentSnapshot.getString("gender"));
@@ -315,6 +331,7 @@ public class CreateProfileActivity extends AppCompatActivity {
 
         // 1. 입력값 가져오기
         String name = editTextName.getText().toString().trim();
+        String kakaoId = editTextKakao.getText().toString().trim(); // ⭐ 추가
         String gender = getSpinnerString(spinnerGender);
         String dorm = getSpinnerString(spinnerDormitory);
         String age = getSpinnerString(spinnerAge);
@@ -329,10 +346,11 @@ public class CreateProfileActivity extends AppCompatActivity {
         String sleepTime = textViewSleepTime.getText().toString();
         String wakeTime = textViewWakeTime.getText().toString();
 
-        // 2. Map 생성
+        // 2. Map 생성//
         Map<String, Object> userProfile = new HashMap<>();
         userProfile.put("email", userEmail);
         userProfile.put("name", name);
+        userProfile.put("kakaoId", kakaoId); // ⭐ 추가
         userProfile.put("gender", gender);
         userProfile.put("dorm", dorm);
         userProfile.put("age", age);
