@@ -17,13 +17,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        boolean login = true;
-        if (login) {
-            Intent intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
-            finish();
-            return;
-        }
         Intent intent = new Intent(this, StartActivity.class);
         startActivity(intent);
         finish();

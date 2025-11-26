@@ -73,7 +73,7 @@
         android:layout_width="300dp"
         android:layout_height="60dp"
         android:layout_marginBottom="170dp"
-        android:text="구글로 회원가입하기"
+        android:text="구글로 로그인하기"
         android:textAllCaps="false"
         android:textColor="@color/black"
         app:backgroundTint="@color/white"

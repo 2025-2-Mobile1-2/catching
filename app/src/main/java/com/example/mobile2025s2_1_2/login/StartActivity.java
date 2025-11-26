@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 // 🌟 충돌 해결: 메인 액티비티 Import 추가
 import com.example.mobile2025s2_1_2.MainActivity;
 import com.example.mobile2025s2_1_2.R;
+import com.example.mobile2025s2_1_2.home.HomeActivity;
 import com.google.firebase.FirebaseApp;
 
 public class StartActivity extends AppCompatActivity {
@@ -107,11 +108,7 @@ public class StartActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                // 애니메이션 종료 후 클릭 이벤트 활성화
-                mainLayout.setClickable(true);
-                mainLayout.setOnClickListener(v -> {
-                    navigateToNextScreen();
-                });
+                mainLayout.postDelayed(() -> navigateToNextScreen(), 1000); // 1초(1000ms) 지연 후 실행
             }
 
             @Override
@@ -209,7 +206,7 @@ public class StartActivity extends AppCompatActivity {
 
         Intent intent;
         if (isLogined) {
-            intent = new Intent(this, MainActivity.class);
+            intent = new Intent(this, HomeActivity.class);
         } else {
             intent = new Intent(this, LoginActivity.class);
         }
