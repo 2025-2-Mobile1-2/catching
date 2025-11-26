@@ -180,11 +180,6 @@
                                 android:ellipsize="end"
                                 android:maxLines="1"/>
 
-                            <FrameLayout
-                                android:id="@+id/fragment_container"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent" />
-
                             <TextView
                                 android:id="@+id/school_preview_2"
                                 android:layout_width="wrap_content"
@@ -226,6 +221,10 @@
             android:visibility="gone" />
 
         <!--매칭 페이지 선택시 카테고리창 fragment영역-->
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <!--하단 navBar-->
         <include
