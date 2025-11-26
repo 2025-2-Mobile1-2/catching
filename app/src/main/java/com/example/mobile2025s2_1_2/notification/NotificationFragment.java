@@ -612,4 +612,4 @@ public class NotificationFragment extends Fragment {
 
         kakaoDialog.show();
     }
-}
+}//
