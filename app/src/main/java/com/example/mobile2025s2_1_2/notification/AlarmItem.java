@@ -4,6 +4,7 @@ public class AlarmItem {
     public String docId;        // Firestore 문서 ID
     public String text;         // 화면에 보여줄 문장
     public boolean isNew;       // N 뱃지 표시 여부
+    public String fromID;
     public String state;        // "request" / "accepted" / "rejected"
     public String category;     // "roommate" 등
     public boolean isReceived;  // 받은 탭인지/보낸 탭인지
@@ -19,12 +20,14 @@ public class AlarmItem {
     public AlarmItem(String docId,
                      String text,
                      boolean isNew,
+                     String fromID,
                      String state,
                      String category,
                      boolean isReceived) {
         this.docId = docId;
         this.text = text;
         this.isNew = isNew;
+        this.fromID = fromID;
         this.state = state;
         this.category = category;
         this.isReceived = isReceived;

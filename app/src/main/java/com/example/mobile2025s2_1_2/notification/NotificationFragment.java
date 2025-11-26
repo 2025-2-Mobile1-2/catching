@@ -14,6 +14,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -48,6 +49,8 @@ public class NotificationFragment extends Fragment {
 
     // 현재 클릭된 알람
     private AlarmItem currentItem;
+    private String matchedUserName;
+    private String currnetUserName;
 
     // Firestore
     private FirebaseFirestore db;
@@ -56,6 +59,7 @@ public class NotificationFragment extends Fragment {
     // 메모리 캐시용 리스트
     private final List<AlarmItem> receivedList = new ArrayList<>();
     private final List<AlarmItem> sentList     = new ArrayList<>();
+
 
     @Nullable
     @Override
@@ -77,6 +81,14 @@ public class NotificationFragment extends Fragment {
         currentUserEmail = prefs.getString("user_email", null);
 
         Log.d("NOTI_USER", "currentUserEmail = " + currentUserEmail);
+
+        db.collection("Users")
+                .document(currentUserEmail)
+                .get()
+                .addOnSuccessListener(docMyEmail ->{
+                    String userName = docMyEmail.getString("name");
+                    currnetUserName = userName;
+                });
 
         // 토글
         toggleReceived = view.findViewById(R.id.alarm_toggle_r);
@@ -137,28 +149,60 @@ public class NotificationFragment extends Fragment {
                                         ", toID=" + toId +
                                         ", state=" + state);
 
-                        // TODO: 나중에 fromId → users 컬렉션에서 이름 가져오기
-                        String fromName = fromId != null ? fromId : "상대";
-
+                        String fromName = "  ";
                         String text;
                         if ("accepted".equals(state)) {
-                            text = fromName + " 님이 매칭을 수락했습니다.";
+                            text = fromName + " 님의 매칭을 수락했습니다.";
                         } else if ("rejected".equals(state)) {
-                            text = fromName + " 님이 매칭을 거절했습니다.";
+                            text = fromName + " 님의 매칭을 거절했습니다.";
                         } else { // "request" 또는 null
-                            text = fromName + " 님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!";
+                            if(category.equals("roommate")){
+                                text = fromName + " 님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!";
+                            } else if(category.equals("mentorship")){
+                                text = fromName + " 님으로부터 진로·전공 멘토 매칭 신청이 왔습니다!";
+                            }else{
+                                text = fromName + " 님으로부터 교내·교외 활동 팀원 신청이 왔습니다!";
+                            }
                         }
+
 
                         AlarmItem item = new AlarmItem(
                                 docId,
                                 text,
                                 Boolean.TRUE.equals(isNewForB),
+                                fromId,
                                 state != null ? state : "request",
                                 category != null ? category : "roommate",
-                                true   // 받은 탭
+                                true// 받은 탭
                         );
 
                         receivedList.add(item);
+                        // 🔥 Firestore에서 이름 가져오면 item.text만 업데이트
+                        db.collection("Users")
+                                .document(fromId)
+                                .get()
+                                .addOnSuccessListener(docUser -> {
+                                    String fetchedName = docUser.getString("name");
+                                    if (fetchedName != null) {
+                                        if ("accepted".equals(item.state)) {
+                                            item.text = fetchedName + " 님의 매칭을 수락했습니다.";
+                                            item.lastPopupType = 2;
+                                        } else if ("rejected".equals(item.state)) {
+                                            item.text = fetchedName + " 님의 매칭을 거절했습니다.";
+                                            item.lastPopupType = 4;
+                                        } else {
+                                            if(item.category.equals("roommate")){
+                                                item.text = fetchedName + " 님으로부터 기숙사 룸메이트 매칭 신청이 왔습니다!";
+                                            } else if(item.category.equals("mentorship")){
+                                                item.text = fetchedName + " 님으로부터 진로·전공 멘토 매칭 신청이 왔습니다!";
+                                            }else{
+                                                item.text = fetchedName + " 님으로부터 교내·교외 활동 팀원 신청이 왔습니다!";
+                                            }
+                                        }
+                                        matchedUserName = fetchedName;
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                });
                     }
 
                     adapter = new AlarmAdapter(
@@ -203,8 +247,7 @@ public class NotificationFragment extends Fragment {
                                         ", toID=" + toId +
                                         ", state=" + state);
 
-                        // TODO: 나중에 toId → users 컬렉션에서 이름 가져오기
-                        String toName = toId != null ? toId : "상대";
+                        String toName ="  ";
 
                         String text;
                         if ("accepted".equals(state)) {
@@ -212,19 +255,50 @@ public class NotificationFragment extends Fragment {
                         } else if ("rejected".equals(state)) {
                             text = toName + " 님이 매칭을 거절했습니다.";
                         } else { // "request" 또는 null
-                            text = toName + " 님께 기숙사 룸메이트 매칭 신청을 보냈습니다!";
+                            if(category.equals("roommate")){
+                                text = toName + " 님께 기숙사 룸메이트 매칭 신청을 보냈습니다!";
+                            } else if(category.equals("mentorship")){
+                                text = toName + " 님께 진로·전공 멘토 매칭 신청을 보냈습니다!";
+                            }else{
+                                text = toName + " 님께 교내·교외 활동 팀원 신청을 보냈습니다!";
+                            }
                         }
 
                         AlarmItem item = new AlarmItem(
                                 docId,
                                 text,
                                 Boolean.TRUE.equals(isNewForA),
+                                fromId,
                                 state != null ? state : "request",
                                 category != null ? category : "roommate",
-                                false  // 보낸 탭
+                                false// 보낸 탭
                         );
 
                         sentList.add(item);
+                        // 🔥 Firestore에서 이름 가져오면 item.text만 업데이트
+                        db.collection("Users")
+                                .document(toId)
+                                .get()
+                                .addOnSuccessListener(doctoUser -> {
+                                    String fetchedName = doctoUser.getString("name");
+                                    if (fetchedName != null) {
+                                        if ("accepted".equals(item.state)) {
+                                            item.text = fetchedName + " 님이 매칭을 수락했습니다.";
+                                        } else if ("rejected".equals(item.state)) {
+                                            item.text = fetchedName + " 님이 매칭을 거절했습니다.";
+                                        } else {
+                                            if(item.category.equals("roommate")){
+                                                item.text = fetchedName + " 님께 기숙사 룸메이트 매칭 신청을 보냈습니다!";
+                                            } else if(item.category.equals("mentorship")){
+                                                item.text = fetchedName + " 님께 진로·전공 멘토 매칭 신청을 보냈습니다!";
+                                            }else{
+                                                item.text = fetchedName + " 님께 교내·교외 활동 팀원 신청을 보냈습니다!";
+                                            }
+                                        }
+                                        matchedUserName = fetchedName;
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                });
                     }
 
                     adapter = new AlarmAdapter(
@@ -255,20 +329,18 @@ public class NotificationFragment extends Fragment {
             }
             return;
         }
+        Log.d("NOTI_T", "k=" + item.lastPopupType );
 
         // 3) 받은 매칭 탭 클릭
-        if (item.clickedBefore) {
-            if (item.lastPopupType == 2) {
-                showConfirmPopup();
-            } else if (item.lastPopupType == 4) {
-                showRejectConfirmPopup();
-            }
-            return;
+        if (item.lastPopupType == 2) {
+            showConfirmPopup();
+        } else if (item.lastPopupType == 4) {
+            showRejectConfirmPopup();
+        }else{
+            item.clickedBefore = true;
+            item.lastPopupType = 1;
+            showProfilePopup();
         }
-
-        item.clickedBefore = true;
-        item.lastPopupType = 1;
-        showProfilePopup();
     }
 
     /** N 뱃지 읽음 처리 (isNewForA / isNewForB false로) */
@@ -312,6 +384,7 @@ public class NotificationFragment extends Fragment {
 
     // ================== 팝업 로직들 ==================
 
+    //룸메이트 팝업
     public void showProfilePopup() {
         profileDialog = new Dialog(requireContext());
         profileDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -327,6 +400,7 @@ public class NotificationFragment extends Fragment {
             );
         }
 
+        //닫기 버튼
         ImageView btnClose = profileDialog.findViewById(R.id.btn_close);
         btnClose.setOnClickListener(v -> {
             profileDialog.dismiss();
@@ -337,6 +411,80 @@ public class NotificationFragment extends Fragment {
             }
         });
 
+
+        //상대 유저 정보
+        db.collection("Users")
+                .document(currentItem.fromID)
+                .get()
+                .addOnSuccessListener(doc -> {
+                    String name = doc.getString("name");
+                    String gender = doc.getString("gender");
+                    String dorm = doc.getString("dorm");
+                    String age = doc.getString("age");
+                    String mbti = doc.getString("mbti");
+                    String drink = doc.getString("drink");
+                    String smoking = doc.getString("smoking");
+                    String clean = doc.getString("clean");
+                    String sleep = doc.getString("sleep");
+                    String sensitive = doc.getString("sensitive");
+                    String sleepTime = doc.getString("sleepTime");
+                    String wakeTime = doc.getString("wakeTime");
+
+                    //정보 연결하기
+                    TextView userName = profileDialog.findViewById(R.id.roommate_name);
+                    userName.setText(name != null ? name : "정보 없음");
+
+                    TextView userGender = profileDialog.findViewById(R.id.roommate_gender);
+                    userGender.setText(gender != null ? gender : "정보 없음");
+
+                    TextView userDorm = profileDialog.findViewById(R.id.roommate_dormitory);
+                    userDorm.setText(dorm != null ? dorm : "정보 없음");
+
+                    TextView userAge = profileDialog.findViewById(R.id.roommate_age);
+                    userAge.setText(age != null ? age : "정보 없음");
+
+                    TextView userMbti = profileDialog.findViewById(R.id.roommate_mbti);
+                    userMbti.setText(mbti != null ? mbti : "정보 없음");
+
+                    TextView userDrink = profileDialog.findViewById(R.id.roommate_drink);
+                    userDrink.setText(drink != null ? "음주 " + drink : "정보 없음");
+
+                    TextView userSmoke = profileDialog.findViewById(R.id.roommate_smoke);
+                    userSmoke.setText(smoking != null ? "흡연 " + smoking : "정보 없음");
+
+                    //자고 일어나는 시간
+                    TextView userSleepTime = profileDialog.findViewById(R.id.roommate_time);
+                    String timeText;
+                    if (sleepTime != null && wakeTime != null) {
+                        timeText = sleepTime + " ~ " + wakeTime;
+                    } else if (sleepTime != null) {
+                        timeText = sleepTime;
+                    } else if (wakeTime != null) {
+                        timeText = wakeTime;
+                    } else {
+                        timeText = "정보 없음";
+                    }
+                    userSleepTime.setText(timeText);
+
+                    TextView userCleanValue = profileDialog.findViewById(R.id.roommate_clean_value);
+                    userCleanValue.setText(clean != null ? clean : "정보 없음");
+                    SeekBar userCleanBar = profileDialog.findViewById(R.id.roommate_clean_seekbar);
+                    userCleanBar.setProgress(Integer.parseInt(clean != null ? clean : "0"));
+
+                    TextView userSleepValue = profileDialog.findViewById(R.id.roommate_sleep_value);
+                    userSleepValue.setText(sleep != null ? sleep : "정보 없음");
+                    SeekBar userSleepBar = profileDialog.findViewById(R.id.roommate_sleep_seekbar);
+                    userSleepBar.setProgress(Integer.parseInt(sleep != null ? sleep : "0"));
+
+                    TextView userSensitiveValue = profileDialog.findViewById(R.id.roommate_sensitive_value);
+                    userSensitiveValue.setText(sensitive != null ? sensitive : "정보 없음");
+                    SeekBar userSensitivepBar = profileDialog.findViewById(R.id.roommate_sensitive_seekbar);
+                    userSensitivepBar.setProgress(Integer.parseInt(sensitive != null ? sensitive : "0"));
+
+
+                });
+
+        //수락, 취소 버튼
         ImageView btnAccept = profileDialog.findViewById(R.id.btn_accept);
         ImageView btnReject = profileDialog.findViewById(R.id.btn_reject);
 
@@ -356,26 +504,13 @@ public class NotificationFragment extends Fragment {
                 currentItem.state = "accepted";
                 currentItem.lastPopupType = 2;
             }
-
+            loadReceivedFromFirestore();
             showConfirmPopup();
         });
 
         // ✅ 거절 버튼
         btnReject.setOnClickListener(v -> {
             profileDialog.dismiss();
-
-            if (currentItem != null && currentItem.docId != null) {
-                db.collection("matching_status")
-                        .document(currentItem.docId)
-                        .update(
-                                "state", "rejected",
-                                "isNewForA", true,
-                                "isNewForB", false
-                        );
-
-                currentItem.state = "rejected";
-            }
-
             showRejectPopup();
         });
 
@@ -399,9 +534,28 @@ public class NotificationFragment extends Fragment {
             );
         }
 
+        //매칭 유저 이름
+        TextView userName = confirmDialog.findViewById(R.id.tv_name_confirm);
+        userName.setText(matchedUserName);
+
+        //매칭 카테고리 메세지
+        TextView confirmCate = confirmDialog.findViewById(R.id.tv_message);
+        if(currentItem.category.equals("roommate")){
+            confirmCate.setText("기숙사 룸메이트 매칭을 수락했어요!");
+        }else if(currentItem.category.equals("mentorship")){
+            confirmCate.setText("진로·전공 멘토 매칭을 수락했어요!");
+        }else{
+            confirmCate.setText("교내·교외 활동 팀원 매칭을 수락했어요!");
+        }
+
+        //매칭 메세지
+        TextView confirmText = confirmDialog.findViewById(R.id.tv_sub_message);
+        confirmText.setText(matchedUserName+" 님과 24시간 이야기나 정말 수준의\n 대화를 기대하세요!");
+
+
+        //확인 버튼
         View btnConfirm = confirmDialog.findViewById(R.id.btn_confirm_layout);
         btnConfirm.setOnClickListener(v -> confirmDialog.dismiss());
-
         confirmDialog.show();
     }
 
@@ -420,12 +574,35 @@ public class NotificationFragment extends Fragment {
             );
         }
 
+        //이름
+        TextView userName = rejectDialog.findViewById(R.id.tv_name_reject);
+        userName.setText(matchedUserName);
+
+        //매칭 메세지
+        TextView rejectText = rejectDialog.findViewById(R.id.tv_sub_message);
+        rejectText.setText(currnetUserName+" 님께 더 좋은 매칭이 이뤄질 수 있게 캐칭이 더 \n노력할게요!");
+
+
+        //거절 버튼
         View btnReject = rejectDialog.findViewById(R.id.btn_reject_layout);
         btnReject.setOnClickListener(v -> {
             rejectDialog.dismiss();
+            if (currentItem != null && currentItem.docId != null) {
+                db.collection("matching_status")
+                        .document(currentItem.docId)
+                        .update(
+                                "state", "rejected",
+                                "isNewForA", true,
+                                "isNewForB", false
+                        );
+
+                currentItem.state = "rejected";
+            }
+            loadReceivedFromFirestore();
             showRejectConfirmPopup();
         });
 
+        //취소 버튼
         View btnClose = rejectDialog.findViewById(R.id.btn_delete_layout);
         btnClose.setOnClickListener(v -> {
             rejectDialog.dismiss();
@@ -456,9 +633,27 @@ public class NotificationFragment extends Fragment {
             );
         }
 
+        //이름
+        TextView userName = deleteDialog.findViewById(R.id.tv_name_delete);
+        userName.setText(matchedUserName);
+
+        //매칭 카테고리 메세지
+        TextView deleteCate = deleteDialog.findViewById(R.id.tv_message);
+        if(currentItem.category.equals("roommate")){
+            deleteCate.setText("기숙사 룸메이트 매칭을 거절했어요!");
+        }else if(currentItem.category.equals("mentorship")){
+            deleteCate.setText("진로·전공 멘토 매칭을 거절했어요!");
+        }else{
+            deleteCate.setText("교내·교외 활동 팀원 매칭을 거절했어요!");
+        }
+
+        //매칭 메세지
+        TextView deletetText = deleteDialog.findViewById(R.id.tv_sub_message);
+        deletetText.setText(currnetUserName+" 님께 더 좋은 매칭이 이뤄질 수 있게 캐칭이 더 \n노력할게요!");
+
+        //확인 버튼
         View btnConfirm = deleteDialog.findViewById(R.id.btn_confirm_layout);
         btnConfirm.setOnClickListener(v -> deleteDialog.dismiss());
-
         deleteDialog.show();
     }
 
@@ -476,6 +671,9 @@ public class NotificationFragment extends Fragment {
                     ViewGroup.LayoutParams.MATCH_PARENT
             );
         }
+
+        TextView userName = kakaoDialog.findViewById(R.id.tv_line1);
+        userName.setText(matchedUserName+" 님의 카카오톡 아이디는");
 
         View btnCopy = kakaoDialog.findViewById(R.id.btn_copy);
         if (btnCopy != null) {

@@ -83,7 +83,7 @@ public class MatchingCategoryFragment extends Fragment {
                 return;
             }
 
-            String uid = user.getUid();
+            String uid = user.getEmail();
 
             FirebaseFirestore db = FirebaseFirestore.getInstance();
 
