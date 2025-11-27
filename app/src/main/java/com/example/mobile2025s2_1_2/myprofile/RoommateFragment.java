@@ -96,8 +96,8 @@ public class RoommateFragment extends Fragment {
         SeekBar.OnSeekBarChangeListener listener = new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (progress < 1) {
-                    seekBar.setProgress(1);
+                if (progress < 0) {
+                    seekBar.setProgress(0);
                     return;
                 }
 
