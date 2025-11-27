@@ -59,7 +59,8 @@
                 android:id="@+id/non_matched_card"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp">
+                android:layout_margin="8dp"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="294dp"
