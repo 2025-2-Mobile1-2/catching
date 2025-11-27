@@ -139,8 +139,20 @@ public class RoommateFragment extends Fragment {
             ));
         }
 
-        RoommateCardAdapter adapter = new RoommateCardAdapter(requireContext(), cardList);
-        recyclerView.setAdapter(adapter);
+        // ⭐ cardList 생성 후 바로 아래에 넣기
+        View emptyView = view.findViewById(R.id.non_matched_card);   // xml에 미리 만들어야 함
+
+        if (cardList.isEmpty()) {
+            recyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+
+            RoommateCardAdapter adapter =
+                    new RoommateCardAdapter(requireContext(), cardList);
+            recyclerView.setAdapter(adapter);
+        }
 
         SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(recyclerView);
