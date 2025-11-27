@@ -195,6 +195,7 @@
                     android:orientation="vertical">
 
                     <LinearLayout
+                        android:id="@+id/settings_logout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -211,7 +212,6 @@
                             android:textSize="17sp"/>
 
                         <ImageView
-                            android:id="@+id/settings_logout_icon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -226,6 +226,7 @@
 
                     <!--계정삭제-->
                     <LinearLayout
+                        android:id="@+id/settings_delete_account"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -242,7 +243,6 @@
                             android:textSize="17sp" />
 
                         <ImageView
-                            android:id="@+id/settings_delete_account_icon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
