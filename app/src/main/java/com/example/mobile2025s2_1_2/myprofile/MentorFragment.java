@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView; // ⭐ 변경: AutoCompleteTextView 임포트
-import android.widget.Spinner; // Spinner는 사용하지 않지만 기존 코드에 있었으므로 유지
+import android.widget.AutoCompleteTextView;
+import android.widget.Spinner; // ⭐ Spinner 임포트 확인
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,7 +20,7 @@ public class MentorFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // ✅ 수정: myprofile_fragment_mentor 레이아웃 파일을 로드합니다.
+        // myprofile_fragment_mentor 레이아웃 로드
         return inflater.inflate(R.layout.myprofile_fragment_mentor, container, false);
     }
 
@@ -29,54 +29,73 @@ public class MentorFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // ----------------------------------------------------------------------
-        // 1. 전공 (AutoCompleteTextView) 검색 기능 설정
+        // 1. 전공 (AutoCompleteTextView) 검색 기능 설정 (기존 코드 유지)
         // ----------------------------------------------------------------------
-
-        // ✅ 변경: Spinner 대신 AutoCompleteTextView 위젯을 참조합니다. (ID도 XML에 맞게 가정)
         AutoCompleteTextView autoCompleteMajor = view.findViewById(R.id.autocomplete_major);
-
-        // a. arrays.xml의 'kmu_all_majors_array'를 Adapter에 연결
         ArrayAdapter<CharSequence> majorAdapter = ArrayAdapter.createFromResource(
                 requireContext(),
-                // ✅ 수정: 정확한 배열 ID를 사용합니다.
-                R.array.kookmin_college_and_major,
-                // 검색 추천 목록에 적합한 드롭다운 레이아웃을 사용합니다.
+                R.array.kookmin_college_and_major, // 학과 배열 ID
                 android.R.layout.simple_dropdown_item_1line
         );
 
-        // c. AutoCompleteTextView에 Adapter 연결
-        if (autoCompleteMajor != null) { // Null 체크로 충돌 방지
+        if (autoCompleteMajor != null) {
             autoCompleteMajor.setAdapter(majorAdapter);
-
-            // (선택 사항: 항목 선택 시 이벤트 처리)
             autoCompleteMajor.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    // 사용자가 목록에서 항목을 선택했을 때의 로직을 여기에 추가합니다.
                     String selectedMajor = (String) parent.getItemAtPosition(position);
-                    // 예: Log.d("Selection", "선택된 학과: " + selectedMajor);
                 }
             });
         }
 
         // ----------------------------------------------------------------------
-        // 2. 다·부전공 (AutoCompleteTextView) 검색 기능 설정
+        // 2. 다·부전공 (AutoCompleteTextView) 검색 기능 설정 (기존 코드 유지)
         // ----------------------------------------------------------------------
-
-        // ✅ 변경: 다·부전공도 AutoCompleteTextView로 가정합니다. (ID도 XML에 맞게 가정)
         AutoCompleteTextView autoCompleteSecondaryMajor = view.findViewById(R.id.autocomplete_secondary_major);
-
-        // a. arrays.xml의 'kmu_interdisciplinary_majors_array'를 Adapter에 연결
         ArrayAdapter<CharSequence> secondaryMajorAdapter = ArrayAdapter.createFromResource(
                 requireContext(),
-                // ✅ 수정: 정확한 배열 ID를 사용합니다.
-                R.array.kookmin_college_and_major,
+                R.array.kookmin_college_and_major, // 연계전공 배열 ID
                 android.R.layout.simple_dropdown_item_1line
         );
 
-        // c. AutoCompleteTextView에 Adapter 연결
-        if (autoCompleteSecondaryMajor != null) { // Null 체크로 충돌 방지
+        if (autoCompleteSecondaryMajor != null) {
             autoCompleteSecondaryMajor.setAdapter(secondaryMajorAdapter);
+        }
+
+        // ----------------------------------------------------------------------
+        // ⭐ 3. 학년 (Spinner) 드롭다운 설정 추가
+        // ----------------------------------------------------------------------
+
+        // 1. XML 레이아웃에서 Spinner 위젯 찾기 (ID: spinner_grade 가정)
+        Spinner spinnerGrade = view.findViewById(R.id.spinner_grade);
+
+        // 2. arrays.xml의 'grade_array' 배열을 가져와 ArrayAdapter 생성
+        ArrayAdapter<CharSequence> gradeAdapter = ArrayAdapter.createFromResource(
+                requireContext(),
+                R.array.grade_array, // arrays.xml에 정의된 학년 배열 ID
+                android.R.layout.simple_spinner_item // 기본 스피너 레이아웃 (선택 전 모습)
+        );
+
+        // 3. 드롭다운 목록이 펼쳐졌을 때의 레이아웃 설정
+        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // 4. Spinner에 Adapter 연결 (Null 체크로 안전하게 실행)
+        if (spinnerGrade != null) {
+            spinnerGrade.setAdapter(gradeAdapter);
+
+            // (선택 사항) 사용자가 학년을 선택했을 때 이벤트 처리
+            spinnerGrade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String selectedGrade = parent.getItemAtPosition(position).toString();
+                    // 예: Log.d("Selection", "선택된 학년: " + selectedGrade);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    // 아무것도 선택되지 않았을 때 (보통 비워둠)
+                }
+            });
         }
     }
 }

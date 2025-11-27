@@ -122,8 +122,7 @@ public class CreateProfileActivity extends AppCompatActivity {
         seekBarSensitivity = findViewById(R.id.seekbar_sensitivity);
         valueLabel3 = findViewById(R.id.seekbar_value_label3);
 
-        textViewSleepTime = findViewById(R.id.textViewSleepTime);
-        textViewWakeTime = findViewById(R.id.textViewWakeTime);
+
         buttonComplete = findViewById(R.id.buttonComplete);
     }
 
