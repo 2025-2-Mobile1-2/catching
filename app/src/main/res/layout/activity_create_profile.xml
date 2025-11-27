@@ -56,77 +56,8 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
 
-                <!-- 닉네임 입력 -->
-                <TextView
-                    android:id="@+id/textViewNameLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
-                    android:text="닉네임"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewSubtitle" />
 
-                <EditText
-                    android:id="@+id/editTextName"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:background="@null"
-                    android:hint="닉네임을 입력해주세요!"
-                    android:inputType="text"
-                    android:minHeight="48dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewNameLabel" />
 
-                <!-- 구분선 -->
-                <View
-                    android:id="@+id/dividerNickname"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:background="@color/material_dynamic_neutral40"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editTextName" />
-
-                <!-- 카카오톡 ID 입력 -->
-                <TextView
-                    android:id="@+id/textViewKakaoLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="카카오톡 ID"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/dividerNickname" />
-
-                <EditText
-                    android:id="@+id/editTextKakao"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:background="@null"
-                    android:hint="카카오톡 ID를 입력해주세요!"
-                    android:inputType="text"
-                    android:minHeight="48dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewKakaoLabel" />
-
-                <!-- 구분선 -->
-                <View
-                    android:id="@+id/dividerKakao"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:background="@color/material_dynamic_neutral40"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editTextKakao" />
 
                 <!-- ⭐ 통합된 상세 정보 입력 영역 (LinearLayout) 시작 ⭐ -->
                 <LinearLayout
@@ -137,9 +68,83 @@
                     android:layout_marginTop="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/dividerKakao">
+                    app:layout_constraintTop_toBottomOf="@+id/textViewSubtitle"> <!-- 위젯 위치 조정 -->
 
-                    <!-- 여기부터 성별, 기숙사 등 내용은 그대로 유지 -->
+
+                    <!-- 0. 닉네임 (수정됨) -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingVertical="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="닉네임"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold"/>
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <EditText
+                            android:id="@+id/editTextName"
+                            android:layout_width="180dp"
+                            android:layout_height="40dp"
+
+                            android:hint="닉네임을 입력해주세요!"
+                            android:inputType="text"
+                            android:paddingStart="12dp"
+                            android:paddingEnd="12dp"
+                            android:textSize="14sp"
+                            android:gravity="center_vertical"
+                            />
+
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/material_dynamic_neutral40"/>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingVertical="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="카카오톡 ID"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold"/>
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <EditText
+                            android:id="@+id/editTextKakao"
+                            android:layout_width="200dp"
+                            android:layout_height="40dp"
+
+                            android:hint="카카오톡 ID를 입력해주세요!"
+                            android:inputType="text"
+                            android:paddingStart="12dp"
+                            android:paddingEnd="12dp"
+                            android:textSize="14sp"
+                            android:gravity="center_vertical"
+                            />
+
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/material_dynamic_neutral40"/>
+
 
                     <!-- 1. 성별 -->
                     <LinearLayout
@@ -324,7 +329,7 @@
                     <!-- 7. 청결도 (SeekBar) -->
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="60dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:paddingVertical="8dp">
@@ -372,7 +377,7 @@
                     <!-- 8. 잠꼬대 정도 (SeekBar) -->
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="60dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:paddingVertical="8dp">
@@ -420,7 +425,7 @@
                     <!-- 9. 예민 정도 (SeekBar) -->
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="60dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:paddingVertical="8dp">
@@ -470,67 +475,7 @@
 
 
                 <!-- 시간 선택 (잠드는 시간) -->
-                <TextView
-                    android:id="@+id/textViewSleepTimeLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="잠드는 시간"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/layoutDetailInfo" />
 
-                <TextView
-                    android:id="@+id/textViewSleepTime"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/bg_time_picker_box"
-                    android:drawableLeft="@android:drawable/ic_lock_idle_alarm"
-                    android:drawablePadding="12dp"
-                    android:drawableTint="#388E3C"
-                    android:minHeight="48dp"
-                    android:padding="16dp"
-                    android:text="00:00"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewSleepTimeLabel" />
-
-                <!-- 시간 선택 (일어나는 시간) -->
-                <TextView
-                    android:id="@+id/textViewWakeTimeLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="일어나는 시간"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewSleepTime" />
-
-                <TextView
-                    android:id="@+id/textViewWakeTime"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/bg_time_picker_box"
-                    android:drawableLeft="@android:drawable/ic_lock_idle_alarm"
-                    android:drawablePadding="12dp"
-                    android:drawableTint="#388E3C"
-                    android:minHeight="48dp"
-                    android:padding="16dp"
-                    android:text="08:00"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewWakeTimeLabel" />
 
                 <!-- 작성 완료 버튼 -->
                 <Button
@@ -542,9 +487,7 @@
                     android:text="작성 완료"
                     android:textColor="@color/white"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewWakeTime" />
+                     />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
