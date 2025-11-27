@@ -116,11 +116,13 @@ public class CreateProfileActivity extends AppCompatActivity {
         seekBarCleanliness = findViewById(R.id.seekbar_cleanliness);
         valueLabel1 = findViewById(R.id.seekbar_value_label1);
 
-        seekBarSnoring = findViewById(R.id.seekbar_Sleeptalk);
+        seekBarSnoring = findViewById(R.id.seekbar_snoring);
         valueLabel2 = findViewById(R.id.seekbar_value_label2);
 
-        seekBarSensitivity = findViewById(R.id.seekbar_sensitive);
+        seekBarSensitivity = findViewById(R.id.seekbar_sensitivity);
         valueLabel3 = findViewById(R.id.seekbar_value_label3);
+        textViewSleepTime = findViewById(R.id.textViewSleepTime);
+        textViewWakeTime = findViewById(R.id.textViewWakeTime);
 
 
         buttonComplete = findViewById(R.id.buttonComplete);

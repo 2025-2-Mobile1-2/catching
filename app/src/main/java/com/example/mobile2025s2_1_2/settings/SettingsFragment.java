@@ -66,7 +66,7 @@ public class SettingsFragment extends Fragment {
         });
 
         //로그아웃
-        ImageView logout = view.findViewById(R.id.settings_logout_icon);
+        View logout = view.findViewById(R.id.settings_logout);
         logout.setOnClickListener(v -> {
             touchBlocker.setVisibility(View.VISIBLE);
             LogoutDialogFragment fragment = new LogoutDialogFragment();
@@ -79,7 +79,7 @@ public class SettingsFragment extends Fragment {
         });
 
         //계정삭제
-        ImageView deleteAccount = view.findViewById(R.id.settings_delete_account_icon);
+        View deleteAccount = view.findViewById(R.id.settings_delete_account);
         deleteAccount.setOnClickListener(v -> {
             touchBlocker.setVisibility(View.VISIBLE);
             DeleteAccountDialogFragment fragment = new DeleteAccountDialogFragment();

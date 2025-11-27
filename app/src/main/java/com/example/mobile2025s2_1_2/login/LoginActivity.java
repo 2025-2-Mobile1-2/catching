@@ -21,6 +21,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.mobile2025s2_1_2.R;
+import com.example.mobile2025s2_1_2.home.HomeActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -127,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
                                     .addOnSuccessListener(doc -> {
                                         if (doc.exists()) {
                                             // 🔥 이미 가입된 사용자 → HomeActivity
-                                            Intent intent = new Intent(this, com.example.mobile2025s2_1_2.home.HomeActivity.class);
+                                            Intent intent = new Intent(this, HomeActivity.class);
                                             intent.putExtra("user_email", email);
                                             startActivity(intent);
                                             finish();
