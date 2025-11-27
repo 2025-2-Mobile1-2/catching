@@ -48,14 +48,21 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_main);
+        touchBlocker = findViewById(R.id.touch_blocker);
 
         // ───────── 공지사항 미리보기 ─────────
         View noticeGo = findViewById(R.id.home_notice_go);
-        noticeGo.setOnClickListener(v -> getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, new NoticeFragment())
-                .addToBackStack(null)
-                .commit());
+        noticeGo.setOnClickListener(v -> {
+            if (HomeActivity.touchBlocker != null) {
+                HomeActivity.touchBlocker.setVisibility(View.VISIBLE);
+            }
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new NoticeFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
 
         TextView previewTitle = findViewById(R.id.home_notice_preview);
         List<NoticeCardData.HomeNoticeData> notices =
@@ -67,11 +74,17 @@ public class HomeActivity extends AppCompatActivity {
 
         // ───────── 학사공지 미리보기 ─────────
         View schoolGo = findViewById(R.id.home_school_go);
-        schoolGo.setOnClickListener(v -> getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, new SchoolFragment())
-                .addToBackStack(null)
-                .commit());
+        schoolGo.setOnClickListener(v -> {
+            if (HomeActivity.touchBlocker != null) {
+                HomeActivity.touchBlocker.setVisibility(View.VISIBLE);
+            }
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new SchoolFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
 
         TextView preview1 = findViewById(R.id.school_preview_1);
         TextView preview2 = findViewById(R.id.school_preview_2);
@@ -88,7 +101,6 @@ public class HomeActivity extends AppCompatActivity {
             });
         }).start();
 
-        touchBlocker = findViewById(R.id.touch_blocker);
 
         // ───────── 하단 네비게이션 바 ─────────
         bottomNavBar = findViewById(R.id.custom_navbar);

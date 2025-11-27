@@ -55,6 +55,27 @@
                 android:gravity="center"
                 android:paddingStart="50dp"
                 android:paddingEnd="50dp" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/non_matched_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp">
+
+                <LinearLayout
+                    android:layout_width="294dp"
+                    android:layout_height="426dp"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="조건과 가장 잘 맞는 상대를 찾고 있어요.\n새로운 후보가 생기면 바로 알려드릴게요!"
+                        android:textSize="15sp"
+                        android:fontFamily="@font/semibold"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/match_roommate_button"
