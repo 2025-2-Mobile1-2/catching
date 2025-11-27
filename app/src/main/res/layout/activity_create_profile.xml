@@ -56,10 +56,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
 
-
-
-
-                <!-- ⭐ 통합된 상세 정보 입력 영역 (LinearLayout) 시작 ⭐ -->
+                <!-- ⭐ 상세 정보 입력 구역 ⭐ -->
                 <LinearLayout
                     android:id="@+id/layoutDetailInfo"
                     android:layout_width="0dp"
@@ -68,10 +65,10 @@
                     android:layout_marginTop="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewSubtitle"> <!-- 위젯 위치 조정 -->
+                    app:layout_constraintTop_toBottomOf="@+id/textViewSubtitle">
 
 
-                    <!-- 0. 닉네임 (수정됨) -->
+                    <!-- 닉네임 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -85,7 +82,7 @@
                             android:text="닉네임"
                             android:textColor="@android:color/black"
                             android:textSize="16sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
                         <Space
                             android:layout_width="0dp"
@@ -96,19 +93,20 @@
                             android:id="@+id/editTextName"
                             android:layout_width="180dp"
                             android:layout_height="40dp"
-
                             android:hint="닉네임을 입력해주세요!"
                             android:inputType="text"
                             android:paddingStart="12dp"
                             android:paddingEnd="12dp"
                             android:textSize="14sp"
-                            android:gravity="center_vertical"
-                            />
-
+                            android:gravity="center_vertical" />
                     </LinearLayout>
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/material_dynamic_neutral40"/>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/material_dynamic_neutral40" />
 
+                    <!-- 카카오톡 ID -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -122,7 +120,7 @@
                             android:text="카카오톡 ID"
                             android:textColor="@android:color/black"
                             android:textSize="16sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
                         <Space
                             android:layout_width="0dp"
@@ -133,20 +131,20 @@
                             android:id="@+id/editTextKakao"
                             android:layout_width="200dp"
                             android:layout_height="40dp"
-
                             android:hint="카카오톡 ID를 입력해주세요!"
                             android:inputType="text"
                             android:paddingStart="12dp"
                             android:paddingEnd="12dp"
                             android:textSize="14sp"
-                            android:gravity="center_vertical"
-                            />
-
+                            android:gravity="center_vertical" />
                     </LinearLayout>
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/material_dynamic_neutral40"/>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/material_dynamic_neutral40" />
 
-                    <!-- 1. 성별 -->
+                    <!-- 성별 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -160,7 +158,7 @@
                             android:text="성별"
                             android:textColor="@android:color/black"
                             android:textSize="16sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
                         <Space
                             android:layout_width="0dp"
@@ -174,9 +172,13 @@
                             android:minHeight="48dp"
                             android:spinnerMode="dropdown" />
                     </LinearLayout>
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/material_dynamic_neutral40"/>
 
-                    <!-- 2. 기숙사 종류 -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/material_dynamic_neutral40" />
+
+                    <!-- 기숙사 종류 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -190,7 +192,7 @@
                             android:text="기숙사 종류"
                             android:textColor="@android:color/black"
                             android:textSize="16sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
                         <Space
                             android:layout_width="0dp"
@@ -204,9 +206,13 @@
                             android:minHeight="48dp"
                             android:spinnerMode="dropdown" />
                     </LinearLayout>
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/material_dynamic_neutral40"/>
 
-                    <!-- 3. 나이 -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/material_dynamic_neutral40" />
+
+                    <!-- 나이 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -220,7 +226,7 @@
                             android:text="나이"
                             android:textColor="@android:color/black"
                             android:textSize="16sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
                         <Space
                             android:layout_width="0dp"
@@ -234,9 +240,13 @@
                             android:minHeight="48dp"
                             android:spinnerMode="dropdown" />
                     </LinearLayout>
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/material_dynamic_neutral40"/>
 
-                    <!-- 4. MBTI -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/material_dynamic_neutral40" />
+
+                    <!-- MBTI -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -250,7 +260,7 @@
                             android:text="MBTI"
                             android:textColor="@android:color/black"
                             android:textSize="16sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
                         <Space
                             android:layout_width="0dp"
@@ -264,9 +274,13 @@
                             android:minHeight="48dp"
                             android:spinnerMode="dropdown" />
                     </LinearLayout>
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/material_dynamic_neutral40"/>
 
-                    <!-- 5. 음주 여부 -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/material_dynamic_neutral40" />
+
+                    <!-- 음주 여부 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -280,7 +294,7 @@
                             android:text="음주 여부"
                             android:textColor="@android:color/black"
                             android:textSize="16sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
                         <Space
                             android:layout_width="0dp"
@@ -294,203 +308,48 @@
                             android:minHeight="48dp"
                             android:spinnerMode="dropdown" />
                     </LinearLayout>
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/material_dynamic_neutral40"/>
 
-                    <!-- 6. 흡연 여부 -->
-                    <LinearLayout
+                    <View
                         android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/material_dynamic_neutral40" />
+
+                    <!-- 자기소개 -->
+                    <TextView
+                        android:id="@+id/textViewIntro"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingVertical="8dp">
+                        android:layout_marginTop="24dp"
+                        android:text="자기소개"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="흡연 여부"
-                            android:textColor="@android:color/black"
-                            android:textSize="16sp"
-                            android:textStyle="bold"/>
-
-                        <Space
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1" />
-
-                        <Spinner
-                            android:id="@+id/spinner_smoke"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:minHeight="48dp"
-                            android:spinnerMode="dropdown" />
-                    </LinearLayout>
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/material_dynamic_neutral40"/>
-
-                    <!-- 7. 청결도 (SeekBar) -->
-                    <LinearLayout
+                    <EditText
+                        android:id="@+id/editTextIntro"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingVertical="8dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="청결도"
-                            android:textColor="@android:color/black"
-                            android:textSize="16sp"
-                            android:textStyle="bold"/>
-
-                        <Space
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/seekbar_value_label1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="4dp"
-                            android:text="5"
-                            android:textColor="#2DD7A4"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:layout_marginEnd="8dp"/>
-
-                        <SeekBar
-                            android:id="@+id/seekbar_cleanliness"
-                            android:layout_width="150dp"
-                            android:layout_height="wrap_content"
-                            android:max="10"
-                            android:min="0"
-                            android:progress="5"
-                            android:paddingStart="0dp"
-                            android:paddingEnd="0dp"
-                            android:thumb="@drawable/thumb"
-                            android:progressDrawable="@drawable/custom_seekbar_progress"
-                            android:splitTrack="false"
-                            android:thumbOffset="0dp"/>
-                    </LinearLayout>
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/material_dynamic_neutral40"/>
-
-                    <!-- 8. 잠꼬대 정도 (SeekBar) -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingVertical="8dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="잠꼬대 정도"
-                            android:textColor="@android:color/black"
-                            android:textSize="16sp"
-                            android:textStyle="bold"/>
-
-                        <Space
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/seekbar_value_label2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="4dp"
-                            android:text="5"
-                            android:textColor="#2DD7A4"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:layout_marginEnd="8dp"/>
-
-                        <SeekBar
-                            android:id="@+id/seekbar_snoring"
-                            android:layout_width="150dp"
-                            android:layout_height="wrap_content"
-                            android:max="10"
-                            android:min="0"
-                            android:progress="5"
-                            android:paddingStart="0dp"
-                            android:paddingEnd="0dp"
-                            android:thumb="@drawable/thumb"
-                            android:progressDrawable="@drawable/custom_seekbar_progress"
-                            android:splitTrack="false"
-                            android:thumbOffset="0dp"/>
-                    </LinearLayout>
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/material_dynamic_neutral40"/>
-
-                    <!-- 9. 예민 정도 (SeekBar) -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingVertical="8dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="예민 정도"
-                            android:textColor="@android:color/black"
-                            android:textSize="16sp"
-                            android:textStyle="bold"/>
-
-                        <Space
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/seekbar_value_label3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="4dp"
-                            android:text="5"
-                            android:textColor="#2DD7A4"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:layout_marginEnd="8dp"/>
-
-                        <SeekBar
-                            android:id="@+id/seekbar_sensitivity"
-                            android:layout_width="150dp"
-                            android:layout_height="wrap_content"
-                            android:max="10"
-                            android:min="0"
-                            android:progress="5"
-                            android:paddingStart="0dp"
-                            android:paddingEnd="0dp"
-                            android:thumb="@drawable/thumb"
-                            android:progressDrawable="@drawable/custom_seekbar_progress"
-                            android:splitTrack="false"
-                            android:thumbOffset="0dp"/>
-                    </LinearLayout>
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/material_dynamic_neutral40"/>
+                        android:layout_height="140dp"
+                        android:layout_marginTop="12dp"
+                        android:gravity="top|start"
+                        android:padding="12dp"
+                        android:background="#F5F5F5"
+                        android:hint="자유롭게 작성해주세요"
+                        android:inputType="textMultiLine"
+                        android:textSize="14sp" />
 
                 </LinearLayout>
-                <!-- ⭐ 통합된 상세 정보 입력 영역 끝 ⭐ -->
 
-
-                <!-- 시간 선택 (잠드는 시간) -->
-
-
-                <!-- 작성 완료 버튼 -->
+                <!-- 저장 버튼 -->
                 <Button
-                    android:id="@+id/buttonComplete"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="32dp"
-                    android:backgroundTint="#388E3C"
+                    android:id="@+id/buttonComplete" android:layout_width="0dp" android:layout_height="60dp" android:layout_marginTop="32dp" android:backgroundTint="#388E3C"
                     android:text="작성 완료"
-                    android:textColor="@color/white"
+                    android:textColor="@android:color/white"
                     android:textStyle="bold"
-                     />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layoutDetailInfo" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </ScrollView>
     </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
