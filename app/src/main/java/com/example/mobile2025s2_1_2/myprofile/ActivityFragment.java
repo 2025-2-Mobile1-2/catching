@@ -21,7 +21,7 @@ public class ActivityFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // myprofile_fragment_mentor 레이아웃 로드
-        return inflater.inflate(R.layout.myprofile_fragment_mentor, container, false);
+        return inflater.inflate(R.layout.myprofile_fragment_activity, container, false);
     }
 
     @Override
