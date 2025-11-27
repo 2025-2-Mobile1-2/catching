@@ -308,12 +308,258 @@
                             android:minHeight="48dp"
                             android:spinnerMode="dropdown" />
                     </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/material_dynamic_neutral40"/>
+
+                    <!-- 6. 흡연 여부 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingVertical="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="흡연 여부"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold"/>
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <Spinner
+                            android:id="@+id/spinner_smoke"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minHeight="48dp"
+                            android:spinnerMode="dropdown" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/material_dynamic_neutral40"/>
+
+                    <!-- 7. 청결도 (SeekBar) -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingVertical="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="청결도"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold"/>
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/seekbar_value_label1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp"
+                            android:text="5"
+                            android:textColor="#2DD7A4"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:layout_marginEnd="8dp"/>
+
+                        <SeekBar
+                            android:id="@+id/seekbar_cleanliness"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:max="10"
+                            android:min="0"
+                            android:progress="5"
+                            android:paddingStart="0dp"
+                            android:paddingEnd="0dp"
+                            android:thumb="@drawable/thumb"
+                            android:progressDrawable="@drawable/custom_seekbar_progress"
+                            android:splitTrack="false"
+                            android:thumbOffset="0dp"/>
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/material_dynamic_neutral40"/>
+
+                    <!-- 8. 잠꼬대 정도 (SeekBar) -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingVertical="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="잠꼬대 정도"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold"/>
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/seekbar_value_label2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp"
+                            android:text="5"
+                            android:textColor="#2DD7A4"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:layout_marginEnd="8dp"/>
+
+                        <SeekBar
+                            android:id="@+id/seekbar_snoring"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:max="10"
+                            android:min="0"
+                            android:progress="5"
+                            android:paddingStart="0dp"
+                            android:paddingEnd="0dp"
+                            android:thumb="@drawable/thumb"
+                            android:progressDrawable="@drawable/custom_seekbar_progress"
+                            android:splitTrack="false"
+                            android:thumbOffset="0dp"/>
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/material_dynamic_neutral40"/>
+
+                    <!-- 9. 예민 정도 (SeekBar) -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingVertical="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="예민 정도"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold"/>
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/seekbar_value_label3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp"
+                            android:text="5"
+                            android:textColor="#2DD7A4"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:layout_marginEnd="8dp"/>
+
+                        <SeekBar
+                            android:id="@+id/seekbar_sensitivity"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:max="10"
+                            android:min="0"
+                            android:progress="5"
+                            android:paddingStart="0dp"
+                            android:paddingEnd="0dp"
+                            android:thumb="@drawable/thumb"
+                            android:progressDrawable="@drawable/custom_seekbar_progress"
+                            android:splitTrack="false"
+                            android:thumbOffset="0dp"/>
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/material_dynamic_neutral40" />
 
+                </LinearLayout>
+                <!-- 시간 선택 (잠드는 시간) -->
+                <TextView
+                    android:id="@+id/textViewSleepTimeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="잠드는 시간"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layoutDetailInfo" />
+
+                <TextView
+                    android:id="@+id/textViewSleepTime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_time_picker_box"
+                    android:drawableLeft="@android:drawable/ic_lock_idle_alarm"
+                    android:drawablePadding="12dp"
+                    android:drawableTint="#388E3C"
+                    android:minHeight="48dp"
+                    android:padding="16dp"
+                    android:text="00:00"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewSleepTimeLabel" />
+
+                <!-- 시간 선택 (일어나는 시간) -->
+                <TextView
+                    android:id="@+id/textViewWakeTimeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="일어나는 시간"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewSleepTime" />
+
+                <TextView
+                    android:id="@+id/textViewWakeTime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_time_picker_box"
+                    android:drawableLeft="@android:drawable/ic_lock_idle_alarm"
+                    android:drawablePadding="12dp"
+                    android:drawableTint="#388E3C"
+                    android:minHeight="48dp"
+                    android:padding="16dp"
+                    android:text="08:00"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewWakeTimeLabel" />
+
+                <LinearLayout
+                    android:id="@+id/introduction"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewWakeTime" >
                     <!-- 자기소개 -->
                     <TextView
                         android:id="@+id/textViewIntro"
@@ -336,18 +582,21 @@
                         android:hint="자유롭게 작성해주세요"
                         android:inputType="textMultiLine"
                         android:textSize="14sp" />
-
                 </LinearLayout>
 
                 <!-- 저장 버튼 -->
                 <Button
-                    android:id="@+id/buttonComplete" android:layout_width="0dp" android:layout_height="60dp" android:layout_marginTop="32dp" android:backgroundTint="#388E3C"
+                    android:id="@+id/buttonComplete"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="32dp"
+                    android:backgroundTint="#388E3C"
                     android:text="작성 완료"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/layoutDetailInfo" />
+                    app:layout_constraintTop_toBottomOf="@+id/introduction" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
