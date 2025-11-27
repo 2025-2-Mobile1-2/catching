@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.example.mobile2025s2_1_2.*;
+import com.example.mobile2025s2_1_2.matching.mentorship.MentorshipFragment;
 import com.example.mobile2025s2_1_2.matching.roommate.RoommateFragment;
 import com.example.mobile2025s2_1_2.matching.activity.ActivityFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,10 +48,10 @@ public class MatchingCategoryFragment extends Fragment {
         //진로, 전공 멘토 매칭 버튼
         View mentorshipView = view.findViewById(R.id.match_cate_mentorship);
         mentorshipView.setOnClickListener(v -> {
-            ActivityFragment activityFragment = new ActivityFragment();
+            MentorshipFragment mentorshipFragment = new MentorshipFragment();
             getParentFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.match_category_container, activityFragment)
+                    .replace(R.id.match_category_container, mentorshipFragment)
                     .addToBackStack(null)
                     .commit();
         });
