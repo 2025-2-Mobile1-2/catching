@@ -483,7 +483,6 @@ public class NotificationFragment extends Fragment {
         TextView tvMbti       = profileDialog.findViewById(R.id.roommate_mbti);
         TextView tvDrink      = profileDialog.findViewById(R.id.roommate_drink);
         TextView tvSmoke      = profileDialog.findViewById(R.id.roommate_smoke);
-        TextView tvTime       = profileDialog.findViewById(R.id.roommate_time);
 
         TextView tvCleanValue     = profileDialog.findViewById(R.id.roommate_clean_value);
         TextView tvSleepValue     = profileDialog.findViewById(R.id.roommate_sleep_value);
@@ -521,8 +520,6 @@ public class NotificationFragment extends Fragment {
                         String mbti      = doc.getString("mbti");
                         String alcohol   = doc.getString("alcohol");   // "O"/"X" or 값
                         String smoking   = doc.getString("smoking");   // "O"/"X"
-                        String sleepTime = doc.getString("sleepTime");
-                        String wakeTime  = doc.getString("wakeTime");
 
                         Object cleanObj     = doc.get("clean");
                         Object sleepObj     = doc.get("sleep");
@@ -557,13 +554,6 @@ public class NotificationFragment extends Fragment {
                             String smokeText = "흡연 " +
                                     (smoking == null ? "정보없음" : smoking);
                             tvSmoke.setText(smokeText);
-                        }
-                        if (tvTime != null) {
-                            if (sleepTime != null && wakeTime != null) {
-                                tvTime.setText(sleepTime + " ~ " + wakeTime);
-                            } else {
-                                tvTime.setText("시간 정보 없음");
-                            }
                         }
 
                         // 숫자 & SeekBar 값 설정 (0~10 사이로 클램프)

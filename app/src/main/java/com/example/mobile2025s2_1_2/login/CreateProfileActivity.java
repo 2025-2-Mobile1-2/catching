@@ -49,7 +49,6 @@ public class CreateProfileActivity extends AppCompatActivity {
     private Spinner spinnerGender, spinnerDormitory, spinnerAge, spinnerMbti, spinnerAlcohol, spinnerSmoking;
     private SeekBar seekBarCleanliness, seekBarSnoring, seekBarSensitivity;
     private TextView valueLabel1, valueLabel2, valueLabel3;
-    private TextView textViewSleepTime, textViewWakeTime;
     private Button buttonComplete;
 
     // Firebase 관련
@@ -121,8 +120,6 @@ public class CreateProfileActivity extends AppCompatActivity {
 
         seekBarSensitivity = findViewById(R.id.seekbar_sensitivity);
         valueLabel3 = findViewById(R.id.seekbar_value_label3);
-        textViewSleepTime = findViewById(R.id.textViewSleepTime);
-        textViewWakeTime = findViewById(R.id.textViewWakeTime);
 
 
         buttonComplete = findViewById(R.id.buttonComplete);
@@ -178,9 +175,6 @@ public class CreateProfileActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
-        // 시간 선택 팝업 연결
-        textViewSleepTime.setOnClickListener(v -> showTimePickerDialog(textViewSleepTime, "잠드는 시간", 0, 0));
-        textViewWakeTime.setOnClickListener(v -> showTimePickerDialog(textViewWakeTime, "일어나는 시간", 8, 0));
 
         // 필수 입력 체크 이벤트 연결
         editTextName.addTextChangedListener(new TextWatcher() {
@@ -310,13 +304,6 @@ public class CreateProfileActivity extends AppCompatActivity {
                     setSeekBarValue(seekBarSnoring, valueLabel2, String.valueOf(documentSnapshot.get("sleep")));
                     setSeekBarValue(seekBarSensitivity, valueLabel3, String.valueOf(documentSnapshot.get("sensitive")));
 
-                    // 시간 설정
-                    String sleepTime = documentSnapshot.getString("sleepTime");
-                    if (sleepTime != null) textViewSleepTime.setText(sleepTime);
-
-                    String wakeTime = documentSnapshot.getString("wakeTime");
-                    if (wakeTime != null) textViewWakeTime.setText(wakeTime);
-
                     Toast.makeText(this, "기존 데이터를 불러왔습니다.", Toast.LENGTH_SHORT).show();
                     checkRequiredFields(); // 데이터 로드 후 버튼 상태 갱신
 
@@ -344,9 +331,6 @@ public class CreateProfileActivity extends AppCompatActivity {
         String sleepVal = String.valueOf(seekBarSnoring.getProgress());
         String sensitiveVal = String.valueOf(seekBarSensitivity.getProgress());
 
-        String sleepTime = textViewSleepTime.getText().toString();
-        String wakeTime = textViewWakeTime.getText().toString();
-
         // 2. Map 생성//
         Map<String, Object> userProfile = new HashMap<>();
         userProfile.put("email", userEmail);
@@ -361,8 +345,6 @@ public class CreateProfileActivity extends AppCompatActivity {
         userProfile.put("clean", cleanVal);
         userProfile.put("sleep", sleepVal);
         userProfile.put("sensitive", sensitiveVal);
-        userProfile.put("sleepTime", sleepTime);
-        userProfile.put("wakeTime", wakeTime);
 
         // 3. Firestore 저장
         Log.d("Users", "🔥 Firestore 저장 시도 중...");
