@@ -489,68 +489,7 @@
                         android:background="@color/material_dynamic_neutral40" />
 
                 </LinearLayout>
-                <!-- 시간 선택 (잠드는 시간) -->
-                <TextView
-                    android:id="@+id/textViewSleepTimeLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="잠드는 시간"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/layoutDetailInfo" />
 
-                <TextView
-                    android:id="@+id/textViewSleepTime"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/bg_time_picker_box"
-                    android:drawableLeft="@android:drawable/ic_lock_idle_alarm"
-                    android:drawablePadding="12dp"
-                    android:drawableTint="#388E3C"
-                    android:minHeight="48dp"
-                    android:padding="16dp"
-                    android:text="00:00"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewSleepTimeLabel" />
-
-                <!-- 시간 선택 (일어나는 시간) -->
-                <TextView
-                    android:id="@+id/textViewWakeTimeLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="일어나는 시간"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewSleepTime" />
-
-                <TextView
-                    android:id="@+id/textViewWakeTime"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/bg_time_picker_box"
-                    android:drawableLeft="@android:drawable/ic_lock_idle_alarm"
-                    android:drawablePadding="12dp"
-                    android:drawableTint="#388E3C"
-                    android:minHeight="48dp"
-                    android:padding="16dp"
-                    android:text="08:00"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewWakeTimeLabel" />
 
                 <LinearLayout
                     android:id="@+id/introduction"
@@ -559,7 +498,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewWakeTime" >
+                    app:layout_constraintTop_toBottomOf="@+id/layoutDetailInfo" >
                     <!-- 자기소개 -->
                     <TextView
                         android:id="@+id/textViewIntro"

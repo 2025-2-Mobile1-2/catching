@@ -133,9 +133,7 @@ public class RoommateFragment extends Fragment {
                     safe(u.get("smoking")),
                     safe(u.get("clean")),
                     safe(u.get("sleep")),
-                    safe(u.get("sensitive")),
-                    safe(u.get("sleepTime")),
-                    safe(u.get("wakeTime"))
+                    safe(u.get("sensitive"))
             ));
         }
 
