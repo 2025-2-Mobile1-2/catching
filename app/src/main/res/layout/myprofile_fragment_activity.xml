@@ -198,7 +198,88 @@
                         android:layout_width="wrap_content"
                         android:layout_height="1dp"
                         android:background="@color/cardview_dark_background" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <!-- 자기소개 -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:text="강점"
+                            android:textSize="16sp" />
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
 
+                        <EditText
+                            android:id="@+id/editStrength_activity"
+                            android:layout_width="200dp"
+                            android:layout_height="100dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:background="#F5F5F5"
+                            android:gravity="top|start"
+                            android:hint=" #태그 형식으로 작성해주세요!                      ex) #꼼꼼함 #성실함 #책임감 강함"
+                            android:inputType="textMultiLine"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:background="@color/cardview_dark_background" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <!-- 자기소개 -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:text="비고"
+                            android:textSize="16sp" />
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <EditText
+                            android:id="@+id/editTextIntro_activity"
+                            android:layout_width="200dp"
+                            android:layout_height="100dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:background="#F5F5F5"
+                            android:gravity="top|start"
+                            android:hint="자유롭게 작성해주세요!                      ex) 2025 AI·SW+X 본선 진출 경험 있음"
+                            android:inputType="textMultiLine"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:background="@color/cardview_dark_background" />
 
 
                 </LinearLayout>
