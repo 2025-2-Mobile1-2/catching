@@ -150,6 +150,20 @@ public class RoommateFragment extends Fragment {
             RoommateCardAdapter adapter =
                     new RoommateCardAdapter(requireContext(), cardList);
             recyclerView.setAdapter(adapter);
+
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView rv, int newState) {
+                    super.onScrollStateChanged(rv, newState);
+                    applyCardEffects(rv, layoutManager);
+                }
+
+                @Override
+                public void onScrolled(@NonNull RecyclerView rv, int dx, int dy) {
+                    super.onScrolled(rv, dx, dy);
+                    applyCardEffects(rv, layoutManager);
+                }
+            });
         }
 
         SnapHelper snapHelper = new PagerSnapHelper();
@@ -202,5 +216,28 @@ public class RoommateFragment extends Fragment {
         Map<String, Object> user;
         int score;
         UserSim(Map<String, Object> u, int s) { this.user = u; this.score = s; }
+    }
+
+    private void applyCardEffects(RecyclerView rv, LinearLayoutManager lm) {
+        int first = lm.findFirstVisibleItemPosition();
+        int last = lm.findLastVisibleItemPosition();
+
+        float centerX = rv.getWidth() / 2f;
+
+        for (int i = first; i <= last; i++) {
+            View item = lm.findViewByPosition(i);
+            if (item == null) continue;
+
+            float itemCenterX = item.getLeft() + (item.getWidth() / 2f);
+            float distance = Math.abs(centerX - itemCenterX);
+            float maxDistance = rv.getWidth() / 2f;
+
+            float scale = 1 - (0.1f * (distance / maxDistance));
+            float alpha = 1 - (0.4f * (distance / maxDistance));
+
+            item.setScaleX(scale);
+            item.setScaleY(scale);
+            item.setAlpha(alpha);
+        }
     }
 }
