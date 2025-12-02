@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mobile2025s2_1_2.R;
+import com.example.mobile2025s2_1_2.home.HomeActivity;
 import com.example.mobile2025s2_1_2.home.notice.NoticeCardAdapter;
 import com.example.mobile2025s2_1_2.home.notice.NoticeCardData;
 
@@ -46,6 +47,7 @@ public class SchoolFragment extends Fragment {
         //뒤로가기
         ImageView roommateBack = view.findViewById(R.id.home_school_back);
         roommateBack.setOnClickListener(v->{
+            HomeActivity.touchBlocker.setVisibility(View.GONE);
             requireActivity().getSupportFragmentManager().popBackStack();
         });
 

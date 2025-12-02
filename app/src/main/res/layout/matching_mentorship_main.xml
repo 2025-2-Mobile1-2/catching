@@ -55,6 +55,29 @@
                 android:gravity="center"
                 android:paddingStart="50dp"
                 android:paddingEnd="50dp" />
+            <!--나중에 매칭 유저 없는거로 바꾸기-->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/non_matched_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="294dp"
+                    android:layout_height="426dp"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="더 나은 경험을 위해 열심히 만드는 중이에요.\n 곧 찾아올게요!"
+                        android:textSize="15sp"
+                        android:fontFamily="@font/semibold"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/match_mentorship_button"

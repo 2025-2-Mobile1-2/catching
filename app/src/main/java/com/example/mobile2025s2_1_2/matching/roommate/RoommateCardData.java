@@ -27,14 +27,11 @@ public class RoommateCardData {
         private String clean;
         private String sleep;
         private String sensitive;
-        private String sleepTime;
-        private String wakeTime;
 
         // 🔥 Firestore 데이터 → 카드 객체 생성자
         public RoommateData(String email, String name, String gender, String dorm, String age,
                             String mbti, String alcohol, String smoking,
-                            String clean, String sleep, String sensitive,
-                            String sleepTime, String wakeTime) {
+                            String clean, String sleep, String sensitive) {
 
             this.email = email;
             this.name = name;
@@ -47,8 +44,6 @@ public class RoommateCardData {
             this.clean = clean;
             this.sleep = sleep;
             this.sensitive = sensitive;
-            this.sleepTime = sleepTime;
-            this.wakeTime = wakeTime;
         }
 
         // 🔥 Firebase / Gson 용 기본 생성자
@@ -66,8 +61,6 @@ public class RoommateCardData {
         public String getClean() { return clean; }
         public String getSleep() { return sleep; }
         public String getSensitive() { return sensitive; }
-        public String getSleepTime() { return sleepTime; }
-        public String getWakeTime() { return wakeTime; }
     }
 
     // 🔥 JSON 로드 기능(선택)

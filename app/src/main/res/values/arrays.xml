@@ -61,6 +61,13 @@
         <item>X</item>
     </string-array>
 
+    <string-array name="teamplay_array">
+        <item>선택</item>
+        <item>0~2회</item>
+        <item>3~5회</item>
+        <item>6~8회</item>
+        <item>9회 이상</item>
+    </string-array>
 
     <string-array name="kookmin_college_and_major">
             <!-- 글로벌인문·지역대학 -->

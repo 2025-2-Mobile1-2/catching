@@ -44,8 +44,21 @@ public class MentorshipFragment extends Fragment {
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
+
+        MaterialButton matchRoomButton = view.findViewById(R.id.match_mentorship_button);
+
         // 카드 데이터 연결
         List<RoommateCardData.RoommateData> roommateList = RoommateCardData.loadRoommates(requireContext());
+
+        if (true) {
+            View emptyCard = view.findViewById(R.id.non_matched_card);
+            emptyCard.setVisibility(View.VISIBLE);
+
+            recyclerView.setVisibility(View.GONE);
+            matchRoomButton.setVisibility(View.GONE);
+            return view;
+        }
+
         RoommateCardAdapter adapter = new RoommateCardAdapter(requireContext(), roommateList);
         recyclerView.setAdapter(adapter);
         // 스냅 효과: 중앙 카드에 자동 정렬
@@ -78,7 +91,6 @@ public class MentorshipFragment extends Fragment {
 
 
         //메칭 신청하기 버튼
-        MaterialButton matchRoomButton = view.findViewById(R.id.match_mentorship_button);
         matchRoomButton.setOnClickListener(v -> {
             View centerRoomCard = snapHelper.findSnapView(layoutManager);
             if (centerRoomCard != null) {
