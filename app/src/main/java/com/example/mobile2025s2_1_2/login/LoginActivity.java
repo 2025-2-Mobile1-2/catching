@@ -64,7 +64,14 @@ public class LoginActivity extends AppCompatActivity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        findViewById(R.id.btn_google_sign_up).setOnClickListener(v -> signIn());
+        findViewById(R.id.btn_google_sign_up).setOnClickListener(v -> {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                    .add(R.id.fragment_container, new LoginAgreementFragment(), "AgreementFragment")
+                    .addToBackStack("AgreementFragment")
+                    .commit();
+        });
 
     }
 
@@ -169,5 +176,12 @@ public class LoginActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    public void onAgreementCompleted(boolean agreed) {
+        if (agreed) {
+            signIn();
+        } else {
+            Toast.makeText(this, "약관 동의가 필요합니다.", Toast.LENGTH_SHORT).show();
+        }
+    }
 
 }
