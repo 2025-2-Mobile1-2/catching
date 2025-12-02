@@ -34,6 +34,20 @@ android {
 }
 
 dependencies {
+
+    // 테스트 JUnit4 (딱 이것만!)
+    testImplementation("junit:junit:4.13.2")
+
+    // Robolectric
+    testImplementation("org.robolectric:robolectric:4.10.3")
+
+    // Mockito
+    testImplementation("org.mockito:mockito-core:5.7.0")
+    testImplementation("org.mockito:mockito-inline:5.2.0")
+
+    // AndroidX test core
+    testImplementation("androidx.test:core:1.5.0")
+
     // 🔥 Firebase BOM
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
 

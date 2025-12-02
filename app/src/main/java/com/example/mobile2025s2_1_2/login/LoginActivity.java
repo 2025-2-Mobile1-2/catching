@@ -2,7 +2,6 @@ package com.example.mobile2025s2_1_2.login;
 
 import androidx.appcompat.app.AlertDialog;
 
-
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -35,6 +34,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class LoginActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
     private GoogleSignInClient mGoogleSignInClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -42,10 +42,9 @@ public class LoginActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
-
         View mainView = findViewById(R.id.main);
         ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, insets) -> {
-            int type = WindowInsetsCompat.Type.systemBars(); // ✅ 수정된 부분
+            int type = WindowInsetsCompat.Type.systemBars();
 
             v.setPadding(
                     insets.getInsets(type).left,
@@ -55,7 +54,8 @@ public class LoginActivity extends AppCompatActivity {
             );
             return insets;
         });
-        // ✅ Google 로그인 옵션 설정 (이메일 요청)
+
+        // Google 로그인 옵션 설정
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("456923291195-cm5q2ekcfa1h7upthi1klqtsq7kf77hk.apps.googleusercontent.com")
                 .requestEmail()
@@ -64,19 +64,14 @@ public class LoginActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         findViewById(R.id.btn_google_sign_up).setOnClickListener(v -> signIn());
-
     }
 
     private void signIn() {
         mGoogleSignInClient.signOut().addOnCompleteListener(this, task -> {
-            //mGoogleSignInClient.revokeAccess().addOnCompleteListener(this, revokeTask -> {
-                // 완전 초기화 후 로그인 창 띄우기
-                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent, RC_SIGN_IN);
-            //});
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, RC_SIGN_IN);
         });
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -88,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+    public void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
@@ -100,13 +95,9 @@ public class LoginActivity extends AppCompatActivity {
             String email = account.getEmail();
             Log.d("GoogleSignIn", "Success: " + email);
 
-            // 📌 1) 국민대 이메일인지 검사
-            if (email == null || !email.endsWith("@kookmin.ac.kr")) {
-                showDomainErrorDialog();
-                return;
-            }
+            // 🔥 국민대 이메일 검사 제거됨
 
-            // 📌 2) FirebaseAuth 인증 연결 (가장 중요!! MUST HAVE)
+            // FirebaseAuth 인증
             FirebaseAuth auth = FirebaseAuth.getInstance();
             AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
 
@@ -115,7 +106,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d("GoogleSignIn", "🔥 FirebaseAuth 로그인 성공: " + auth.getCurrentUser().getUid());
 
-                            // ✅ 자동 로그인 정보 저장
+                            // 자동로그인 정보 저장
                             SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
                             SharedPreferences.Editor editor = prefs.edit();
                             editor.putString("user_email", email);
@@ -126,13 +117,11 @@ public class LoginActivity extends AppCompatActivity {
                             db.collection("Users").document(email).get()
                                     .addOnSuccessListener(doc -> {
                                         if (doc.exists()) {
-                                            // 🔥 이미 가입된 사용자 → HomeActivity
                                             Intent intent = new Intent(this, com.example.mobile2025s2_1_2.home.HomeActivity.class);
                                             intent.putExtra("user_email", email);
                                             startActivity(intent);
                                             finish();
                                         } else {
-                                            // 🔥 신규 사용자 → CreateProfileActivity
                                             Intent intent = new Intent(this, CreateProfileActivity.class);
                                             intent.putExtra("user_email", email);
                                             startActivity(intent);
@@ -140,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
                                         }
                                     })
                                     .addOnFailureListener(e -> {
-                                        android.util.Log.e("Firestore", "사용자 확인 실패", e);
+                                        Log.e("Firestore", "사용자 확인 실패", e);
                                         Toast.makeText(this, "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
                                     });
 
@@ -150,27 +139,8 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
 
-        } catch (ApiException e) {
-            Log.w("GoogleSignIn", "signInResult:failed code=" + e.getStatusCode());
-            Toast.makeText(this, "로그인 실패", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Log.e("GoogleSignIn", "로그인 처리 중 오류 발생", e);
         }
     }
-
-
-    private void showDomainErrorDialog() {
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_message, null);
-
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setView(dialogView)
-                .setCancelable(false)
-                .create();
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        Button btnConfirm = dialogView.findViewById(R.id.dialog_button);
-        btnConfirm.setOnClickListener(v -> dialog.dismiss());
-
-        dialog.show();
-    }
-
-
 }
