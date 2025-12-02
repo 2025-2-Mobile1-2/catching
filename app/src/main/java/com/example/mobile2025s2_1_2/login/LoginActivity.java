@@ -100,11 +100,7 @@ public class LoginActivity extends AppCompatActivity {
             String email = account.getEmail();
             Log.d("GoogleSignIn", "Success: " + email);
 
-            // 📌 1) 국민대 이메일인지 검사
-            if (email == null || !email.endsWith("@kookmin.ac.kr")) {
-                showDomainErrorDialog();
-                return;
-            }
+
 
             // 📌 2) FirebaseAuth 인증 연결 (가장 중요!! MUST HAVE)
             FirebaseAuth auth = FirebaseAuth.getInstance();
