@@ -138,8 +138,8 @@ public class MyprofileFragment extends Fragment {
         });
 
         btnSave.setOnClickListener(v -> {
-            if (viewPager.getCurrentItem() == 2) {
-                Fragment fragment = getChildFragmentManager().findFragmentByTag("f2");
+            if (viewPager.getCurrentItem() == 0) {
+                Fragment fragment = getChildFragmentManager().findFragmentByTag("f0");
                 if (fragment instanceof RoommateFragment) {
                     ((RoommateFragment) fragment).saveRoommateData();
                 }

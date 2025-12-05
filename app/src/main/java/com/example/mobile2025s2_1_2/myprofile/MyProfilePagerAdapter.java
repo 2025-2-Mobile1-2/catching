@@ -20,13 +20,14 @@ public class MyProfilePagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                return new MentorFragment();
-            case 1:
-                return new ActivityFragment();
-            case 2:
+                // 기본으로 뜨는 Fragment → 룸메이트
                 return new RoommateFragment();
+            case 1:
+                return new MentorFragment();     // 1번
+            case 2:
+                return new ActivityFragment();   // 2번
             default:
-                return new MentorFragment();
+                return new RoommateFragment();
         }
     }
 

@@ -49,8 +49,26 @@
                     app:chipSpacingHorizontal="3dp"
                     app:singleSelection="true">
 
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_roommate"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="4dp"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="4dp"
+                        android:paddingBottom="4dp"
+                        android:text="기숙사 룸메이트 매칭"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textColor="@color/tab_chip_text_color"
+                        app:chipBackgroundColor="@color/tab_chip_background_color"
+                        app:chipMinHeight="30dp"
+                        app:chipStrokeColor="@color/tab_chip_stroke_color"
+                        app:chipStrokeWidth="1dp" />
+
                     <!-- ... (Chip들은 그대로) ... -->
                     <com.google.android.material.chip.Chip
+                        android:visibility="gone"
                         android:id="@+id/chip_mentor"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
@@ -68,6 +86,7 @@
                         app:chipStrokeWidth="1dp" />
 
                     <com.google.android.material.chip.Chip
+                        android:visibility="gone"
                         android:id="@+id/chip_activity"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
@@ -84,22 +103,6 @@
                         app:chipStrokeColor="@color/tab_chip_stroke_color"
                         app:chipStrokeWidth="1dp" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip_roommate"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="4dp"
-                        android:paddingTop="4dp"
-                        android:paddingEnd="4dp"
-                        android:paddingBottom="4dp"
-                        android:text="기숙사 룸메이트 매칭"
-                        android:textAppearance="?attr/textAppearanceBody2"
-                        android:textColor="@color/tab_chip_text_color"
-                        app:chipBackgroundColor="@color/tab_chip_background_color"
-                        app:chipMinHeight="30dp"
-                        app:chipStrokeColor="@color/tab_chip_stroke_color"
-                        app:chipStrokeWidth="1dp" />
 
                 </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>

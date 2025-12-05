@@ -46,7 +46,9 @@
                 app:strokeColor="@android:color/transparent"
                 app:strokeWidth="0dp">
 
+                <!--TODO: visibilty나중에 바꾸기"-->
                 <LinearLayout
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#FFFFFFFF"
