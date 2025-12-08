@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -101,7 +100,6 @@ public class HomeActivity extends AppCompatActivity {
             });
         }).start();
 
-
         // ───────── 하단 네비게이션 바 ─────────
         bottomNavBar = findViewById(R.id.custom_navbar);
         BottomNavBarHelper.setupCustomNav(this, bottomNavBar);
@@ -166,7 +164,7 @@ public class HomeActivity extends AppCompatActivity {
                             break;
                         }
 
-                        // 🔥 여기서 Users 컬렉션에서 name 가져와서 배너 텍스트 구성
+                        // Users 컬렉션에서 이름 가져오기
                         final String finalState = state;
                         final String finalCategory = category;
                         db.collection("Users")
@@ -194,7 +192,6 @@ public class HomeActivity extends AppCompatActivity {
                                     showTopInAppBanner(message);
                                 })
                                 .addOnFailureListener(e -> {
-                                    // 이름 가져오기 실패 시 이메일 그대로 사용
                                     String fromName = fromId;
                                     String message;
                                     if ("accepted".equals(finalState)) {
@@ -254,7 +251,6 @@ public class HomeActivity extends AppCompatActivity {
                             break;
                         }
 
-                        // 🔥 toID 기준으로 Users.name 가져오기
                         final String finalState = state;
                         final String finalCategory = category;
                         db.collection("Users")
@@ -308,10 +304,15 @@ public class HomeActivity extends AppCompatActivity {
     private void showTopInAppBanner(String message) {
         if (message == null) return;
 
+        // 🔥 인앱 알림 사용 여부 확인 (설정에서 끄면 바로 return)
+        SharedPreferences prefs = getSharedPreferences("app_settings", MODE_PRIVATE);
+        boolean inappEnabled = prefs.getBoolean("inapp_enabled", true);
+        if (!inappEnabled) return;
+
         if (overlayBanner == null) {
             FrameLayout root = findViewById(android.R.id.content);
 
-            // 🔥 레이아웃 이름: notification_b.xml
+            // 레이아웃: notification_b.xml
             overlayBanner = getLayoutInflater()
                     .inflate(R.layout.notification_b, root, false);
 
